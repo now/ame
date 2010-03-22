@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'facets/kernel/tap'
-
-require 'ame/argument'
-require 'ame/splat'
-
-class Ame; end
-
 class Ame::Arguments
   def initialize
     @arguments = []

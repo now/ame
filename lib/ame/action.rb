@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'forwardable'
-
-class Ame; end
-
 class Ame::Action
   extend Forwardable
 

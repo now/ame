@@ -2,8 +2,6 @@
 
 require 'ostruct'
 
-class Ame; end
-
 class Ame::Options
   def initialize
     @options = {}

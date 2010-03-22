@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-class Ame; end
-
 class Ame::Actions
   include Enumerable
 

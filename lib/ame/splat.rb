@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'ame/argument'
-
 class Ame::Splat < Ame::Argument
   def process(results, arguments)
     super nil, nil if not optional? and arguments.empty?

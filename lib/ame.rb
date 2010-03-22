@@ -4,7 +4,13 @@ require 'facets/kernel/tap'
 require 'forwardable'
 
 class Ame
-  require 'ame/context'
+  autoload :Action, 'ame/action'
+  autoload :Actions, 'ame/actions'
+  autoload :Argument, 'ame/argument'
+  autoload :Arguments, 'ame/arguments'
+  autoload :Option, 'ame/option'
+  autoload :Options, 'ame/options'
+  autoload :Splat, 'ame/splat'
 
   Error = Class.new(StandardError)
   MalformedArgument = Class.new(Error)

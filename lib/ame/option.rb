@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-class Ame; end
-
 class Ame::Option < Ame::Argument
   def initialize(name, description, options = {}, &validate)
     options[:type] ||= :boolean
