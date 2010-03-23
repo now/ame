@@ -30,7 +30,7 @@ class Ame::Options
       when /^-([a-z]+)$/i
         stack.unshift *$1.split(//).map{ |s| '-' + s }
         next
-      when /^--$/i
+      when '--'
         break
       when /^(--[a-z]+[-a-z]*|-[a-z])(?:=(.*))$/i
         name = $1.sub(/^-+/, '')
