@@ -24,6 +24,10 @@ class Ame::Argument
     @optional
   end
 
+  def required?
+    not optional?
+  end
+
   def to_s
     (optional? ? '[%s]' : '%s') % [argument_name]
   end

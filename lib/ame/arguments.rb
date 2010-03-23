@@ -7,16 +7,19 @@ class Ame::Arguments
   end
 
   def argument(name, description, options = {}, &block)
-    if options.fetch(:optional, false) and optional = @arguments.first{ |argument| argument.optional? }
-      raise ArgumentError,
-        "Required argument #{name} must come before optional argument #{optional.name}"
-    end
-    @arguments << Ame::Argument.new(name, description, options, &block)
+    argument = Ame::Argument.new(name, description, options, &block)
+    optional = @arguments.find{ |a| a.optional? }
+    raise ArgumentError,
+      'Required argument %s must come before optional argument %s' %
+        [argument.name, optional.name] if argument.required? and optional
+    @arguments << argument
+    self
   end
 
   def splat(name, description, options = {}, &validate)
-    raise ArgumentError, "Splat argument #{splat.name} already defined: #{name}" if @splat
+    raise ArgumentError, "Splat argument #{@splat.name} already defined: #{name}" if @splat
     @splat = Ame::Splat.new(name, description, options, &validate)
+    self
   end
 
   def count
@@ -42,7 +45,4 @@ class Ame::Arguments
     }
   end
 =end
-
-#  require 'ample/utilities/commandline/arguments/argument'
-#  require 'ample/utilities/commandline/arguments/splat'
 end

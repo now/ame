@@ -14,7 +14,9 @@ Expectations do
   end
 
   expect Ame::Argument.new('a', 'd').not.to.be.optional? 
+  expect Ame::Argument.new('a', 'd').to.be.required? 
   expect Ame::Argument.new('a', 'd', :optional => true).to.be.optional? 
+  expect Ame::Argument.new('a', 'd', :optional => true).not.to.be.required? 
 
   expect ArgumentError do
     Ame::Argument.new('a', 'd', :type => :unregistered)
