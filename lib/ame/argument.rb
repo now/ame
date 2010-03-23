@@ -6,15 +6,11 @@ class Ame::Argument
     @@parsers[type] = parser
   end
 
-  def self.to_s
-    name.downcase
-  end
-
   def initialize(name, description, options = {}, &validate)
     @name, @description, @validate = name, description, validate || proc{ |results, argument| argument }
     @optional = options[:optional] || false
     self.type = options[:type] || :string
-    self.default = options[:default] if options.key?(:default)
+    self.default = options[:default] if options.include?(:default)
   end
 
   def process(results, arguments)
