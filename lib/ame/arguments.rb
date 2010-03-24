@@ -32,13 +32,6 @@ class Ame::Arguments
     @splat || first_optional ? -required - 1 : required
   end
 
-private
-
-  def first_optional
-    @arguments.find{ |a| a.optional? }
-  end
-
-=begin
   def process(arguments)
     [].tap{ |results|
       @arguments.each do |argument|
@@ -48,6 +41,13 @@ private
     }
   end
 
+private
+
+  def first_optional
+    @arguments.find{ |a| a.optional? }
+  end
+
+=begin
   def to_s
     @arguments.map{ |argument| argument.to_s).join(' ').tap{ |s|
       if @splat

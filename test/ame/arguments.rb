@@ -66,4 +66,40 @@ Expectations do
   expect ArgumentError do
     Ame::Arguments.new.argument('a', 'd', :optional => true).splat('a', 'd')
   end
+
+  expect Ame::MissingArgument do
+    Ame::Arguments.new.argument('a', 'd').process([])
+  end
+
+  expect [] do
+    Ame::Arguments.new.process([])
+  end
+
+  expect [1] do
+    Ame::Arguments.new.argument('a', 'd', :type => :integer).process(['1'])
+  end
+
+  expect [1, TrueClass] do
+    Ame::Arguments.new.argument('a', 'd', :type => :integer).
+                       argument('b', 'd', :type => :boolean).
+                       process(['1', 'true'])
+  end
+
+  expect Ame::MissingArgument do
+    Ame::Arguments.new.argument('a', 'd', :type => :integer).
+                       splat('b', 'd').
+                       process(['1'])
+  end
+
+  expect [1, []] do
+    Ame::Arguments.new.argument('a', 'd', :type => :integer).
+                       splat('b', 'd', :optional => true).
+                       process(['1'])
+  end
+
+  expect [1, [2, 3]] do
+    Ame::Arguments.new.argument('a', 'd', :type => :integer).
+                       splat('b', 'd', :type => :integer).
+                       process(['1', '2', '3'])
+  end
 end
