@@ -16,9 +16,9 @@ class Ame::Arguments
   end
 
   def splat(name, description, options = {}, &validate)
-    raise ArgumentError,
-      'Splat argument %s already defined: %s' % [@splat.name, name] if @splat
     splat = Ame::Splat.new(name, description, options, &validate)
+    raise ArgumentError,
+      'Splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
     raise ArgumentError,
       'Optional argument %s may not precede required splat argument %s' %
         [first_optional.name, splat.name] if splat.required? and first_optional
