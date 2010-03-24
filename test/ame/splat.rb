@@ -9,6 +9,10 @@ Expectations do
     Ame::Splat.new('a', 'd')
   end
 
+  expect Ame::MissingArgument do
+    Ame::Splat.new('a', 'd').process([], [])
+  end
+
   expect [] do
     Ame::Splat.new('a', 'd', :optional => true).process([], [])
   end

@@ -14,9 +14,9 @@ class Ame::Argument
     self.default = options[:default] if options.include?(:default)
   end
 
-  def process(results, arguments)
-    raise Ame::MissingArgument, "Missing argument: #{self}" if required? and arguments.empty?
-    @validate.call(results, parse(arguments.shift))
+  def process(results, argument)
+    raise Ame::MissingArgument, "Missing argument: #{self}" if required? and argument.nil?
+    @validate.call(results, parse(argument))
   end
 
   attr_reader :name, :description
