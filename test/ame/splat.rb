@@ -8,7 +8,7 @@ Expectations do
   expect Ame::Argument do
     Ame::Splat.new('a', 'd')
   end
-  
+
   expect [] do
     Ame::Splat.new('a', 'd', :optional => true).process([], [])
   end

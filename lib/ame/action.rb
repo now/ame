@@ -21,11 +21,7 @@ class Ame::Action
 
   def_delegators :@options, :option
 
-  def_delegators :@arguments, :argument, :splat
-
-  def has_arguments?
-    @arguments.count > 0
-  end
+  def_delegators :@arguments, :argument, :splat, :arity
 
   def process(arguments)
     options, remainder = @options.process(arguments)

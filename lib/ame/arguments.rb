@@ -8,22 +8,34 @@ class Ame::Arguments
 
   def argument(name, description, options = {}, &block)
     argument = Ame::Argument.new(name, description, options, &block)
-    optional = @arguments.find{ |a| a.optional? }
     raise ArgumentError,
       'Required argument %s must come before optional argument %s' %
-        [argument.name, optional.name] if argument.required? and optional
+        [argument.name, first_optional.name] if argument.required? and first_optional
     @arguments << argument
     self
   end
 
   def splat(name, description, options = {}, &validate)
-    raise ArgumentError, "Splat argument #{@splat.name} already defined: #{name}" if @splat
-    @splat = Ame::Splat.new(name, description, options, &validate)
+    raise ArgumentError,
+      'Splat argument %s already defined: %s' % [@splat.name, name] if @splat
+    splat = Ame::Splat.new(name, description, options, &validate)
+    raise ArgumentError,
+      'Optional argument %s may not precede required splat argument %s' %
+        [first_optional.name, splat.name] if splat.required? and first_optional
+    @splat = splat
     self
   end
 
-  def count
-    @arguments.size
+  def arity
+    required = @arguments.select{ |a| a.required? }.size +
+               (@splat && @splat.required? ? 1 : 0)
+    @splat || first_optional ? -required - 1 : required
+  end
+
+private
+
+  def first_optional
+    @arguments.find{ |a| a.optional? }
   end
 
 =begin

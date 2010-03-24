@@ -31,7 +31,7 @@ class Ame
   def self.process
     raise NotImplementedError, "initialize action must be defined" unless initialize = actions[:initialize]
     if actions.size > 1
-      if initialize.has_arguments?
+      unless initialize.arity.zero?
         raise NotImplementedError,
           "initialize action must not have arguments if other actions have been defined"
       end
