@@ -25,7 +25,7 @@ class Ame
   def self.method_added(name)
     return unless public_instance_methods.map{ |m| m.to_sym }.include? name
     actions[name] = action if action.defined?
-    action = Action.new
+    self.action = Action.new
   end
 
   def self.process
