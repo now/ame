@@ -10,11 +10,12 @@ class Ame::Argument
     @name, @description, @validate = name, description, validate || proc{ |results, argument| argument }
     @optional = options[:optional] || false
     self.type = options[:type] || :string
+    @default = nil
     self.default = options[:default] if options.include?(:default)
   end
 
   def process(results, arguments)
-    raise Ame::MissingArgument, "Missing argument: #{self}" if not optional? and arguments.empty?
+    raise Ame::MissingArgument, "Missing argument: #{self}" if required? and arguments.empty?
     @validate.call(results, parse(arguments.shift))
   end
 

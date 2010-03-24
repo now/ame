@@ -2,8 +2,12 @@
 
 class Ame::Splat < Ame::Argument
   def process(results, arguments)
-    super nil, nil if not optional? and arguments.empty?
-    arguments.map{ |argument| super(results, argument) }
+    super nil, nil if required? and arguments.empty?
+    result = []
+    until arguments.empty?
+      result << super(results, arguments)
+    end
+    result
   end
 
   def to_s

@@ -101,4 +101,22 @@ Expectations do
   expect 3 do
     Ame::Argument.new('a', 'd', :type => :integer){ |r, a| 3 }.process([1], ['2'])
   end
+
+  expect Ame::MissingArgument do
+    Ame::Argument.new('a', 'd').process([], [])
+  end
+
+  expect nil do
+    Ame::Argument.new('a', 'd', :optional => true).process([], [])
+  end
+
+  expect 'string' do
+    Ame::Argument.new('a', 'd', :optional => true, :default => 'string').process([], [])
+  end
+
+  expect [] do
+    arguments = ['2']
+    Ame::Argument.new('a', 'd').process([], arguments)
+    arguments
+  end
 end
