@@ -11,6 +11,7 @@ class Ame
   autoload :Option, 'ame/option'
   autoload :Options, 'ame/options'
   autoload :Splat, 'ame/splat'
+  autoload :Types, 'ame/types'
   autoload :Version, 'ame/version'
 
   Error = Class.new(StandardError)
