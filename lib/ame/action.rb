@@ -3,28 +3,32 @@
 class Ame::Action
   extend Forwardable
 
-  def initialize
-    @options = Ame::Options.new
-    @arguments = Ame::Arguments.new
-  end
-
   def defined?
-    # TODO: If one of @options and @arguments is non-empty, we should really
-    # raise an alarm about the description missing for what the user probably
-    # wanted to be an action.
     instance_variable_defined? :@description
   end
 
-  def description(description)
+  def description(description = nil)
+    return @description unless description
     @description = description
+    self
   end
 
-  def_delegators :@options, :option
+  def_delegators :options, :option
 
-  def_delegators :@arguments, :argument, :splat, :arity
+  def_delegators :arguments, :argument, :splat, :arity
 
   def process(arguments)
-    options, remainder = @options.process(arguments)
-    [options, @arguments.process(remainder)]
+    options, remainder = self.options.process(arguments)
+    [options, self.arguments.process(options, remainder)]
+  end
+
+protected
+
+  def options
+    @options ||= Ame::Options.new
+  end
+
+  def arguments
+    @arguments ||= Ame::Arguments.new
   end
 end
