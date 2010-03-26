@@ -68,38 +68,38 @@ Expectations do
   end
 
   expect Ame::MissingArgument do
-    Ame::Arguments.new.argument('a', 'd').process([])
+    Ame::Arguments.new.argument('a', 'd').process({}, [])
   end
 
   expect [] do
-    Ame::Arguments.new.process([])
+    Ame::Arguments.new.process({}, [])
   end
 
   expect [1] do
-    Ame::Arguments.new.argument('a', 'd', :type => Integer).process(['1'])
+    Ame::Arguments.new.argument('a', 'd', :type => Integer).process({}, ['1'])
   end
 
   expect [1, TrueClass] do
     Ame::Arguments.new.argument('a', 'd', :type => Integer).
                        argument('b', 'd', :type => FalseClass).
-                       process(['1', 'true'])
+                       process({}, ['1', 'true'])
   end
 
   expect Ame::MissingArgument do
     Ame::Arguments.new.argument('a', 'd', :type => Integer).
                        splat('b', 'd').
-                       process(['1'])
+                       process({}, ['1'])
   end
 
   expect [1, []] do
     Ame::Arguments.new.argument('a', 'd', :type => Integer).
                        splat('b', 'd', :optional => true).
-                       process(['1'])
+                       process({}, ['1'])
   end
 
   expect [1, [2, 3]] do
     Ame::Arguments.new.argument('a', 'd', :type => Integer).
                        splat('b', 'd', :type => Integer).
-                       process(['1', '2', '3'])
+                       process({}, ['1', '2', '3'])
   end
 end

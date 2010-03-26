@@ -32,12 +32,12 @@ class Ame::Arguments
     @splat || first_optional ? -required - 1 : required
   end
 
-  def process(arguments)
-    [].tap{ |results|
+  def process(options, arguments)
+    [].tap{ |processed|
       @arguments.each do |argument|
-        results << argument.process(results, arguments.shift)
+        processed << argument.process(options, processed, arguments.shift)
       end
-      results << @splat.process(results, arguments) if @splat
+      processed << @splat.process(options, processed, arguments) if @splat
     }
   end
 

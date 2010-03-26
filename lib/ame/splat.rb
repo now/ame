@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Splat < Ame::Argument
-  def process(results, arguments)
-    super results, nil if required? and arguments.empty?
+  def process(options, processed, arguments)
+    super options, processed, nil if required? and arguments.empty?
     [].tap{ |result|
-      result << super(results, arguments.shift) until arguments.empty?
+      result << super(options, processed, arguments.shift) until arguments.empty?
     }
   end
 

@@ -2,15 +2,15 @@
 
 class Ame::Argument
   def initialize(name, description, options = {}, &validate)
-    @name, @description, @validate = name, description, validate || proc{ |results, argument| argument }
+    @name, @description, @validate = name, description, validate || proc{ |options, processed, argument| argument }
     @optional = options[:optional] || false
     @type = Ame::Types[[options[:type], options[:default], String].find{ |o| !o.nil? }]
     set_default options[:default], options[:type] if options.include? :default
   end
 
-  def process(results, argument)
+  def process(options, processed, argument)
     raise Ame::MissingArgument, "Missing argument: #{self}" if required? and argument.nil?
-    @validate.call(results, @type.parse(self, argument))
+    @validate.call(options, processed, @type.parse(self, argument))
   end
 
   attr_reader :name, :description, :default

@@ -31,40 +31,40 @@ Expectations do
   end
 
   expect nil do
-    Ame::Argument.new('a', 'd', :optional => true).process([], nil)
+    Ame::Argument.new('a', 'd', :optional => true).process({}, [], nil)
   end
 
   expect 'default' do
-    Ame::Argument.new('a', 'd', :optional => true, :default => 'default').process([], nil)
+    Ame::Argument.new('a', 'd', :optional => true, :default => 'default').process({}, [], nil)
   end
 
   expect 'string' do
-    Ame::Argument.new('a', 'd').process([], 'string')
+    Ame::Argument.new('a', 'd').process({}, [], 'string')
   end
 
   expect 1 do
-    Ame::Argument.new('a', 'd', :type => Integer).process([], '1')
+    Ame::Argument.new('a', 'd', :type => Integer).process({}, [], '1')
   end
 
   expect 2 do
-    Ame::Argument.new('a', 'd', :optional => true, :default => 1).process([], '2')
+    Ame::Argument.new('a', 'd', :optional => true, :default => 1).process({}, [], '2')
   end
 
   expect Ame::MalformedArgument do
-    Ame::Argument.new('a', 'd', :type => Integer).process([], '')
+    Ame::Argument.new('a', 'd', :type => Integer).process({}, [], '')
   end
 
   expect 'string' do
-    Ame::Argument.new('a', 'd').process([], 'string')
+    Ame::Argument.new('a', 'd').process({}, [], 'string')
   end
 
   expect Ame::MalformedArgument do
-    Ame::Argument.new('a', 'd', :type => Integer).process([], 'junk')
+    Ame::Argument.new('a', 'd', :type => Integer).process({}, [], 'junk')
   end
 
   expect 'A is not an integer: junk' do
     begin
-      Ame::Argument.new('a', 'd', :type => Integer).process([], 'junk')
+      Ame::Argument.new('a', 'd', :type => Integer).process({}, [], 'junk')
     rescue => e
       e.message
     end
@@ -76,26 +76,26 @@ Expectations do
 
   ['true', 'yes', 'on'].each do |s|
     expect TrueClass do
-      Ame::Argument.new('a', 'd', :type => TrueClass).process([], s)
+      Ame::Argument.new('a', 'd', :type => TrueClass).process({}, [], s)
     end
   end
 
   ['false', 'no', 'off'].each do |s|
     expect FalseClass do
-      Ame::Argument.new('a', 'd', :type => FalseClass).process([], s)
+      Ame::Argument.new('a', 'd', :type => FalseClass).process({}, [], s)
     end
   end
 
   expect TrueClass do
-    Ame::Argument.new('a', 'd', :optional => true, :default => false).process([], nil)
+    Ame::Argument.new('a', 'd', :optional => true, :default => false).process({}, [], nil)
   end
 
   expect FalseClass do
-    Ame::Argument.new('a', 'd', :optional => true, :default => true).process([], nil)
+    Ame::Argument.new('a', 'd', :optional => true, :default => true).process({}, [], nil)
   end
 
   expect Ame::MalformedArgument do
-    Ame::Argument.new('a', 'd', :type => TrueClass).process([], 'junk')
+    Ame::Argument.new('a', 'd', :type => TrueClass).process({}, [], 'junk')
   end
 
   expect 'A' do
@@ -106,31 +106,37 @@ Expectations do
     Ame::Argument.new('a', 'd', :optional => true).to_s
   end
 
+  expect 'a' => 1 do
+    options = nil
+    Ame::Argument.new('a', 'd', :type => Integer){ |o, p, a| options = o }.process({'a' => 1}, [1], '2')
+    options
+  end
+
   expect [1] do
-    results = nil
-    Ame::Argument.new('a', 'd', :type => Integer){ |r, a| results = r }.process([1], '2')
-    results
+    processed = nil
+    Ame::Argument.new('a', 'd', :type => Integer){ |o, p, a| processed = p }.process({'a' => 1}, [1], '2')
+    processed
   end
 
   expect 2 do
     argument = nil
-    Ame::Argument.new('a', 'd', :type => Integer){ |r, a| argument = a }.process([1], '2')
+    Ame::Argument.new('a', 'd', :type => Integer){ |o, p, a| argument = a }.process({'a' => 1}, [1], '2')
     argument
   end
 
   expect 3 do
-    Ame::Argument.new('a', 'd', :type => Integer){ |r, a| 3 }.process([1], '2')
+    Ame::Argument.new('a', 'd', :type => Integer){ |o, p, a| 3 }.process({'a' => 1}, [1], '2')
   end
 
   expect Ame::MissingArgument do
-    Ame::Argument.new('a', 'd').process([], nil)
+    Ame::Argument.new('a', 'd').process({}, [], nil)
   end
 
   expect nil do
-    Ame::Argument.new('a', 'd', :optional => true).process([], nil)
+    Ame::Argument.new('a', 'd', :optional => true).process({}, [], nil)
   end
 
   expect 'string' do
-    Ame::Argument.new('a', 'd', :optional => true, :default => 'string').process([], nil)
+    Ame::Argument.new('a', 'd', :optional => true, :default => 'string').process({}, [], nil)
   end
 end

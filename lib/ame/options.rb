@@ -43,6 +43,7 @@ private
           'Unrecognized option: %s' %
             match unless option = @options[match.sub(/^-+/, "")]
         results[option.name] = option.process(results,
+                                              [],
                                               argument(arg, option, arguments))
       else
         remainder << first
