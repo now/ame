@@ -65,8 +65,8 @@ Expectations do
   end
 
   expect [{'a' => false, 'b' => false}, ['arg', '-a', '-b']] do
-    ENV.stubs(:include?).returns(true)
     Ame::Options.new.
+      options_must_precede_arguments.
       option('a', 'd').
       option('b', 'd').process(['arg', '-a', '-b'])
   end

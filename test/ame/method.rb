@@ -9,6 +9,10 @@ Expectations do
     action.option 'a', 'd'
   end
 
+  expect Ame::Method.new.to.delegate(:options_must_precede_arguments).to(:options) do |action|
+    action.options_must_precede_arguments
+  end
+
   expect Ame::Method.new.to.delegate(:argument).to(:arguments) do |action|
     action.argument 'a', 'd'
   end

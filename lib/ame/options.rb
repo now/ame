@@ -3,6 +3,7 @@
 class Ame::Options
   def initialize
     @options = {}
+    @options_must_precede_arguments = ENV.include? 'POSIXLY_CORRECT'
   end
 
   def option(name, description, options = {}, &block)
@@ -11,6 +12,11 @@ class Ame::Options
     options.fetch(:aliases, []).each do |a|
       self[a] = option
     end
+    self
+  end
+
+  def options_must_precede_arguments
+    @options_must_precede_arguments = true
     self
   end
 
@@ -47,7 +53,7 @@ private
                                               argument(arg, option, arguments))
       else
         remainder << first
-        break if ENV.include? 'POSIXLY_CORRECT'
+        break if @options_must_precede_arguments
       end
     end
     [results, remainder.concat(arguments)]

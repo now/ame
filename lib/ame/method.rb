@@ -13,7 +13,7 @@ class Ame::Method
     self
   end
 
-  def_delegators :options, :option
+  def_delegators :options, :option, :options_must_precede_arguments
 
   def_delegators :arguments, :argument, :splat, :arity
 
