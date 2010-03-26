@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class Ame::Actions
+class Ame::Methods
   include Enumerable
 
   def initialize
@@ -8,9 +8,9 @@ class Ame::Actions
     @random = {}
   end
 
-  def <<(action)
-    @ordered << action
-    @random[action.name] = action
+  def <<(method)
+    @ordered << method
+    @random[method.name] = method
     self
   end
 

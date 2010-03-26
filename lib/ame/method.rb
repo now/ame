@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class Ame::Action
+class Ame::Method
   extend Forwardable
 
   def defined?

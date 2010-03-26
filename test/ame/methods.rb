@@ -6,25 +6,25 @@ require 'ame'
 
 Expectations do
   expect Enumerable do
-    Ame::Actions.new
+    Ame::Methods.new
   end
 
-  expect Ame::Actions.new do |o|
-    o.expected << Ame::Action.new
+  expect Ame::Methods.new do |o|
+    o.expected << Ame::Method.new
   end
 
-  expect Ame::Action.new do |o|
+  expect Ame::Method.new do |o|
     o.expected.name = 'name'
-    actions = Ame::Actions.new
+    actions = Ame::Methods.new
     actions << o.expected
     actions['name']
   end
 
-  expect [Ame::Action.new, Ame::Action.new] do |o|
+  expect [Ame::Method.new, Ame::Method.new] do |o|
     as = o.expected
     as[0].name = 'name1'
     as[1].name = 'name2'
-    actions = Ame::Actions.new
+    actions = Ame::Methods.new
     actions << as[0] << as[1]
     actions.entries
   end

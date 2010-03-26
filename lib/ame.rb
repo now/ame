@@ -4,10 +4,10 @@ require 'facets/kernel/tap'
 require 'forwardable'
 
 class Ame
-  autoload :Action, 'ame/action'
-  autoload :Actions, 'ame/actions'
   autoload :Argument, 'ame/argument'
   autoload :Arguments, 'ame/arguments'
+  autoload :Method, 'ame/method'
+  autoload :Methods, 'ame/methods'
   autoload :Option, 'ame/option'
   autoload :Options, 'ame/options'
   autoload :Splat, 'ame/splat'
@@ -21,37 +21,38 @@ class Ame
 
   self.extend SingleForwardable
 
-  self.def_delegators :action, :description, :option, :argument, :splat
+  self.def_delegators :method, :description, :option, :argument, :splat
 
   def self.method_added(name)
     return unless public_instance_methods.map{ |m| m.to_sym }.include? name
-    actions[name] = action if action.defined?
-    self.action = Action.new
+    method.name = name
+    methods << method if method.defined?
+    self.method = Method.new
   end
 
   def self.process
-    raise NotImplementedError, "initialize action must be defined" unless initialize = actions[:initialize]
-    if actions.size > 1
+    raise NotImplementedError, "initialize method must be defined" unless initialize = methods[:initialize]
+    if methods.size > 1
       unless initialize.arity.zero?
         raise NotImplementedError,
-          "initialize action must not have arguments if other actions have been defined"
+          "initialize method must not have arguments if other methods have been defined"
       end
-      initialize.argument :action, "Action to run"
+      initialize.argument :method, "Method to run"
     end
   end
 
 private
 
-  def self.actions
-    @actions ||= Actions.new
+  def self.methods
+    @methods ||= Methods.new
   end
 
-  def self.action
-    @action ||= Action.new
+  def self.method
+    @method ||= Method.new
   end
 
-  def self.action=(action)
-    @action = action
+  def self.method=(method)
+    @method = method
   end
 
 =begin
