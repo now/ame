@@ -1,48 +1,67 @@
 # -*- coding: utf-8 -*-
 
-require 'ostruct'
-
 class Ame::Options
   def initialize
     @options = {}
   end
 
   def option(name, description, options = {}, &block)
-    # TODO: Deal with --boolean and --no-boolean
-    # TODO: Deal with --with-* and --without-*
     option = Ame::Option.new(name, description, options, &block)
-    @options[name] = option
+    self[option.name] = option
     options.fetch(:aliases, []).each do |a|
-      raise ArgumentError, "Option #{a} already defined" if @options.key? a
-      @options[a] = option
+      self[a] = option
     end
+    self
   end
 
   def process(arguments)
-    stack = arguments.dup
-    results = OpenStruct.new
-    @options.each do |option|
-      results[option.name] = option.default
-    end
+    process!(defaults, arguments.dup)
+  end
+
+private
+
+  def defaults
+    {}.tap{ |results|
+      @options.each_value do |option|
+        results[option.name] = option.default
+      end
+    }
+  end
+
+  def process!(results, arguments)
     remainder = []
-    until stack.empty?
-      case top = stack.shift
-      when /^-([a-z]+)$/i
-        stack.unshift *$1.split(//).map{ |s| '-' + s }
-        next
+    until arguments.empty?
+      case first = arguments.shift
       when '--'
         break
-      when /^(--[a-z]+[-a-z]*|-[a-z])(?:=(.*))$/i
-        name = $1.sub(/^-+/, '')
-        raise UnrecognizedOption, "Unrecognized option: #{$1}" unless option = @options[name]
-        stack.unshift 'yes' if not $2 and option.optional?
-        stack.unshift $2 if $2
-        results[option.name] = option.process(results, stack)
+      when /^-([^=-]{2,})$/
+        arguments.unshift *$1.split("").map{ |s| '-' + s }
+      when /^(--[^=]+|-[^-])(?:=(.*))?$/
+        match = $1
+        arg = $2
+        raise Ame::UnrecognizedOption,
+          'Unrecognized option: %s' %
+            match unless option = @options[match.sub(/^-+/, "")]
+        results[option.name] = option.process(results,
+                                              argument(arg, option, arguments))
       else
-        remainder << top
-        break if ENV['POSIXLY_CORRECT']
+        remainder << first
+        break if ENV.include? 'POSIXLY_CORRECT'
       end
     end
-    [results, remainder.concat(stack)]
+    [results, remainder.concat(arguments)]
+  end
+
+  def []=(name, option)
+    raise ArgumentError, "Option #{name} already defined" if @options.include? name
+    @options[name] = option
+  end
+
+  def argument(argument, option, arguments)
+    case
+    when argument then argument
+    when option.optional? then nil
+    else arguments.shift
+    end
   end
 end
