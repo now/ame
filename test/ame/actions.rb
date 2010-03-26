@@ -9,9 +9,23 @@ Expectations do
     Ame::Actions.new
   end
 
-=begin
-  expect Ame::Action.new do |action|
-    Ame::Actions.new << action
+  expect Ame::Actions.new do |o|
+    o.expected << Ame::Action.new
   end
-=end
+
+  expect Ame::Action.new do |o|
+    o.expected.name = 'name'
+    actions = Ame::Actions.new
+    actions << o.expected
+    actions['name']
+  end
+
+  expect [Ame::Action.new, Ame::Action.new] do |o|
+    as = o.expected
+    as[0].name = 'name1'
+    as[1].name = 'name2'
+    actions = Ame::Actions.new
+    actions << as[0] << as[1]
+    actions.entries
+  end
 end

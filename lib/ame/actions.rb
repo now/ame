@@ -4,18 +4,23 @@ class Ame::Actions
   include Enumerable
 
   def initialize
-    @order = []
-    @actions = {}
+    @ordered = []
+    @random = {}
   end
 
-  def []=(key, value)
-    @order << key
-    @actions[key] = value
+  def <<(action)
+    @ordered << action
+    @random[action.name] = action
+    self
+  end
+
+  def [](name)
+    @random[name]
   end
 
   def each
-    @order.each do |key|
-      yield key, value
+    @ordered.each do |action|
+      yield action
     end
     self
   end
