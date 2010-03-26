@@ -31,6 +31,12 @@ Expectations do
     Ame::Action.new.description('d').description
   end
 
+  expect 'name' do
+    action = Ame::Action.new
+    action.name = 'name'
+    action.name
+  end
+
   expect [{'a' => true}, ['b', 1, true, ['d', 'e', 'f']]] do
     action = Ame::Action.new
     action.option('a', 'd')

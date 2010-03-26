@@ -22,6 +22,8 @@ class Ame::Action
     [options, self.arguments.process(options, remainder)]
   end
 
+  attr_accessor :name
+
 protected
 
   def options
