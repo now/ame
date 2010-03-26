@@ -4,8 +4,8 @@ class Ame::Argument
   def initialize(name, description, options = {}, &validate)
     @name, @description, @validate = name, description, validate || proc{ |results, argument| argument }
     @optional = options[:optional] || false
-    @type = Ame::Types[options[:type] || :string]
-    self.default = options[:default] if options.include?(:default)
+    @type = Ame::Types[[options[:type], options[:default], String].find{ |o| !o.nil? }]
+    set_default options[:default], options[:type] if options.include? :default
   end
 
   def process(results, argument)
@@ -33,8 +33,12 @@ private
     name.to_s.upcase
   end
 
-  def default=(value)
-    raise ArgumentError, "Default can only be set if optional" unless optional?
+  def set_default(value, type)
+    raise ArgumentError,
+      'Default value can only be set if optional' unless optional?
+    raise ArgumentError,
+      'Default value %s is not of type %s' %
+        [value, type] unless value.nil? or type.nil? or value.is_a? type
     @default = value
   end
 end

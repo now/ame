@@ -22,7 +22,7 @@ Expectations do
   end
 
   expect [1, 2] do
-    Ame::Splat.new('a', 'd', :type => :integer).process([], ['1', '2'])
+    Ame::Splat.new('a', 'd', :type => Integer).process([], ['1', '2'])
   end
 
   expect 'A...' do

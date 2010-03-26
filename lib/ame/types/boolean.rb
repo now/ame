@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 module Ame::Types::Boolean
-  Ame::Types.register self, :boolean
+  Ame::Types.register self, TrueClass, FalseClass
 
   def self.parse(argument, value)
     case value

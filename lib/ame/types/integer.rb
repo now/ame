@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 module Ame::Types::Integer
-  Ame::Types.register self, :integer
+  Ame::Types.register self, Integer
 
   def self.parse(argument, value)
     return argument.default if value.nil?
