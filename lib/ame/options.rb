@@ -67,7 +67,7 @@ private
   def argument(argument, option, arguments)
     case
     when argument then argument
-    when option.optional? then nil
+    when option.optional? then (!option.default).to_s
     else arguments.shift
     end
   end

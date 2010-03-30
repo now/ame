@@ -10,7 +10,7 @@ class Ame::Argument
 
   def process(options, processed, argument)
     raise Ame::MissingArgument, "Missing argument: #{self}" if required? and argument.nil?
-    @validate.call(options, processed, @type.parse(self, argument))
+    @validate.call(options, processed, parse(argument))
   end
 
   attr_reader :name, :description, :default
@@ -28,6 +28,10 @@ class Ame::Argument
   end
 
 private
+
+  def parse(argument)
+    argument.nil? ? default : @type.parse(self, argument)
+  end
 
   def argument_name
     name.to_s.upcase

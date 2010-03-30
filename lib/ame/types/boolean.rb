@@ -5,8 +5,6 @@ module Ame::Types::Boolean
 
   def self.parse(argument, value)
     case value
-    when nil
-      not argument.default
     when 'true', 'yes', 'on'
       true
     when 'false', 'no', 'off'

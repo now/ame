@@ -86,11 +86,11 @@ Expectations do
     end
   end
 
-  expect TrueClass do
+  expect FalseClass do
     Ame::Argument.new('a', 'd', :optional => true, :default => false).process({}, [], nil)
   end
 
-  expect FalseClass do
+  expect TrueClass do
     Ame::Argument.new('a', 'd', :optional => true, :default => true).process({}, [], nil)
   end
 

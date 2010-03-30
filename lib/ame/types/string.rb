@@ -4,6 +4,6 @@ module Ame::Types::String
   Ame::Types.register self, String
 
   def self.parse(argument, value)
-    value.nil? ? argument.default : value
+    value
   end
 end
