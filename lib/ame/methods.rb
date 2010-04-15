@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Methods
+  extend Forwardable
   include Enumerable
 
   def initialize
@@ -14,13 +15,11 @@ class Ame::Methods
     self
   end
 
-  def [](name)
-    @random[name]
-  end
+  def_delegators :@random, :[], :include?
 
   def each
-    @ordered.each do |action|
-      yield action
+    @ordered.each do |method|
+      yield method
     end
     self
   end

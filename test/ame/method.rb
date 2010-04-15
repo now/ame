@@ -5,49 +5,63 @@ require 'lookout'
 require 'ame'
 
 Expectations do
-  expect Ame::Method.new.to.delegate(:option).to(:options) do |action|
-    action.option 'a', 'd'
+  expect Ame::Method.new(nil).to.delegate(:option).to(:options) do |method|
+    method.option 'a', 'd'
   end
 
-  expect Ame::Method.new.to.delegate(:options_must_precede_arguments).to(:options) do |action|
-    action.options_must_precede_arguments
+  expect Ame::Method.new(nil).to.delegate(:options_must_precede_arguments).to(:options) do |method|
+    method.options_must_precede_arguments
   end
 
-  expect Ame::Method.new.to.delegate(:argument).to(:arguments) do |action|
-    action.argument 'a', 'd'
+  expect Ame::Method.new(nil).to.delegate(:argument).to(:arguments) do |method|
+    method.argument 'a', 'd'
   end
 
-  expect Ame::Method.new.to.delegate(:splat).to(:arguments) do |action|
-    action.splat 'a', 'd'
+  expect Ame::Method.new(nil).to.delegate(:splat).to(:arguments) do |method|
+    method.splat 'a', 'd'
   end
 
-  expect Ame::Method.new.to.delegate(:arity).to(:arguments) do |action|
-    action.arity
+  expect Ame::Method.new(nil).to.delegate(:arity).to(:arguments) do |method|
+    method.arity
   end
 
-  expect Ame::Method.new.not.to.be.defined?
+  expect Ame::Method.new(nil).not.to.be.defined?
 
-  expect Ame::Method.new.to.be.defined? do |action|
-    action.description 'd'
+  expect Ame::Method.new(nil).to.be.defined? do |method|
+    method.description 'd'
   end
 
   expect 'd' do
-    Ame::Method.new.description('d').description
+    Ame::Method.new(nil).description('d').description
   end
 
   expect 'name' do
-    action = Ame::Method.new
-    action.name = 'name'
-    action.name
+    method = Ame::Method.new(nil)
+    method.name = 'name'
+    method.name
   end
 
-  expect [{'a' => true}, ['b', 1, true, ['d', 'e', 'f']]] do
-    action = Ame::Method.new
-    action.option('a', 'd')
-    action.argument('a', 'd')
-    action.argument('b', 'd', :type => Integer)
-    action.argument('c', 'd', :type => FalseClass)
-    action.splat('d', 'd')
-    action.process(['b', '-a', '1', 'on', 'd', 'e', 'f'])
+  expect mock.to.receive(:method).with('b', 1, true, ['d', 'e', 'f'], {'a' => true}).once do |o|
+    o.stubs(:instance).returns(o)
+    method = Ame::Method.new(o)
+    method.option('a', 'd')
+    method.argument('a', 'd')
+    method.argument('b', 'd', :type => Integer)
+    method.argument('c', 'd', :type => FalseClass)
+    method.splat('d', 'd')
+    method.name = :method
+    method.process(['b', '-a', '1', 'on', 'd', 'e', 'f'])
+    method.process(['b', '-a', '1', 'on', 'd', 'e', 'f'])
+  end
+
+  expect mock.to.receive(:method).with(1, false, [], {'a' => 5}).once do |o|
+    o.stubs(:instance).returns(o)
+    method = Ame::Method.new(o)
+    method.option('a', 'd', :default => 5)
+    method.argument('b', 'd', :optional => true, :default => 1)
+    method.argument('c', 'd', :optional => true, :default => false)
+    method.splat('d', 'd', :optional => true)
+    method.name = :method
+    method.call
   end
 end

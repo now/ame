@@ -3,6 +3,11 @@
 class Ame::Method
   extend Forwardable
 
+  def initialize(klass)
+    @class = klass
+    @called = false
+  end
+
   def defined?
     instance_variable_defined? :@description
   end
@@ -18,8 +23,19 @@ class Ame::Method
   def_delegators :arguments, :argument, :splat, :arity
 
   def process(arguments)
+    return self if @called
     options, remainder = self.options.process(arguments)
-    [options, self.arguments.process(options, remainder)]
+    call(self.arguments.process(options, remainder), options)
+  end
+
+  def call(arguments = nil, options = nil)
+    return self if @called
+    options, remainder = self.options.process([]) unless options
+    arguments ||= self.arguments.process(options, [])
+    arguments << options
+    @class.instance.send name, *arguments
+    @called = true
+    self
   end
 
   attr_accessor :name

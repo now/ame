@@ -3,9 +3,17 @@
 require 'facets/kernel/tap'
 require 'forwardable'
 
-class Ame
+module Ame
+  Error = Class.new(StandardError)
+  MalformedArgument = Class.new(Error)
+  MissingArgument = Class.new(Error)
+  UnrecognizedOption = Class.new(Error)
+
   autoload :Argument, 'ame/argument'
   autoload :Arguments, 'ame/arguments'
+  autoload :Base, 'ame/base'
+  autoload :Class, 'ame/class'
+  autoload :Classes, 'ame/classes'
   autoload :Method, 'ame/method'
   autoload :Methods, 'ame/methods'
   autoload :Option, 'ame/option'
@@ -13,47 +21,6 @@ class Ame
   autoload :Splat, 'ame/splat'
   autoload :Types, 'ame/types'
   autoload :Version, 'ame/version'
-
-  Error = Class.new(StandardError)
-  MalformedArgument = Class.new(Error)
-  MissingArgument = Class.new(Error)
-  UnrecognizedOption = Class.new(Error)
-
-  self.extend SingleForwardable
-
-  self.def_delegators :method, :description, :option, :argument, :splat
-
-  def self.method_added(name)
-    return unless public_instance_methods.map{ |m| m.to_sym }.include? name
-    method.name = name
-    methods << method if method.defined?
-    self.method = Method.new
-  end
-
-  def self.process
-    raise NotImplementedError, "initialize method must be defined" unless initialize = methods[:initialize]
-    if methods.size > 1
-      unless initialize.arity.zero?
-        raise NotImplementedError,
-          "initialize method must not have arguments if other methods have been defined"
-      end
-      initialize.argument :method, "Method to run"
-    end
-  end
-
-private
-
-  def self.methods
-    @methods ||= Methods.new
-  end
-
-  def self.method
-    @method ||= Method.new
-  end
-
-  def self.method=(method)
-    @method = method
-  end
 
 =begin
   def initialize(version, command = File.basename($PROGRAM_NAME), name = command)
