@@ -56,6 +56,10 @@ Expectations do
   end
 
   expect ArgumentError do
+    Ame::Arguments.new.splat('a', 'd').argument('b', 'd')
+  end
+
+  expect ArgumentError do
     Ame::Arguments.new.argument('a', 'd', :optional => true).argument('b', 'd')
   end
 

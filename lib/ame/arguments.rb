@@ -9,6 +9,9 @@ class Ame::Arguments
   def argument(name, description, options = {}, &block)
     argument = Ame::Argument.new(name, description, options, &block)
     raise ArgumentError,
+      'argument %s may not follow splat argument %s' %
+        [argument.name, splat.name] if @splat
+    raise ArgumentError,
       'Required argument %s must come before optional argument %s' %
         [argument.name, first_optional.name] if argument.required? and first_optional
     @arguments << argument
