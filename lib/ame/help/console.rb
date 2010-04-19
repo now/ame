@@ -17,8 +17,8 @@ module Ame::Help::Console
 
   def self.options(options)
     longest = options.map{ |o| option(o).length }.max
-    options.map{ |o| '%-*s  %s' % [longest, option(o), o.description] }.
-      sort_by{ |s| s.sub(/^\s*-+/, "") }.join("\n")
+    options.sort_by{ |o| o.short || o.long }.
+      map{ |o| '%-*s  %s' % [longest, option(o), o.description] }.join("\n")
   end
 
   def self.option(option)
