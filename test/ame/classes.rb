@@ -20,7 +20,7 @@ Expectations do
   expect ArgumentError do
     c = Class.new(Ame::Class)
     c.class_eval do
-      namespace 'defined:namespace'
+      namespace :name => 'defined:namespace'
     end
     Ame::Classes.method('defined:namespace:undefined-method', ignore)
   end
@@ -28,7 +28,7 @@ Expectations do
   expect 'd' do
     c = Class.new(Ame::Class)
     c.class_eval do
-      namespace 'defined:namespace2'
+      namespace :name => 'defined:namespace2'
       description 'd'
       def a() end
     end
@@ -38,7 +38,7 @@ Expectations do
   expect 'd' do
     c = Class.new(Ame::Class)
     c.class_eval do
-      namespace 'defined:namespace3'
+      namespace :name => 'defined:namespace3'
       description 'd'
       def defined_method() end
     end
