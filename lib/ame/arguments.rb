@@ -20,7 +20,8 @@ class Ame::Arguments
     self
   end
 
-  def splat(name, description, options = {}, &validate)
+  def splat(name = nil, description = nil, options = {}, &validate)
+    return @splat unless name
     splat = Ame::Splat.new(name, description, options, &validate)
     raise ArgumentError,
       'Splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat

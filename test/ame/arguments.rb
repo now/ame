@@ -110,4 +110,8 @@ Expectations do
                        splat('b', 'd', :type => Integer).
                        process({}, ['1', '2', '3'])
   end
+
+  expect Ame::Splat do
+    Ame::Arguments.new.splat('a', 'b').splat
+  end
 end
