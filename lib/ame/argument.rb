@@ -24,17 +24,15 @@ class Ame::Argument
   end
 
   def to_s
-    (optional? ? '[%s]' : '%s') % [argument_name]
+    name.to_s.upcase
   end
 
 private
 
   def parse(argument)
-    argument.nil? ? default : @type.parse(self, argument)
-  end
-
-  def argument_name
-    name.to_s.upcase
+    argument.nil? ? default : @type.parse(argument)
+  rescue Ame::MalformedArgument => e
+    raise e.exception('%s: %s' % [self, e])
   end
 
   def set_default(value, type)

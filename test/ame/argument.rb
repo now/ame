@@ -62,7 +62,7 @@ Expectations do
     Ame::Argument.new('a', 'd', :type => Integer).process({}, [], 'junk')
   end
 
-  expect 'A is not an integer: junk' do
+  expect 'A: not an integer: junk' do
     begin
       Ame::Argument.new('a', 'd', :type => Integer).process({}, [], 'junk')
     rescue => e
@@ -96,14 +96,6 @@ Expectations do
 
   expect Ame::MalformedArgument do
     Ame::Argument.new('a', 'd', :type => TrueClass).process({}, [], 'junk')
-  end
-
-  expect 'A' do
-    Ame::Argument.new('a', 'd').to_s
-  end
-
-  expect '[A]' do
-    Ame::Argument.new('a', 'd', :optional => true).to_s
   end
 
   expect 'a' => 1 do
