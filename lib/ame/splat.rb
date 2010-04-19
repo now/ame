@@ -7,8 +7,4 @@ class Ame::Splat < Ame::Argument
       result << super(options, processed, arguments.shift) until arguments.empty?
     }
   end
-
-  def to_s
-    super + '...'
-  end
 end

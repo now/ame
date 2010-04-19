@@ -33,7 +33,39 @@ Expectations do
     Ame::Option.new('a', 'd', :type => String).process({}, [], 'string')
   end
 
-  expect 'a' do
+  expect 'A' do
+    Ame::Option.new('a', 'd', :type => String).argument_name
+  end
+
+  expect 'B' do
+    Ame::Option.new('a', 'd', :argument => 'b', :type => String).argument_name
+  end
+
+  expect ArgumentError do
+    Ame::Option.new('a', 'd', :argument => 'a').argument_name
+  end
+
+  expect ['a'] do
+    Ame::Option.new('a', 'd', :aliases => 'a').aliases
+  end
+
+  expect ['a', 'b', 'c'] do
+    Ame::Option.new('a', 'd', :aliases => ['a', 'b', 'c']).aliases
+  end
+
+  expect '-a' do
     Ame::Option.new('a', 'd').to_s
+  end
+
+  expect '--abc' do
+    Ame::Option.new('abc', 'd').to_s
+  end
+
+  expect 'a' do
+    Ame::Option.new('abc', 'd', :aliases => ['a', 'b']).short
+  end
+
+  expect 'abc' do
+    Ame::Option.new('a', 'd', :aliases => ['abc', 'b']).long
   end
 end

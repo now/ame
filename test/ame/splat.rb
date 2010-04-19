@@ -24,12 +24,4 @@ Expectations do
   expect [1, 2] do
     Ame::Splat.new('a', 'd', :type => Integer).process({}, [], ['1', '2'])
   end
-
-  expect 'A...' do
-    Ame::Splat.new('a', 'd').to_s
-  end
-
-  expect '[A]...' do
-    Ame::Splat.new('a', 'd', :optional => true).to_s
-  end
 end

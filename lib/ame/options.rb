@@ -12,7 +12,7 @@ class Ame::Options
   def option(name, description, options = {}, &block)
     option = Ame::Option.new(name, description, options, &block)
     self[option.name] = option
-    options.fetch(:aliases, []).each do |a|
+    option.aliases.each do |a|
       self[a] = option
     end
     @ordered << option
