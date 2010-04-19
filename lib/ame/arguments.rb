@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Arguments
+  include Enumerable
+
   def initialize
     @arguments = []
     @splat = nil
@@ -44,20 +46,16 @@ class Ame::Arguments
     }
   end
 
+  def each
+    @arguments.each do |argument|
+      yield argument
+    end
+    self
+  end
+
 private
 
   def first_optional
     @arguments.find{ |a| a.optional? }
   end
-
-=begin
-  def to_s
-    @arguments.map{ |argument| argument.to_s).join(' ').tap{ |s|
-      if @splat
-        s << ' ' unless s.empty?
-        s << @splat.to_s
-      end
-    }
-  end
-=end
 end

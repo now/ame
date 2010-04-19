@@ -5,6 +5,10 @@ require 'lookout'
 require 'ame'
 
 Expectations do
+  expect Enumerable do
+    Ame::Arguments.new
+  end
+
   expect 0 do
     Ame::Arguments.new.arity
   end
