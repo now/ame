@@ -5,6 +5,14 @@ require 'lookout'
 require 'ame'
 
 Expectations do
+  expect Enumerable do
+    Ame::Options.new
+  end
+
+  expect ['a', 'b'] do
+    Ame::Options.new.option('a', 'd').option('b', 'd').map{ |o| o.name }
+  end
+
   expect ArgumentError do
     Ame::Options.new.option('a', 'd').option('a', 'd')
   end

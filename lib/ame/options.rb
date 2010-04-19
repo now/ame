@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Options
+  include Enumerable
+
   def initialize
     @options = {}
+    @ordered = []
     @options_must_precede_arguments = ENV.include? 'POSIXLY_CORRECT'
   end
 
@@ -12,6 +15,7 @@ class Ame::Options
     options.fetch(:aliases, []).each do |a|
       self[a] = option
     end
+    @ordered << option
     self
   end
 
@@ -22,6 +26,13 @@ class Ame::Options
 
   def process(arguments)
     process!(defaults, arguments.dup)
+  end
+
+  def each
+    @ordered.each do |option|
+      yield option
+    end
+    self
   end
 
 private
