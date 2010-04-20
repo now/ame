@@ -5,11 +5,8 @@ class Ame::Method
 
   def initialize(klass)
     @class = klass
+    @description = nil
     @called = false
-  end
-
-  def defined?
-    instance_variable_defined? :@description
   end
 
   def description(description = nil)
@@ -21,6 +18,12 @@ class Ame::Method
   def_delegators :options, :option, :options_must_precede_arguments
 
   def_delegators :arguments, :argument, :splat, :arity
+
+  def validate
+    raise ArgumentError,
+      'method lacks description: %s' % name unless description
+    true
+  end
 
   def process(arguments)
     return self if @called

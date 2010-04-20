@@ -25,14 +25,16 @@ Expectations do
     method.arity
   end
 
-  expect Ame::Method.new(nil).not.to.be.defined?
-
-  expect Ame::Method.new(nil).to.be.defined? do |method|
-    method.description 'd'
-  end
-
   expect 'd' do
     Ame::Method.new(nil).description('d').description
+  end
+
+  expect ArgumentError do
+    Ame::Method.new(nil).validate
+  end
+
+  expect true do
+    Ame::Method.new(nil).description('d').validate
   end
 
   expect 'name' do
