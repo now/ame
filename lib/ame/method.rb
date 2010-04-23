@@ -43,8 +43,6 @@ class Ame::Method
 
   attr_accessor :name
 
-protected
-
   def options
     @options ||= Ame::Options.new
   end
