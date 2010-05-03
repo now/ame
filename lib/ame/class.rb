@@ -6,10 +6,15 @@ class Ame::Class
   extend SingleForwardable
   include Singleton
 
-  def self.namespace(options = {})
-    @description = options[:description] if options[:description]
-    @namespace = options[:name] if options.member? :name
-    @namespace = name.gsub('::', ':').downcase if @namespace.nil? or @namespace.empty?
+  def self.namespace(namespace = nil)
+    raise ArgumentError,
+      'namespace can only be set from a child of Ame::Class' unless
+        namespace.nil? or self.superclass == Ame::Class
+    @namespace = namespace.downcase if namespace
+    if @namespace.nil? or @namespace.empty?
+      @namespace = superclass < Ame::Class ? superclass.namespace + ' ' : ""
+      @namespace << name.split('::').last.downcase
+    end
     @namespace
   end
 
@@ -41,9 +46,14 @@ private
   end
 
   def self.method_added(name)
-    return unless public_instance_methods.map{ |m| m.to_sym }.include? name
-    method.name = name
-    methods << method if method.validate
+    if name == :initialize
+      method.validate
+      @description = method.description
+    else
+      return unless public_instance_methods.map{ |m| m.to_sym }.include? name
+      method.name = name
+      methods << method if method.validate
+    end
     @method = Ame::Method.new(self)
   end
 
