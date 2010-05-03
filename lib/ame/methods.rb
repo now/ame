@@ -15,7 +15,11 @@ class Ame::Methods
     self
   end
 
-  def_delegators :@random, :[], :include?
+  def [](name)
+    @random[name.to_sym]
+  end
+
+  def_delegators :@random, :include?
 
   def each
     @ordered.each do |method|
