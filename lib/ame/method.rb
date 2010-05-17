@@ -7,6 +7,7 @@ class Ame::Method
     @class = klass
     @description = nil
     @called = false
+    option 'help', 'display help for this method'
   end
 
   def description(description = nil)
@@ -28,12 +29,14 @@ class Ame::Method
   def process(arguments)
     return self if @called
     options, remainder = self.options.process(arguments)
+    return self if possibly_display_help(options)
     call(self.arguments.process(options, remainder), options)
   end
 
   def call(arguments = nil, options = nil)
     return self if @called
     options, remainder = self.options.process([]) unless options
+    return self if possibly_display_help(options)
     arguments ||= self.arguments.process(options, [])
     arguments << options
     @class.instance.send name, *arguments
@@ -49,5 +52,17 @@ class Ame::Method
 
   def arguments
     @arguments ||= Ame::Arguments.new
+  end
+
+private
+
+  def possibly_display_help(options)
+    return false unless options['help']
+    help
+    true
+  end
+
+  def help
+    @class.help_for_method self
   end
 end

@@ -43,7 +43,7 @@ Expectations do
     method.name
   end
 
-  expect mock.to.receive(:method).with('b', 1, true, ['d', 'e', 'f'], {'a' => true}).once do |o|
+  expect mock.to.receive(:method).with('b', 1, true, ['d', 'e', 'f'], {'help' => false, 'a' => true}).once do |o|
     o.stubs(:instance).returns(o)
     method = Ame::Method.new(o)
     method.option('a', 'd')
@@ -56,7 +56,7 @@ Expectations do
     method.process(['b', '-a', '1', 'on', 'd', 'e', 'f'])
   end
 
-  expect mock.to.receive(:method).with(1, false, [], {'a' => 5}).once do |o|
+  expect mock.to.receive(:method).with(1, false, [], {'help' => false, 'a' => 5}).once do |o|
     o.stubs(:instance).returns(o)
     method = Ame::Method.new(o)
     method.option('a', 'd', :default => 5)
@@ -65,5 +65,10 @@ Expectations do
     method.splat('d', 'd', :optional => true)
     method.name = :method
     method.call
+  end
+
+  expect Ame::Class.to.receive(:help_for_method).with(instance_of(Ame::Method)) do |o|
+    method = Ame::Method.new(o)
+    method.process ['--help']
   end
 end

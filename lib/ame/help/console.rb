@@ -1,41 +1,86 @@
 # -*- coding: utf-8 -*-
 
-module Ame::Help::Console
-  def self.method(method, program = "")
-    args = arguments(method.arguments)
-    opts = options(method.options)
-    "Usage: ".tap{ |result|
-      result << program << ' ' if program.length > 0
-      result << method.name
-      result << ' ' << args if args.length > 0
-      result << "\n  " << method.description
-      result << "\n\nOptions:\n" << opts if opts.length > 0
+class Ame::Help::Console
+  def initialize(io = STDOUT)
+    @io = io
+  end
+
+  def for_dispatch(klass, method, subclass)
+    for_method(klass, method).tap{ |result|
+      append_group result, 'Methods', methods(subclass.methods)
     }
   end
 
-  # Make rest private and turn this into a class, taking program in constructor
+  def for_method(klass, method)
+    'Usage: '.tap{ |result|
+      result << klass.namespace << ' ' << method.name.to_s
+      append result, ' ', options_usage(method.options)
+      append result, ' ', arguments_usage(method.arguments)
+      result << "\n  " << method.description
+      append_group result, 'Arguments', arguments(method.arguments)
+      append_group result, 'Options', options(method.options)
+    }
+  end
 
-  def self.arguments(arguments)
-    arguments.map{ |a| argument(a) }.tap{ |as|
-      as << splat(arguments.splat) if arguments.splat
+private
+
+  def append(result, prefix, string)
+    result << prefix << string unless string.empty?
+  end
+
+  def append_group(result, heading, listing)
+    append result, "\n\n%s:\n" % heading, listing
+  end
+
+  def options_usage(options)
+    options.count > 0 ? '[OPTIONS]...' : ""
+  end
+
+  def arguments_usage(arguments)
+    arguments.map{ |a| argument_usage(a) }.tap{ |as|
+      as << splat_usage(arguments.splat) if arguments.splat
     }.join(' ')
   end
 
-  def self.argument(argument)
+  def argument_usage(argument)
     (argument.optional? ? '[%s]' : '%s') % argument
   end
 
-  def self.splat(splat)
+  def splat_usage(splat)
+    '%s...' % argument_usage(splat)
+  end
+
+  def arguments(arguments)
+    longest = arguments.map{ |a| argument(a).length }.tap{ |as|
+      as << splat(arguments.splat).length if arguments.splat
+    }.max
+    arguments.
+      map{ |a| '  %-*s  %s' [longest, argument(a), a.description] }.
+      tap{ |as| as << splat(arguments.splat) if arguments.splat }.
+      join("\n")
+  end
+
+  def argument(argument)
+    if argument.optional? and not argument.default.nil?
+      '[%s=%s]' % [argument, argument.default]
+    elsif argument.optional?
+      '[%s]' % argument
+    else
+      argument.to_s
+    end
+  end
+
+  def splat(splat)
     '%s...' % argument(splat)
   end
 
-  def self.options(options)
+  def options(options)
     longest = options.map{ |o| option(o).length }.max
     options.sort_by{ |o| o.short || o.long }.
       map{ |o| '  %-*s  %s' % [longest, option(o), o.description] }.join("\n")
   end
 
-  def self.option(option)
+  def option(option)
     if not option.long
       '-%s' % option.short
     elsif option.short and option.argument_name.empty?
@@ -47,5 +92,15 @@ module Ame::Help::Console
     else
       '    --%s=%s' % [option.long, option.argument_name]
     end
+  end
+
+  def methods(methods)
+    longest = methods.map{ |a| method(a).length }.max
+    methods.sort_by{ |m| method(m) }.
+      map{ |m| '  %-*s  %s' [longest, method(m), m.description] }.join("\n")
+  end
+
+  def method(method)
+    method.name.to_s
   end
 end

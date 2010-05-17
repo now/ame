@@ -23,15 +23,32 @@ class Ame::Class
     @description
   end
 
+  def self.help=(help)
+    @@help = help
+  end
+
+  def self.help
+    @@help ||= Ame::Help::Console.new
+  end
+  private_class_method :help
+
+  def self.help_for_dispatch(method, subclass)
+    help.for_dispatch self, method, subclass
+  end
+
+  def self.help_for_method(method)
+    help.for_method self, method
+  end
+
   self.def_delegators :method, :options_must_precede_arguments, :option, :argument, :splat
 
   def process(name, arguments = [])
-    methods[name].process arguments
+    self.class.methods[name].process arguments
     self
   end
 
   def call(name, arguments = nil, options = nil)
-    methods[name].call arguments, options
+    self.class.methods[name].call arguments, options
     self
   end
 
@@ -58,5 +75,7 @@ private
   end
 
   def self.inherited(subclass)
+    @method = Ame::Dispatch.new(self, subclass)
+    @method.define
   end
 end

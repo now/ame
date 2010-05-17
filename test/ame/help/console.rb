@@ -5,13 +5,45 @@ require 'lookout'
 require 'ame'
 
 Expectations do
-  expect %{Usage: method A B C...
-  Method description
+  expect %{Usage: root dispatch [OPTIONS] METHOD [ARGUMENTS]...
+  Dispatch description
+
+Arguments:
+  METHOD          Method to run
+  [ARGUMENTS]...  Arguments to pass to METHOD
 
 Options:
-  -a, --abc=ABC  abc description
-  -v             v description} do
-    m = Ame::Method.new(nil)
+      --help     Display help for this method
+  
+Methods:
+  method1  Method 1 does a
+  method2  Method 2 does b} do
+    Ame::Class.stubs(:inherited)
+    c = Class.new(Ame::Class) {
+      include Singleton
+      namespace 'root'
+
+      description 'Root description'
+      def initialize() end
+    }
+    c.stubs(:inherited)
+    d = Class.new(c){
+      stubs 'name' => 'Root::Dispatch'
+      description 'Dispatch description'
+      def initialize() end
+
+      description 'Method 1 does a'
+      def method1() end
+
+      description 'Method 2 does b'
+      def method2() end
+    }
+    Ame::Dispatch.new(Ame::Class, c).define
+    Ame::Dispatch.new(c, d).define
+    Ame::Class.instance.process :root, %w(dispatch --help)
+  end
+
+=begin
     m.description 'Method description'
     m.option 'abc', 'abc description', :aliases => 'a', :type => String
     m.option 'v', 'v description'
@@ -19,67 +51,7 @@ Options:
     m.argument 'B', 'B description'
     m.splat 'C', 'C description'
     m.name = 'method'
-    Ame::Help::Console.method(m)
+    Ame::Help::Console.new.method(m)
   end
-
-  expect 'A B [C]' do
-    Ame::Help::Console.arguments(Ame::Arguments.new.argument('a', 'd').
-                                   argument('b', 'd').
-                                   argument('c', 'd', :optional => true))
-  end
-
-  expect 'A B C...' do
-    Ame::Help::Console.arguments(Ame::Arguments.new.argument('a', 'd').
-                                   argument('b', 'd').
-                                   splat('c', 'd'))
-  end
-
-  expect 'A' do
-    Ame::Help::Console.argument(Ame::Argument.new('a', 'd'))
-  end
-
-  expect '[A]' do
-    Ame::Help::Console.argument(Ame::Argument.new('a', 'd', :optional => true))
-  end
-
-  expect 'A...' do
-    Ame::Help::Console.splat(Ame::Splat.new('a', 'd'))
-  end
-
-  expect '[A]...' do
-    Ame::Help::Console.splat(Ame::Splat.new('a', 'd', :optional => true))
-  end
-
-  expect "  -a, --abc=ABC  d\n      --bbc      e" do
-    Ame::Help::Console.options(Ame::Options.new.option('bbc', 'e').
-                                option('abc', 'd', :aliases => 'a', :type => String))
-  end
-
-  expect '-a' do
-    Ame::Help::Console.option(Ame::Option.new('a', 'd'))
-  end
-
-  expect '-a, --abc' do
-    Ame::Help::Console.option(Ame::Option.new('a', 'd', :aliases => 'abc'))
-  end
-
-  expect '-a, --abc' do
-    Ame::Help::Console.option(Ame::Option.new('abc', 'd', :aliases => 'a'))
-  end
-
-  expect '-a, --abc' do
-    Ame::Help::Console.option(Ame::Option.new('abc', 'd', :aliases => ['a', 'b', 'cde']))
-  end
-
-  expect '-a, --abc=ABC' do
-    Ame::Help::Console.option(Ame::Option.new('abc', 'd', :aliases => 'a', :type => String))
-  end
-
-  expect '    --abc' do
-    Ame::Help::Console.option(Ame::Option.new('abc', 'd'))
-  end
-
-  expect '    --abc=ABC' do
-    Ame::Help::Console.option(Ame::Option.new('abc', 'd', :type => String))
-  end
+=end
 end
