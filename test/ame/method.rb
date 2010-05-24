@@ -37,9 +37,9 @@ Expectations do
     Ame::Method.new(nil).description('d').validate
   end
 
-  expect 'name' do
+  expect :name do
     method = Ame::Method.new(nil)
-    method.name = 'name'
+    method.name = :name
     method.name
   end
 

@@ -17,8 +17,8 @@ Options:
       --help  Display help for this method
 
 Methods:
-  method1  Method 1 does a
-  method2  Method 2 does b
+  method-1  Method 1 does a
+  method-2  Method 2 does b
 } do
     Ame::Class.stubs(:inherited)
     c = Class.new(Ame::Class) {
@@ -35,10 +35,10 @@ Methods:
       def initialize() end
 
       description 'Method 1 does a'
-      def method1() end
+      def method_1() end
 
       description 'Method 2 does b'
-      def method2() end
+      def method_2() end
     }
     Ame::Dispatch.new(Ame::Class, c).define
     Ame::Dispatch.new(c, d).define

@@ -22,7 +22,7 @@ class Ame::Method
 
   def validate
     raise ArgumentError,
-      'method lacks description: %s' % name unless description
+      'method lacks description: %s' % ruby_name unless description
     true
   end
 
@@ -39,12 +39,17 @@ class Ame::Method
     return self if possibly_display_help(options)
     arguments ||= self.arguments.process(options, [])
     arguments << options
-    @class.instance.send name, *arguments
+    @class.instance.send ruby_name, *arguments
     @called = true
     self
   end
 
-  attr_accessor :name
+  def name=(name)
+    @ruby_name = name
+    @name = name.to_s.gsub('_', '-').to_sym
+  end
+
+  attr_reader :name, :ruby_name
 
   def options
     @options ||= Ame::Options.new
