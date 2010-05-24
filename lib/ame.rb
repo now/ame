@@ -7,6 +7,7 @@ module Ame
   Error = Class.new(StandardError)
   MalformedArgument = Class.new(Error)
   MissingArgument = Class.new(Error)
+  SuperfluousArgument = Class.new(Error)
   UnrecognizedOption = Class.new(Error)
 
   autoload :Argument, 'ame/argument'

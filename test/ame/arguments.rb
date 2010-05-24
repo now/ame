@@ -114,4 +114,8 @@ Expectations do
   expect Ame::Splat do
     Ame::Arguments.new.splat('a', 'b').splat
   end
+
+  expect Ame::SuperfluousArgument do
+    Ame::Arguments.new.process({}, ['1'])
+  end
 end

@@ -44,6 +44,8 @@ class Ame::Arguments
         processed << argument.process(options, processed, arguments.shift)
       end
       processed << @splat.process(options, processed, arguments) if @splat
+      raise Ame::SuperfluousArgument,
+        'superfluous arguments: %s' % arguments.join(' ') unless arguments.empty?
     }
   end
 
