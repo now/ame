@@ -66,10 +66,11 @@ private
     if name == :initialize
       method.validate
       @description = method.description
-    else
-      return unless public_instance_methods.map{ |m| m.to_sym }.include? name
+    elsif public_instance_methods.map{ |m| m.to_sym }.include? name
       method.name = name
       methods << method if method.validate
+    elsif (method.validate rescue false)
+      raise ArgumentError, 'Non-public method cannot be used by Ame: ' % name
     end
     @method = Ame::Method.new(self)
   end

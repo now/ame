@@ -9,7 +9,7 @@ Expectations do
     Ame::Dispatch.new(nil, nil)
   end
 
-  expect mock.to.receive(:instance_eval) do |o|
+  expect mock.to.receive(:class_exec) do |o|
     Ame::Dispatch.new(o, nil).define
   end
 

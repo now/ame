@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 require 'lookout'
+require 'stringio'
 
 require 'ame'
 
 Expectations do
-  expect %{Usage: root dispatch [OPTIONS] METHOD [ARGUMENTS]...
+  expect %{Usage: help-console-test-1 dispatch [OPTIONS]... METHOD [ARGUMENTS]...
   Dispatch description
 
 Arguments:
@@ -13,22 +14,23 @@ Arguments:
   [ARGUMENTS]...  Arguments to pass to METHOD
 
 Options:
-      --help     Display help for this method
-  
+      --help  Display help for this method
+
 Methods:
   method1  Method 1 does a
-  method2  Method 2 does b} do
+  method2  Method 2 does b
+} do
     Ame::Class.stubs(:inherited)
     c = Class.new(Ame::Class) {
       include Singleton
-      namespace 'root'
+      namespace 'help-console-test-1'
 
       description 'Root description'
       def initialize() end
     }
     c.stubs(:inherited)
     d = Class.new(c){
-      stubs 'name' => 'Root::Dispatch'
+      stubs 'name' => 'HelpConsoleTest1::Dispatch'
       description 'Dispatch description'
       def initialize() end
 
@@ -40,18 +42,43 @@ Methods:
     }
     Ame::Dispatch.new(Ame::Class, c).define
     Ame::Dispatch.new(c, d).define
-    Ame::Class.instance.process :root, %w(dispatch --help)
+    io = StringIO.new
+    Ame::Class.help = Ame::Help::Console.new(io)
+    Ame::Class.instance.process :'help-console-test-1', %w(dispatch --help)
+    io.rewind
+    io.read
   end
 
-=begin
-    m.description 'Method description'
-    m.option 'abc', 'abc description', :aliases => 'a', :type => String
-    m.option 'v', 'v description'
-    m.argument 'A', 'A description'
-    m.argument 'B', 'B description'
-    m.splat 'C', 'C description'
-    m.name = 'method'
-    Ame::Help::Console.new.method(m)
+  expect %{Usage: namespace method [OPTIONS]... ARG1 ARG2 ARGN...
+  Method description
+
+Arguments:
+  ARG1     Argument 1
+  ARG2     Argument 2
+  ARGN...  Argument N
+
+Options:
+  -a, --abc=ABC  Abc description
+      --help     Display help for this method
+  -v             V description
+} do
+    Ame::Class.stubs(:inherited)
+    c = Class.new(Ame::Class) {
+      include Singleton
+      namespace 'namespace'
+
+      description 'Method description'
+      option 'abc', 'Abc description', :aliases => 'a', :type => String
+      option 'v', 'V description'
+      argument 'ARG1', 'Argument 1'
+      argument 'ARG2', 'Argument 2'
+      splat 'ARGN', 'Argument N'
+      def method() end
+    }
+    io = StringIO.new
+    Ame::Class.help = Ame::Help::Console.new(io)
+    c.instance.process :method, %w(--help)
+    io.rewind
+    io.read
   end
-=end
 end

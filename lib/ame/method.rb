@@ -7,7 +7,7 @@ class Ame::Method
     @class = klass
     @description = nil
     @called = false
-    option 'help', 'display help for this method'
+    option 'help', 'Display help for this method'
   end
 
   def description(description = nil)

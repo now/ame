@@ -6,12 +6,18 @@ class Ame::Help::Console
   end
 
   def for_dispatch(klass, method, subclass)
-    for_method(klass, method).tap{ |result|
+    @io.puts for_method_s(klass, method).tap{ |result|
       append_group result, 'Methods', methods(subclass.methods)
     }
   end
 
   def for_method(klass, method)
+    @io.puts for_method_s(klass, method)
+  end
+
+private
+
+  def for_method_s(klass, method)
     'Usage: '.tap{ |result|
       result << klass.namespace << ' ' << method.name.to_s
       append result, ' ', options_usage(method.options)
@@ -21,8 +27,6 @@ class Ame::Help::Console
       append_group result, 'Options', options(method.options)
     }
   end
-
-private
 
   def append(result, prefix, string)
     result << prefix << string unless string.empty?
@@ -55,8 +59,11 @@ private
       as << splat(arguments.splat).length if arguments.splat
     }.max
     arguments.
-      map{ |a| '  %-*s  %s' [longest, argument(a), a.description] }.
-      tap{ |as| as << splat(arguments.splat) if arguments.splat }.
+      map{ |a| '  %-*s  %s' % [longest, argument(a), a.description] }.
+      tap{ |as| as <<
+        '  %-*s  %s' %
+          [longest, splat(arguments.splat), arguments.splat.description] if
+            arguments.splat }.
       join("\n")
   end
 
@@ -97,7 +104,7 @@ private
   def methods(methods)
     longest = methods.map{ |a| method(a).length }.max
     methods.sort_by{ |m| method(m) }.
-      map{ |m| '  %-*s  %s' [longest, method(m), m.description] }.join("\n")
+      map{ |m| '  %-*s  %s' % [longest, method(m), m.description] }.join("\n")
   end
 
   def method(method)

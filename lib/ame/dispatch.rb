@@ -7,19 +7,18 @@ class Ame::Dispatch < Ame::Method
   end
 
   def define
-    # TODO: We really need a gensym here.
-    __sAD = @subclass
-    @class.instance_eval do
-      description __sAD.description
+    @class.class_exec(@subclass, self) do |subclass, dispatch|
+      @method = dispatch
+      description subclass.description
       options_must_precede_arguments
-      option 'version', 'display version information' if self == Ame::Class
-      argument 'method', 'method to run'
-      splat 'arguments', 'arguments to pass to METHOD', :optional => true
-      define_method __sAD.namespace.split(' ').last do |method, arguments, options|
+      option 'version', 'Display version information' if self == Ame::Class
+      argument 'method', 'Method to run'
+      splat 'arguments', 'Arguments to pass to METHOD', :optional => true
+      define_method subclass.namespace.split(' ').last do |method, arguments, options|
         if options['version']
           # Ame::Help::Console.version(self) # ⇒ puts klass.const_get('Version')
         else
-          __sAD.instance.process method, arguments
+          subclass.instance.process method, arguments
         end
       end
     end
