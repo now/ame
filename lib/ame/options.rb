@@ -37,6 +37,12 @@ class Ame::Options
 
 private
 
+  def []=(name, option)
+    raise ArgumentError,
+      'option already defined: %s' % name if @options.include? name
+    @options[name] = option
+  end
+
   def defaults
     {}.tap{ |results|
       @ordered.each do |option|
@@ -68,11 +74,6 @@ private
       'unrecognized option: %s' % match unless
         option = @options[match.sub(/^-+/, "")]
     results[option.name] = option.process(results, [], argument(arg, option, arguments))
-  end
-
-  def []=(name, option)
-    raise ArgumentError, 'option %s already defined' % name if @options.include? name
-    @options[name] = option
   end
 
   def argument(argument, option, arguments)
