@@ -61,6 +61,7 @@ Options:
   -a, --abc=ABC  Abc description
       --help     Display help for this method
   -v             V description
+  -x=LEVEL       X description
 } do
     Ame::Class.stubs(:inherited)
     c = Class.new(Ame::Class) {
@@ -70,6 +71,7 @@ Options:
       description 'Method description'
       option 'abc', 'Abc description', :aliases => 'a', :type => String
       option 'v', 'V description'
+      option 'x', 'X description', :type => String, :argument => 'level'
       argument 'ARG1', 'Argument 1'
       argument 'ARG2', 'Argument 2'
       splat 'ARGN', 'Argument N'

@@ -33,11 +33,11 @@ Expectations do
     Ame::Option.new('a', 'd', :type => String).process({}, [], 'string')
   end
 
-  expect 'A' do
+  expect 'a' do
     Ame::Option.new('a', 'd', :type => String).argument_name
   end
 
-  expect 'B' do
+  expect 'b' do
     Ame::Option.new('a', 'd', :argument => 'b', :type => String).argument_name
   end
 

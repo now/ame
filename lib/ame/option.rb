@@ -15,7 +15,7 @@ class Ame::Option < Ame::Argument
     raise ArgumentError,
       'boolean options cannot have argument descriptions' if
         is_boolean and options[:argument]
-    @argument_name = is_boolean ? "" : (options[:argument] || name).to_s.upcase
+    @argument_name = is_boolean ? "" : (options[:argument] || name).to_s
     @aliases = Array(options[:alias]) + Array(options[:aliases])
     super
   end

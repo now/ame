@@ -88,16 +88,18 @@ private
   end
 
   def option(option)
-    if not option.long
+    if not option.long and option.argument_name.empty?
       '-%s' % option.short
+    elsif not option.long
+      '-%s=%s' % [option.short, option.argument_name.upcase]
     elsif option.short and option.argument_name.empty?
       '-%s, --%s' % [option.short, option.long]
     elsif option.short
-      '-%s, --%s=%s' % [option.short, option.long, option.argument_name]
+      '-%s, --%s=%s' % [option.short, option.long, option.argument_name.upcase]
     elsif option.argument_name.empty?
       '    --%s' % option.long
     else
-      '    --%s=%s' % [option.long, option.argument_name]
+      '    --%s=%s' % [option.long, option.argument_name.upcase]
     end
   end
 
