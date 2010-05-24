@@ -40,6 +40,10 @@ class Ame::Class
     help.for_method self, method
   end
 
+  def self.methods
+    @methods ||= Ame::Methods.new
+  end
+
   self.def_delegators :method, :options_must_precede_arguments, :option, :argument, :splat
 
   def process(name, arguments = [])
@@ -57,10 +61,7 @@ private
   def self.method
     @method ||= Ame::Method.new(self)
   end
-
-  def self.methods
-    @methods ||= Ame::Methods.new
-  end
+  private_class_method :method
 
   def self.method_added(name)
     if name == :initialize
@@ -74,9 +75,11 @@ private
     end
     @method = Ame::Method.new(self)
   end
+  private_class_method :method_added
 
   def self.inherited(subclass)
     @method = Ame::Dispatch.new(self, subclass)
     @method.define
   end
+  private_class_method :inherited
 end
