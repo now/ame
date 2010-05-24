@@ -53,6 +53,10 @@ Expectations do
     Ame::Option.new('a', 'd', :aliases => ['a', 'b', 'c']).aliases
   end
 
+  expect ['b', 'c', 'd'] do
+    Ame::Option.new('a', 'd', :alias => 'b', :aliases => ['c', 'd']).aliases
+  end
+
   expect '-a' do
     Ame::Option.new('a', 'd').to_s
   end
