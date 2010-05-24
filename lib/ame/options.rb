@@ -54,20 +54,20 @@ private
       when /^-([^=-]{2,})$/
         arguments.unshift *$1.split("").map{ |s| '-' + s }
       when /^(--[^=]+|-[^-])(?:=(.*))?$/
-        match = $1
-        arg = $2
-        raise Ame::UnrecognizedOption,
-          'unrecognized option: %s' %
-            match unless option = @options[match.sub(/^-+/, "")]
-        results[option.name] = option.process(results,
-                                              [],
-                                              argument(arg, option, arguments))
+        process1 results, arguments, $1, $2
       else
         remainder << first
         break if @options_must_precede_arguments
       end
     end
     [results, remainder.concat(arguments)]
+  end
+
+  def process1(results, arguments, match, arg)
+    raise Ame::UnrecognizedOption,
+      'unrecognized option: %s' % match unless
+        option = @options[match.sub(/^-+/, "")]
+    results[option.name] = option.process(results, [], argument(arg, option, arguments))
   end
 
   def []=(name, option)
