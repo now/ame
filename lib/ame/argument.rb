@@ -8,6 +8,10 @@ class Ame::Argument
     set_default options[:default], options[:type] if options.include? :default
   end
 
+  def arity
+    1
+  end
+
   def process(options, processed, argument)
     raise Ame::MissingArgument, 'missing argument: %s' % self if required? and argument.nil?
     @validate.call(options, processed, parse(argument))

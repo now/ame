@@ -7,7 +7,7 @@ class Ame::Help::Console
 
   def for_dispatch(klass, method, subclass)
     @io.puts for_method_s(klass, method).tap{ |result|
-      append_group result, 'Methods', methods(subclass.methods)
+      append_group result, 'Methods', :method, subclass.methods.sort_by{ |m| method(m) }
     }
   end
 
@@ -23,8 +23,8 @@ private
       append result, ' ', options_usage(method.options)
       append result, ' ', arguments_usage(method.arguments)
       result << "\n  " << method.description
-      append_group result, 'Arguments', arguments(method.arguments)
-      append_group result, 'Options', options(method.options)
+      append_group result, 'Arguments', :argument, method.arguments
+      append_group result, 'Options', :option, method.options.sort_by{ |o| o.short || o.long }
     }
   end
 
@@ -32,8 +32,10 @@ private
     result << prefix << string unless string.empty?
   end
 
-  def append_group(result, heading, listing)
-    append result, "\n\n%s:\n" % heading, listing
+  def append_group(result, heading, display, objects)
+    longest = objects.map{ |o| send(display, o).length }.max
+    append result, "\n\n%s:\n" % heading,
+      objects.map{ |o| '  %-*s  %s' % [longest, send(display, o), o.description] }.join("\n")
   end
 
   def options_usage(options)
@@ -41,50 +43,21 @@ private
   end
 
   def arguments_usage(arguments)
-    arguments.map{ |a| argument_usage(a) }.tap{ |as|
-      as << splat_usage(arguments.splat) if arguments.splat
+    arguments.map{ |a| 
+      if a.optional? and a.arity < 0 then '[%s]...'
+      elsif a.optional? then '[%s]'
+      elsif a.arity < 0 then '%s...'
+      else '%s'
+      end % a
     }.join(' ')
   end
 
-  def argument_usage(argument)
-    (argument.optional? ? '[%s]' : '%s') % argument
-  end
-
-  def splat_usage(splat)
-    '%s...' % argument_usage(splat)
-  end
-
-  def arguments(arguments)
-    longest = arguments.map{ |a| argument(a).length }.tap{ |as|
-      as << splat(arguments.splat).length if arguments.splat
-    }.max
-    arguments.
-      map{ |a| '  %-*s  %s' % [longest, argument(a), a.description] }.
-      tap{ |as| as <<
-        '  %-*s  %s' %
-          [longest, splat(arguments.splat), arguments.splat.description] if
-            arguments.splat }.
-      join("\n")
-  end
-
   def argument(argument)
-    if argument.optional? and not argument.default.nil?
-      '[%s=%s]' % [argument, argument.default]
-    elsif argument.optional?
-      '[%s]' % argument
-    else
-      argument.to_s
-    end
-  end
-
-  def splat(splat)
-    '%s...' % argument(splat)
-  end
-
-  def options(options)
-    longest = options.map{ |o| option(o).length }.max
-    options.sort_by{ |o| o.short || o.long }.
-      map{ |o| '  %-*s  %s' % [longest, option(o), o.description] }.join("\n")
+    result = argument.to_s
+    result << '=%s' % argument.default if argument.default
+    result = '[%s]' % result if argument.optional?
+    result << '...' if argument.arity < 0
+    result
   end
 
   def option(option)
@@ -101,12 +74,6 @@ private
     else
       '    --%s=%s' % [option.long, option.argument_name.upcase]
     end
-  end
-
-  def methods(methods)
-    longest = methods.map{ |a| method(a).length }.max
-    methods.sort_by{ |m| method(m) }.
-      map{ |m| '  %-*s  %s' % [longest, method(m), m.description] }.join("\n")
   end
 
   def method(method)
