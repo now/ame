@@ -9,11 +9,11 @@ class Ame::Option < Ame::Argument
     end
     is_boolean = [true, false].include? options[:default]
     if options[:optional] and not (is_boolean_type or is_boolean)
-      raise ArgumentError, 'Optional arguments to options are only allowed for booleans'
+      raise ArgumentError, 'optional arguments to options are only allowed for booleans'
     end
     options[:optional] = is_boolean
     raise ArgumentError,
-      'Boolean options cannot have argument descriptions' if
+      'boolean options cannot have argument descriptions' if
         is_boolean and options[:argument]
     @argument_name = is_boolean ? "" : (options[:argument] || name).to_s.upcase
     @aliases = Array(options[:aliases])

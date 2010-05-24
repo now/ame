@@ -11,7 +11,7 @@ module Ame::Types
     type = types[class_or_value] and return type
     pair = types.find{ |c, t| class_or_value.is_a? c } and return pair.last
     class_or_value.respond_to? :parse and return class_or_value
-    raise ArgumentError, 'Unknown type: %s' % class_or_value
+    raise ArgumentError, 'unknown type: %s' % class_or_value
   end
 
   def self.types

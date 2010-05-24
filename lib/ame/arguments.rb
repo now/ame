@@ -14,7 +14,7 @@ class Ame::Arguments
       'argument %s may not follow splat argument %s' %
         [argument.name, splat.name] if @splat
     raise ArgumentError,
-      'Required argument %s must come before optional argument %s' %
+      'required argument %s must come before optional argument %s' %
         [argument.name, first_optional.name] if argument.required? and first_optional
     @arguments << argument
     self
@@ -24,9 +24,9 @@ class Ame::Arguments
     return @splat unless name
     splat = Ame::Splat.new(name, description, options, &validate)
     raise ArgumentError,
-      'Splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
+      'splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
     raise ArgumentError,
-      'Optional argument %s may not precede required splat argument %s' %
+      'optional argument %s may not precede required splat argument %s' %
         [first_optional.name, splat.name] if splat.required? and first_optional
     @splat = splat
     self

@@ -57,7 +57,7 @@ private
         match = $1
         arg = $2
         raise Ame::UnrecognizedOption,
-          'Unrecognized option: %s' %
+          'unrecognized option: %s' %
             match unless option = @options[match.sub(/^-+/, "")]
         results[option.name] = option.process(results,
                                               [],
@@ -71,7 +71,7 @@ private
   end
 
   def []=(name, option)
-    raise ArgumentError, "Option #{name} already defined" if @options.include? name
+    raise ArgumentError, 'option %s already defined' % name if @options.include? name
     @options[name] = option
   end
 

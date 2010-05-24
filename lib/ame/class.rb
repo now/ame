@@ -71,7 +71,7 @@ private
       method.name = name
       methods << method if method.validate
     elsif (method.validate rescue false)
-      raise ArgumentError, 'Non-public method cannot be used by Ame: ' % name
+      raise ArgumentError, 'non-public method cannot be used by Ame: ' % name
     end
     @method = Ame::Method.new(self)
   end

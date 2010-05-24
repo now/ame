@@ -9,7 +9,7 @@ class Ame::Argument
   end
 
   def process(options, processed, argument)
-    raise Ame::MissingArgument, "Missing argument: #{self}" if required? and argument.nil?
+    raise Ame::MissingArgument, 'missing argument: %s' % self if required? and argument.nil?
     @validate.call(options, processed, parse(argument))
   end
 
@@ -37,9 +37,9 @@ private
 
   def set_default(value, type)
     raise ArgumentError,
-      'Default value can only be set if optional' unless optional?
+      'default value can only be set if optional' unless optional?
     raise ArgumentError,
-      'Default value %s is not of type %s' %
+      'default value %s is not of type %s' %
         [value, type] unless value.nil? or type.nil? or value.is_a? type
     @default = value
   end
