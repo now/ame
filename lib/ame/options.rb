@@ -39,7 +39,7 @@ private
 
   def defaults
     {}.tap{ |results|
-      @options.each_value do |option|
+      @ordered.each do |option|
         results[option.name] = option.default
       end
     }
