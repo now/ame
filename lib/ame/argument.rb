@@ -2,7 +2,7 @@
 
 class Ame::Argument
   def initialize(name, description, options = {}, &validate)
-    @name, @description, @validate = name, description, validate || proc{ |options, processed, argument| argument }
+    @name, @description, @validate = name, description, validate || DefaultValidate
     @optional = options[:optional] || false
     @type = Ame::Types[[options[:type], options[:default], String].find{ |o| !o.nil? }]
     set_default options[:default], options[:type] if options.include? :default
@@ -32,6 +32,8 @@ class Ame::Argument
   end
 
 private
+
+  DefaultValidate = proc{ |options, processed, argument| argument }
 
   def parse(argument)
     argument.nil? ? default : @type.parse(argument)
