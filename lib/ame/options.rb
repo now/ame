@@ -44,7 +44,7 @@ private
   end
 
   def defaults
-    @ordered.inject({}){ |d, o| d[o.name] = o.default; d }
+    @ordered.reduce({}){ |d, o| d[o.name] = o.default; d }
   end
 
   def process!(results, arguments)

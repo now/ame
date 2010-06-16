@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'facets/kernel/tap'
 require 'forwardable'
 
 module Ame
