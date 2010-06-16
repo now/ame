@@ -44,11 +44,7 @@ private
   end
 
   def defaults
-    {}.tap{ |results|
-      @ordered.each do |option|
-        results[option.name] = option.default
-      end
-    }
+    @ordered.inject({}){ |d, o| d[o.name] = o.default; d }
   end
 
   def process!(results, arguments)
