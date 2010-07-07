@@ -83,7 +83,7 @@ Expectations do
 =end
 
   expect 'd' do
-    Ame::Class.stubs(:inherited)
+    Ame::Dispatch.stubs(:new).returns(ignore)
     Class.new(Ame::Class){
       description 'd'
       def initialize() end
@@ -116,10 +116,16 @@ Expectations do
   end
 
   expect Ame::Dispatch.to.receive(:new).with(Ame::Class, anything).returns(ignore) do |o|
-    Class.new(Ame::Class)
+    Class.new(Ame::Class){
+      description 'd'
+      def initialize() end
+    }
   end
 
   expect Ame::Dispatch.any_instance.to.receive(:define) do |o|
-    Class.new(Ame::Class)
+    Class.new(Ame::Class){
+      description 'd'
+      def initialize() end
+    }
   end
 end
