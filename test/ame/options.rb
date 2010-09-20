@@ -47,6 +47,30 @@ Expectations do
     Ame::Options.new.option('a', 'd', :default => 1).process(['-b'])
   end
 
+  expect Ame::MalformedArgument do
+    Ame::Options.new.
+      option('a', 'd', :default => 1).
+      option('b', 'd').process(['-ab'])
+  end
+
+  expect Ame::MissingArgument do
+    Ame::Options.new.
+      option('a', 'd').
+      option('b', 'd', :default => 1).process(['-ab'])
+  end
+
+  expect [{'a' => true, 'b' => 2}, []] do
+    Ame::Options.new.
+      option('a', 'd').
+      option('b', 'd', :default => 1).process(['-ab2'])
+  end
+
+  expect [{'a' => true, 'b' => 2}, []] do
+    Ame::Options.new.
+      option('a', 'd').
+      option('b', 'd', :default => 1).process(['-ab', '2'])
+  end
+
   expect [{'a' => true, 'b' => true}, []] do
     Ame::Options.new.
       option('a', 'd').
