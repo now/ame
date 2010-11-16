@@ -83,4 +83,20 @@ Options:
     io.rewind
     io.read
   end
+
+  expect %{namespace 0.1.0\n} do
+    c = Class.new(Ame::Class) {
+      namespace 'namespace'
+
+      Version = '0.1.0'
+
+      description 'd'
+      def initialize() end
+    }
+    io = StringIO.new
+    Ame::Class.help = Ame::Help::Console.new(io)
+    Ame::Class.instance.process :namespace, %w(--version)
+    io.rewind
+    io.read
+  end
 end

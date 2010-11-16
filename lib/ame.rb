@@ -3,6 +3,7 @@
 require 'forwardable'
 
 module Ame
+  AbortProcessing = :AmeAbortProcessing
   Error = Class.new(StandardError)
   MalformedArgument = Class.new(Error)
   MissingArgument = Class.new(Error)

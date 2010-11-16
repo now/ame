@@ -15,6 +15,10 @@ class Ame::Help::Console
     @io.puts for_method_s(klass, method)
   end
 
+  def version(klass)
+    @io.puts '%s %s' % [klass.namespace, klass.const_get(:Version)]
+  end
+
 private
 
   def for_method_s(klass, method)

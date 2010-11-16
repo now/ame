@@ -5,13 +5,20 @@ require 'singleton'
 class Ame::Class
   include Singleton
 
+  # TODO: Don’t we want this to be thrown all the way to the top level?
+  # So, only catch if our #superclass is Ame::Class.  Perhaps set up
+  # Ame::AbortAllProcessing.
   def process(name, arguments = [])
-    self.class.methods[name].process arguments
+    catch Ame::AbortProcessing do
+      self.class.methods[name].process arguments
+    end
     self
   end
 
   def call(name, arguments = nil, options = nil)
-    self.class.methods[name].call arguments, options
+    catch Ame::AbortProcessing do
+      self.class.methods[name].call arguments, options
+    end
     self
   end
 
