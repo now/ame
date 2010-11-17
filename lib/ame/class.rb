@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 
+# TODO: Remove.
 require 'singleton'
 
 class Ame::Class
+  # TODO: Remove.
   include Singleton
+
+  # TODO: Define #initialize and have it create @methods from
+  # self.class.methods that can then be invoked below.  To deal with methods
+  # that should only be called once, simply create an instance of the class
+  # that you’re going to need and pass it around/or create it in the
+  # constructor.
 
   # TODO: Don’t we want this to be thrown all the way to the top level?
   # So, only catch if our #superclass is Ame::Class.  Perhaps set up
@@ -30,7 +38,7 @@ class Ame::Class
         'namespace can only be set from a child of Ame::Class' unless
           namespace.nil? or self.superclass == Ame::Class
       @namespace = namespace.downcase if namespace
-      if @namespace.nil? or @namespace.empty?
+      if not defined? @namespace or @namespace.nil? or @namespace.empty?
         @namespace = superclass < Ame::Class ? superclass.namespace + ' ' : ""
         @namespace << name.split('::').last.downcase
       end

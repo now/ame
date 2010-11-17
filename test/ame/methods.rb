@@ -10,21 +10,21 @@ Expectations do
   end
 
   expect Ame::Methods.new do |o|
-    o.expected << Ame::Method.new(nil)
+    o << Ame::Method.new(nil)
   end
 
   expect Ame::Method.new(nil) do |o|
-    o.expected.name = :name
-    (Ame::Methods.new << o.expected)[:name]
+    o.name = :name
+    (Ame::Methods.new << o)[:name]
   end
 
   expect Ame::Method.new(nil) do |o|
-    o.expected.name = :name
-    (Ame::Methods.new << o.expected)['name']
+    o.name = :name
+    (Ame::Methods.new << o)['name']
   end
 
   expect [Ame::Method.new(nil), Ame::Method.new(nil)] do |o|
-    as = o.expected
+    as = o
     as[0].name = :name1
     as[1].name = :name2
     (Ame::Methods.new << as[0] << as[1]).entries

@@ -19,6 +19,7 @@ module Ame
   autoload :Methods, 'ame/methods'
   autoload :Option, 'ame/option'
   autoload :Options, 'ame/options'
+  autoload :Root, 'ame/root'
   autoload :Splat, 'ame/splat'
   autoload :Types, 'ame/types'
   autoload :Version, 'ame/version'

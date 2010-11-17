@@ -1,63 +1,36 @@
 # -*- coding: utf-8 -*-
 
-require 'lookout'
-
-require 'ame'
-
 Expectations do
   expect 'testclass' do
-    Ame::Class.stubs(:inherited)
-    Class.new(Ame::Class){
-      stubs(:name).returns('Ame::TestClass')
-    }.namespace
+    Class.new(Ame::Class).tap{ |c| stub(c).name{ 'Ame::TestClass' } }.namespace
   end
 
   expect 'namespace' do
-    Ame::Class.stubs(:inherited)
     Class.new(Ame::Class).namespace 'namespace'
   end
 
   expect 'namespace' do
-    Ame::Class.stubs(:inherited)
     Class.new(Ame::Class){ namespace 'namespace' }.namespace
   end
 
   expect ArgumentError do
-    Ame::Class.stubs(:inherited)
-    c = Class.new(Ame::Class)
-    c.stubs(:inherited)
-    Class.new(c).namespace 'namespace'
+    Class.new(Class.new(Ame::Class)).namespace 'namespace'
   end
 
   expect 'outer inner' do
-    Ame::Class.stubs(:inherited)
-    c = Class.new(Ame::Class)
-    c.stubs(:name).returns("Outer")
-    c.stubs(:inherited)
-    d = Class.new(c)
-    d.stubs(:name).returns('Whatever::Inner')
-    d.namespace
+    Class.new(Class.new(Ame::Class).tap{ |c| stub(c).name{ 'Outer' } }).
+      tap{ |c| stub(c).name{ 'Whatever::Inner' } }.namespace
   end
 
   expect 'outer inner' do
-    Ame::Class.stubs(:inherited)
-    c = Class.new(Ame::Class){ namespace 'outer' }
-    c.stubs(:inherited)
-    d = Class.new(c)
-    d.stubs(:name).returns('Whatever::Inner')
-    d.namespace
+    Class.new(Class.new(Ame::Class){ namespace 'outer' }).
+      tap{ |c| stub(c).name{ 'Whatever::Inner' } }.namespace
   end
 
   expect 'c1 c2 c3' do
-    Ame::Class.stubs(:inherited)
-    c = Class.new(Ame::Class){ namespace 'c1' }
-    c.stubs(:inherited)
-    d = Class.new(c)
-    d.stubs(:name).returns('Whatever1::C2')
-    d.stubs(:inherited)
-    e = Class.new(d)
-    e.stubs(:name).returns('Whatever2::C3')
-    e.namespace
+    Class.new(Class.new(Class.new(Ame::Class){ namespace 'c1' }).
+                tap{ |c| stub(c).name{ 'Whatever1::C2' } }).
+      tap{ |c| stub(c).name{ 'Whatever2::C3' } }.namespace
   end
 
 =begin
@@ -83,7 +56,7 @@ Expectations do
 =end
 
   expect 'd' do
-    Ame::Dispatch.stubs(:new).returns(ignore)
+    stub(Ame::Dispatch).new{ stub }
     Class.new(Ame::Class){
       description 'd'
       def initialize() end
@@ -91,21 +64,20 @@ Expectations do
   end
 
   expect Ame::Help::Console.new do |o|
-    Ame::Class.help = o.expected
+    Ame::Class.help = o
   end
 
-  expect Ame::Help::Console.new.to.receive(:for_dispatch).with(Ame::Class, :method, :subclass) do |o|
+  expect Ame::Help::Console.new.to.receive.for_dispatch(Ame::Class, :method, :subclass) do |o|
     Ame::Class.help = o
     Ame::Class.help_for_dispatch :method, :subclass
   end
 
-  expect Ame::Help::Console.new.to.receive(:for_method).with(Ame::Class, :method) do |o|
+  expect Ame::Help::Console.new.to.receive.for_method(Ame::Class, :method) do |o|
     Ame::Class.help = o
     Ame::Class.help_for_method :method
   end
 
   expect [:a, :b] do
-    Ame::Class.stubs(:inherited)
     Class.new(Ame::Class){
       description 'd'
       def a() end
@@ -115,14 +87,15 @@ Expectations do
     }.methods.entries.map{ |m| m.name }
   end
 
-  expect Ame::Dispatch.to.receive(:new).with(Ame::Class, anything).returns(ignore) do |o|
+  expect Ame::Dispatch.to.receive.new(Ame::Class, arg){ stub } do |o|
     Class.new(Ame::Class){
       description 'd'
       def initialize() end
     }
   end
 
-  expect Ame::Dispatch.any_instance.to.receive(:define) do |o|
+  expect mock.to.receive.define do |o|
+    stub(Ame::Dispatch).new{ o }
     Class.new(Ame::Class){
       description 'd'
       def initialize() end

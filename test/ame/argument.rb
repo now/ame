@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'lookout'
-
-require 'ame'
-
 Expectations do
   expect 'a' do
     Ame::Argument.new('a', 'd').name

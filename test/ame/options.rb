@@ -90,7 +90,7 @@ Expectations do
   end
 
   expect [{'a' => true, 'b' => true}, ['arg']] do
-    ENV.stubs(:include?).returns(false)
+    stub(ENV).include?{ false }
     Ame::Options.new.
       option('a', 'd').
       option('b', 'd').process(['arg', '-a', '-b'])

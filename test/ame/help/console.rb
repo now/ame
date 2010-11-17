@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-require 'lookout'
 require 'stringio'
 
-require 'ame'
-
+=begin
 Expectations do
   expect %{Usage: help-console-test-1 dispatch [OPTIONS]... METHOD [ARGUMENTS]...
   Dispatch description
@@ -20,7 +18,6 @@ Methods:
   method-1  Method 1 does a
   method-2  Method 2 does b
 } do
-    Ame::Class.stubs(:inherited)
     c = Class.new(Ame::Class) {
       include Singleton
       namespace 'help-console-test-1'
@@ -28,7 +25,6 @@ Methods:
       description 'Root description'
       def initialize() end
     }
-    c.stubs(:inherited)
     d = Class.new(c){
       stubs 'name' => 'HelpConsoleTest1::Dispatch'
       description 'Dispatch description'
@@ -63,7 +59,6 @@ Options:
   -v             V description
   -x=LEVEL       X description
 } do
-    Ame::Class.stubs(:inherited)
     c = Class.new(Ame::Class) {
       include Singleton
       namespace 'namespace'
@@ -100,3 +95,4 @@ Options:
     io.read
   end
 end
+=end

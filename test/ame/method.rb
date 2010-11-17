@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'lookout'
-
-require 'ame'
-
 Expectations do
   expect Ame::Method.new(nil).to.delegate(:option).to(:options) do |method|
     method.option 'a', 'd'
@@ -43,8 +39,8 @@ Expectations do
     method.name
   end
 
-  expect mock.to.receive(:method).with('b', 1, true, ['d', 'e', 'f'], {'help' => false, 'a' => true}).once do |o|
-    o.stubs(:instance).returns(o)
+  expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'help' => false, 'a' => true}).once do |o|
+    stub(o).instance{ o }
     method = Ame::Method.new(o)
     method.option('a', 'd')
     method.argument('a', 'd')
@@ -56,8 +52,8 @@ Expectations do
     method.process(['b', '-a', '1', 'on', 'd', 'e', 'f'])
   end
 
-  expect mock.to.receive(:method).with(1, false, [], {'help' => false, 'a' => 5}).once do |o|
-    o.stubs(:instance).returns(o)
+  expect mock.to.receive.method(1, false, [], {'help' => false, 'a' => 5}).once do |o|
+    stub(o).instance{ o }
     method = Ame::Method.new(o)
     method.option('a', 'd', :default => 5)
     method.argument('b', 'd', :optional => true, :default => 1)
@@ -67,7 +63,7 @@ Expectations do
     method.call
   end
 
-  expect Ame::Class.to.receive(:help_for_method).with(instance_of(Ame::Method)) do |o|
+  expect Ame::Class.to.receive.help_for_method(Ame::Method) do |o|
     method = Ame::Method.new(o)
     method.process ['--help']
   end
