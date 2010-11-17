@@ -40,7 +40,6 @@ Expectations do
   end
 
   expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'help' => false, 'a' => true}).once do |o|
-    stub(o).instance{ o }
     method = Ame::Method.new(o)
     method.option('a', 'd')
     method.argument('a', 'd')
@@ -48,23 +47,22 @@ Expectations do
     method.argument('c', 'd', :type => FalseClass)
     method.splat('d', 'd')
     method.name = :method
-    method.process(['b', '-a', '1', 'on', 'd', 'e', 'f'])
-    method.process(['b', '-a', '1', 'on', 'd', 'e', 'f'])
+    method.process o, ['b', '-a', '1', 'on', 'd', 'e', 'f']
+    method.process o, ['b', '-a', '1', 'on', 'd', 'e', 'f']
   end
 
   expect mock.to.receive.method(1, false, [], {'help' => false, 'a' => 5}).once do |o|
-    stub(o).instance{ o }
     method = Ame::Method.new(o)
     method.option('a', 'd', :default => 5)
     method.argument('b', 'd', :optional => true, :default => 1)
     method.argument('c', 'd', :optional => true, :default => false)
     method.splat('d', 'd', :optional => true)
     method.name = :method
-    method.call
+    method.call o
   end
 
   expect Ame::Class.to.receive.help_for_method(Ame::Method) do |o|
     method = Ame::Method.new(o)
-    method.process ['--help']
+    method.process o, ['--help']
   end
 end

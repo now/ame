@@ -18,7 +18,7 @@ class Ame::Dispatch < Ame::Method
       argument 'method', 'Method to run'
       splat 'arguments', 'Arguments to pass to METHOD', :optional => true
       define_method subclass.namespace.split(' ').last do |method, arguments, options|
-        subclass.instance.process method, arguments
+        subclass.new.process method, arguments
       end
     end
   end

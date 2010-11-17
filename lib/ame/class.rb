@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# TODO: Remove.
-require 'singleton'
-
 class Ame::Class
-  # TODO: Remove.
-  include Singleton
-
   # TODO: Define #initialize and have it create @methods from
   # self.class.methods that can then be invoked below.  To deal with methods
   # that should only be called once, simply create an instance of the class
@@ -18,14 +12,14 @@ class Ame::Class
   # Ame::AbortAllProcessing.
   def process(name, arguments = [])
     catch Ame::AbortProcessing do
-      self.class.methods[name].process arguments
+      self.class.methods[name].process self, arguments
     end
     self
   end
 
   def call(name, arguments = nil, options = nil)
     catch Ame::AbortProcessing do
-      self.class.methods[name].call arguments, options
+      self.class.methods[name].call self, arguments, options
     end
     self
   end

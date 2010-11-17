@@ -26,20 +26,20 @@ class Ame::Method
     true
   end
 
-  def process(arguments)
+  def process(instance, arguments)
     return self if @called
     options, remainder = self.options.process(arguments)
     return self if possibly_display_help(options)
-    call(self.arguments.process(options, remainder), options)
+    call(instance, self.arguments.process(options, remainder), options)
   end
 
-  def call(arguments = nil, options = nil)
+  def call(instance, arguments = nil, options = nil)
     return self if @called
     options, remainder = self.options.process([]) unless options
     return self if possibly_display_help(options)
     arguments ||= self.arguments.process(options, [])
     arguments << options
-    @class.instance.send ruby_name, *arguments
+    instance.send ruby_name, *arguments
     @called = true
     self
   end

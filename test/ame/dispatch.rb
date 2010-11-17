@@ -66,6 +66,6 @@ Expectations do
 =end
 
   expect Ame::Class.to.receive.help_for_dispatch(Ame::Dispatch, :subclass) do |o|
-    Ame::Dispatch.new(o, :subclass).process ['--help']
+    Ame::Dispatch.new(o, :subclass).process o, ['--help']
   end
 end
