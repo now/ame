@@ -6,7 +6,6 @@ class Ame::Method
   def initialize(klass)
     @class = klass
     @description = nil
-    @called = false
     option 'help', 'Display help for this method'
   end
 
@@ -27,20 +26,17 @@ class Ame::Method
   end
 
   def process(instance, arguments)
-    return self if @called
     options, remainder = self.options.process(arguments)
     return self if possibly_display_help(options)
     call(instance, self.arguments.process(options, remainder), options)
   end
 
   def call(instance, arguments = nil, options = nil)
-    return self if @called
     options, remainder = self.options.process([]) unless options
     return self if possibly_display_help(options)
     arguments ||= self.arguments.process(options, [])
     arguments << options
     instance.send ruby_name, *arguments
-    @called = true
     self
   end
 

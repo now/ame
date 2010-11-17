@@ -48,7 +48,6 @@ Expectations do
     method.splat('d', 'd')
     method.name = :method
     method.process o, ['b', '-a', '1', 'on', 'd', 'e', 'f']
-    method.process o, ['b', '-a', '1', 'on', 'd', 'e', 'f']
   end
 
   expect mock.to.receive.method(1, false, [], {'help' => false, 'a' => 5}).once do |o|
