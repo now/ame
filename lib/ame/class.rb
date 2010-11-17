@@ -1,15 +1,6 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Class
-  # TODO: Define #initialize and have it create @methods from
-  # self.class.methods that can then be invoked below.  To deal with methods
-  # that should only be called once, simply create an instance of the class
-  # that you’re going to need and pass it around/or create it in the
-  # constructor.
-
-  # TODO: Don’t we want this to be thrown all the way to the top level?
-  # So, only catch if our #superclass is Ame::Class.  Perhaps set up
-  # Ame::AbortAllProcessing.
   def process(name, arguments = [])
     catch Ame::AbortProcessing do
       self.class.methods[name].process self, arguments

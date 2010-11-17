@@ -6,7 +6,6 @@ class Ame::Method
   def initialize(klass)
     @class = klass
     @description = nil
-    option 'help', 'Display help for this method'
   end
 
   def description(description = nil)
@@ -22,18 +21,20 @@ class Ame::Method
   def validate
     raise ArgumentError,
       'method lacks description: %s' % ruby_name unless description
-    true
+    option 'help', 'Display help for this method' do
+      @class.help_for_method self
+      throw Ame::AbortAllProcessing
+    end unless options.include? 'help'
+    self
   end
 
   def process(instance, arguments)
     options, remainder = self.options.process(arguments)
-    return self if possibly_display_help(options)
     call(instance, self.arguments.process(options, remainder), options)
   end
 
   def call(instance, arguments = nil, options = nil)
     options, remainder = self.options.process([]) unless options
-    return self if possibly_display_help(options)
     arguments ||= self.arguments.process(options, [])
     arguments << options
     instance.send ruby_name, *arguments
@@ -53,17 +54,5 @@ class Ame::Method
 
   def arguments
     @arguments ||= Ame::Arguments.new
-  end
-
-private
-
-  def possibly_display_help(options)
-    return false unless options['help']
-    help
-    true
-  end
-
-  def help
-    @class.help_for_method self
   end
 end

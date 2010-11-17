@@ -47,6 +47,8 @@ Expectations do
     method.argument('c', 'd', :type => FalseClass)
     method.splat('d', 'd')
     method.name = :method
+    method.description 'd'
+    method.validate
     method.process o, ['b', '-a', '1', 'on', 'd', 'e', 'f']
   end
 
@@ -57,11 +59,14 @@ Expectations do
     method.argument('c', 'd', :optional => true, :default => false)
     method.splat('d', 'd', :optional => true)
     method.name = :method
+    method.description 'd'
+    method.validate
     method.call o
   end
 
   expect Ame::Class.to.receive.help_for_method(Ame::Method) do |o|
-    method = Ame::Method.new(o)
-    method.process o, ['--help']
+    catch Ame::AbortAllProcessing do
+      Ame::Method.new(o).description('d').validate.process o, ['--help']
+    end
   end
 end

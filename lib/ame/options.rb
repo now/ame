@@ -35,11 +35,15 @@ class Ame::Options
     self
   end
 
+  def include?(name)
+    @options.include? name
+  end
+
 private
 
   def []=(name, option)
     raise ArgumentError,
-      'option already defined: %s' % name if @options.include? name
+      'option already defined: %s' % name if include? name
     @options[name] = option
   end
 

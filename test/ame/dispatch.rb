@@ -63,9 +63,11 @@ Expectations do
     Ame::Class.stubs :splat
     Ame::Dispatch.new(Ame::Class, stub(:description => 'd', :namespace => 'a b')).define
   end
-=end
 
   expect Ame::Class.to.receive.help_for_dispatch(Ame::Dispatch, :subclass) do |o|
-    Ame::Dispatch.new(o, :subclass).process o, ['--help']
+    catch Ame::AbortAllProcessing do
+      Ame::Dispatch.new(o, :subclass).description('d').validate.process o, ['--help']
+    end
   end
+=end
 end
