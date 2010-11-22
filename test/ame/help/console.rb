@@ -99,6 +99,38 @@ Methods:
     }.process('dispatch-1', %w[dispatch-2 --help])
   end
 
+  expect io(%{Usage: dispatch [OPTIONS]... [METHOD] [ARGUMENTS]...
+  Dispatch description
+
+Arguments:
+  [METHOD=method-1]  Method to run
+  [ARGUMENTS]...     Arguments to pass to METHOD
+
+Options:
+      --help     Display help for this method
+      --version  Display version information
+
+Methods:
+  method-1  Method 1 does a
+  method-2  Method 2 does b
+}) do |io|
+    Ame::Class.help = Ame::Help::Console.new(io)
+    Class.new(Ame::Root) {
+      dispatch Class.new(Ame::Class) {
+        basename 'dispatch'
+
+        description 'Dispatch description'
+        def initialize() end
+
+        description 'Method 1 does a'
+        def method_1() end
+
+        description 'Method 2 does b'
+        def method_2() end
+      }, :default => 'method-1'
+    }.process('dispatch', %w[--help])
+  end
+
   expect io(%{method 0.1.0\n}) do |io|
     Ame::Class.help = Ame::Help::Console.new(io)
     Class.new(Ame::Root) {

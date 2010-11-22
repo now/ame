@@ -56,7 +56,7 @@ class Ame::Class
       @methods ||= Ame::Methods.new
     end
 
-    def dispatch(klass)
+    def dispatch(klass, options = {})
       klass.parent = self
       description klass.description
       options_must_precede_arguments
@@ -68,7 +68,9 @@ class Ame::Class
       method.arguments.arity.zero? or
         raise ArgumentError,
           'arguments may not be defined for a dispatch: %s' % klass
-      argument 'method', 'Method to run'
+      argument 'method', 'Method to run', options.include?(:default) ?
+        {:optional => true, :default => options[:default]} :
+        {}
       splat 'arguments', 'Arguments to pass to METHOD', :optional => true
       define_method Ame::Method.ruby_name(klass.basename) do |method, arguments, options|
         klass.new.process method, arguments
