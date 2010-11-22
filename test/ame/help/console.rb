@@ -16,8 +16,9 @@ Options:
       --version  Display version information
   -x=LEVEL       X description
 }) do |io|
-    Ame::Class.help = Ame::Help::Console.new(io)
     Class.new(Ame::Root) {
+      help Ame::Help::Console.new(io)
+
       description 'Method description'
       option 'abc', 'Abc description', :aliases => 'a', :type => String
       option 'v', 'V description'
@@ -44,8 +45,9 @@ Methods:
   method-1  Method 1 does a
   method-2  Method 2 does b
 }) do |io|
-    Ame::Class.help = Ame::Help::Console.new(io)
     Class.new(Ame::Root) {
+      help Ame::Help::Console.new(io)
+
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
 
@@ -75,8 +77,9 @@ Methods:
   method-1  Method 1 does a
   method-2  Method 2 does b
 }) do |io|
-    Ame::Class.help = Ame::Help::Console.new(io)
     Class.new(Ame::Root) {
+      help Ame::Help::Console.new(io)
+
       dispatch Class.new(Ame::Class) {
         basename 'dispatch-1'
 
@@ -114,8 +117,9 @@ Methods:
   method-1  Method 1 does a
   method-2  Method 2 does b
 }) do |io|
-    Ame::Class.help = Ame::Help::Console.new(io)
     Class.new(Ame::Root) {
+      help Ame::Help::Console.new(io)
+
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
 
@@ -132,9 +136,10 @@ Methods:
   end
 
   expect io(%{method 0.1.0\n}) do |io|
-    Ame::Class.help = Ame::Help::Console.new(io)
     Class.new(Ame::Root) {
       Version = '0.1.0'
+
+      help Ame::Help::Console.new(io)
 
       description 'd'
       def method() end

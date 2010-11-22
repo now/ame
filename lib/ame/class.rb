@@ -39,17 +39,12 @@ class Ame::Class
       defined?(@description) ? @description : ''
     end
 
-    # TODO: Move to Ame::Root.
-    def help=(help)
-      @@help = help
-    end
-
     def help_for_dispatch(method, subclass)
-      help.for_dispatch self, method, subclass
+      parent.help_for_dispatch(method, subclass)
     end
 
     def help_for_method(method)
-      help.for_method self, method
+      parent.help_for_method(method)
     end
 
     def methods
@@ -82,10 +77,6 @@ class Ame::Class
     attr_accessor :parent
 
   private
-
-    def help
-      @@help ||= Ame::Help::Console.new
-    end
 
     def method
       @method ||= Ame::Method.new(self)

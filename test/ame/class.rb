@@ -44,20 +44,6 @@ Expectations do
   end
 =end
 
-  expect Ame::Help::Console.new do |o|
-    Ame::Class.help = o
-  end
-
-  expect Ame::Help::Console.new.to.receive.for_dispatch(Ame::Class, :method, :subclass) do |o|
-    Ame::Class.help = o
-    Ame::Class.help_for_dispatch :method, :subclass
-  end
-
-  expect Ame::Help::Console.new.to.receive.for_method(Ame::Class, :method) do |o|
-    Ame::Class.help = o
-    Ame::Class.help_for_method :method
-  end
-
   expect [:a, :b] do
     Class.new(Ame::Class){
       description 'd'

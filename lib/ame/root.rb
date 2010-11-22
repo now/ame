@@ -10,6 +10,21 @@ class Ame::Root < Ame::Class
       new.process(method, arguments)
     end
 
+    def help(help = nil)
+      return @help = help if help
+      @help ||= Ame::Help::Console.new
+    end
+
+    def help_for_dispatch(method, subclass)
+      help.for_dispatch method, subclass
+    end
+
+    def help_for_method(method)
+      help.for_method method
+    end
+
+  private
+
     def method_added(name)
       m = method
       option 'version', 'Display version information' do

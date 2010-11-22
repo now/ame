@@ -58,6 +58,10 @@ class Ame::Method
 
   attr_reader :name, :ruby_name
 
+  def qualified_name
+    [@class.fullname, name.to_s].reject{ |n| n.empty? }.join(' ')
+  end
+
   def options
     @options ||= Ame::Options.new
   end

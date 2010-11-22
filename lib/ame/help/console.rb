@@ -5,14 +5,14 @@ class Ame::Help::Console
     @io = io
   end
 
-  def for_dispatch(klass, method, subclass)
-    @io.puts for_method_s(klass, method).tap{ |result|
+  def for_dispatch(method, subclass)
+    @io.puts for_method_s(method).tap{ |result|
       append_group result, 'Methods', :method, subclass.methods.sort_by{ |m| method(m) }
     }
   end
 
-  def for_method(klass, method)
-    @io.puts for_method_s(klass, method)
+  def for_method(method)
+    @io.puts for_method_s(method)
   end
 
   def version(klass, method)
@@ -21,10 +21,9 @@ class Ame::Help::Console
 
 private
 
-  def for_method_s(klass, method)
+  def for_method_s(method)
     ['Usage:'].tap{ |result|
-      append result, ' ', klass.fullname
-      append result, ' ', method(method)
+      append result, ' ', method.qualified_name
       append result, ' ', options_usage(method.options)
       append result, ' ', arguments_usage(method.arguments)
       result << "\n"
