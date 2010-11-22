@@ -1,20 +1,6 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Class
-  def process(name, arguments = [])
-    catch Ame::AbortProcessing do
-      self.class.methods[name].process self, arguments
-    end
-    self
-  end
-
-  def call(name, arguments = nil, options = nil)
-    catch Ame::AbortProcessing do
-      self.class.methods[name].call self, arguments, options
-    end
-    self
-  end
-
   class << self
     extend Forwardable
 
@@ -99,5 +85,19 @@ class Ame::Class
     end
 
     def_delegators :method, :options_must_precede_arguments, :option, :argument, :splat
+  end
+
+  def process(name, arguments = [])
+    catch Ame::AbortProcessing do
+      self.class.methods[name].process self, arguments
+    end
+    self
+  end
+
+  def call(name, arguments = nil, options = nil)
+    catch Ame::AbortProcessing do
+      self.class.methods[name].call self, arguments, options
+    end
+    self
   end
 end
