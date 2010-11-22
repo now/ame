@@ -18,23 +18,28 @@ class Ame::Class
   class << self
     extend Forwardable
 
-    def namespace(namespace = nil)
-      raise ArgumentError,
-        'namespace can only be set from a child of Ame::Class' unless
-          namespace.nil? or self.superclass == Ame::Class
-      @namespace = namespace.downcase if namespace
-      if not defined? @namespace or @namespace.nil? or @namespace.empty?
-        @namespace = superclass < Ame::Class ? superclass.namespace + ' ' : ""
-        @namespace << name.split('::').last.downcase
-      end
-      @namespace
+    def basename(basename = nil)
+      @basename = basename if basename
+      return @basename if defined? @basename
+      name.split('::').last.scan(/[[:upper:]][[:lower:]]+/).join('-').downcase
+    end
+
+    def fullname
+      [].tap{ |names|
+        klass = self
+        until klass.nil? or klass.basename.empty?
+          names << klass.basename
+          klass = klass.parent
+        end
+      }.reverse.join(' ')
     end
 
     def description(description = nil)
       return method.description(description) if description
-      @description
+      defined?(@description) ? @description : ''
     end
 
+    # TODO: Move to Ame::Root.
     def help=(help)
       @@help = help
     end
@@ -51,6 +56,29 @@ class Ame::Class
       @methods ||= Ame::Methods.new
     end
 
+    def dispatch(klass)
+      klass.parent = self
+      description klass.description
+      options_must_precede_arguments
+      dispatch = method
+      option 'help', 'Display help for this method' do
+        help_for_dispatch dispatch, klass
+        throw Ame::AbortAllProcessing
+      end unless method.options.include? 'help'
+      method.arguments.arity.zero? or
+        raise ArgumentError,
+          'arguments may not be defined for a dispatch: %s' % klass
+      argument 'method', 'Method to run'
+      splat 'arguments', 'Arguments to pass to METHOD', :optional => true
+      define_method Ame::Method.ruby_name(klass.basename) do |method, arguments, options|
+        klass.new.process method, arguments
+      end
+    end
+
+  protected
+
+    attr_accessor :parent
+
   private
 
     def help
@@ -65,12 +93,14 @@ class Ame::Class
       if name == :initialize
         method.validate
         @description = method.description
-        Ame::Dispatch.new(superclass, self).define
+      elsif [:process, :call].include? name
+        (method.validate rescue false) and
+          raise ArgumentError, '%s is a method name reserved by Ame' % name
       elsif public_instance_methods.map{ |m| m.to_sym }.include? name
         method.name = name
         methods << method if method.validate
       elsif (method.validate rescue false)
-        raise ArgumentError, 'non-public method cannot be used by Ame: ' % name
+        raise ArgumentError, 'non-public method cannot be used by Ame: %s' % name
       end
       @method = Ame::Method.new(self)
     end

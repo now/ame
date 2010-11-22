@@ -15,7 +15,6 @@ module Ame
   autoload :Argument, 'ame/argument'
   autoload :Arguments, 'ame/arguments'
   autoload :Class, 'ame/class'
-  autoload :Dispatch, 'ame/dispatch'
   autoload :Help, 'ame/help'
   autoload :Method, 'ame/method'
   autoload :Methods, 'ame/methods'

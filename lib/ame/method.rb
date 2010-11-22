@@ -3,6 +3,16 @@
 class Ame::Method
   extend Forwardable
 
+  class << self
+    def ruby_name(name)
+      name.to_s.gsub('-', '_').to_sym
+    end
+
+    def name(name)
+      name.to_s.gsub('_', '-').to_sym
+    end
+  end
+
   def initialize(klass)
     @class = klass
     @description = nil
@@ -43,7 +53,7 @@ class Ame::Method
 
   def name=(name)
     @ruby_name = name
-    @name = name.to_s.gsub('_', '-').to_sym
+    @name = self.class.name(name)
   end
 
   attr_reader :name, :ruby_name

@@ -15,21 +15,23 @@ class Ame::Help::Console
     @io.puts for_method_s(klass, method)
   end
 
-  def version(klass)
-    @io.puts '%s %s' % [klass.namespace, klass.const_get(:Version)]
+  def version(klass, method)
+    @io.puts '%s %s' % [method.name, klass.const_get(:Version)]
   end
 
 private
 
   def for_method_s(klass, method)
-    'Usage: '.tap{ |result|
-      result << klass.namespace << ' ' << method.name.to_s
+    ['Usage:'].tap{ |result|
+      append result, ' ', klass.fullname
+      append result, ' ', method(method)
       append result, ' ', options_usage(method.options)
       append result, ' ', arguments_usage(method.arguments)
-      result << "\n  " << method.description
+      result << "\n"
+      append result, '  ', method.description
       append_group result, 'Arguments', :argument, method.arguments
-      append_group result, 'Options', :option, method.options.sort_by{ |o| o.short || o.long }
-    }
+      append_group result, 'Options', :option, method.options.sort_by{ |o| o.short or o.long }
+    }.join('')
   end
 
   def append(result, prefix, string)
