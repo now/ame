@@ -25,18 +25,12 @@ Expectations do
     Ame::Method.new(nil).description('d').description
   end
 
-  expect ArgumentError do
-    Ame::Method.new(nil).validate
-  end
+  expect Ame::Method.new(nil).not.to.be.valid?
 
-  expect true do
-    Ame::Method.new(nil).description('d').validate
-  end
+  expect Ame::Method.new(nil).description('d').to.be.valid?
 
   expect :name do
-    method = Ame::Method.new(nil)
-    method.name = :name
-    method.name
+    Ame::Method.new(nil).description('d').define(:name).name
   end
 
   expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'help' => false, 'a' => true}).once do |o|
@@ -46,9 +40,8 @@ Expectations do
     method.argument('b', 'd', :type => Integer)
     method.argument('c', 'd', :type => FalseClass)
     method.splat('d', 'd')
-    method.name = :method
     method.description 'd'
-    method.validate
+    method.define(:method)
     method.process o, ['b', '-a', '1', 'on', 'd', 'e', 'f']
   end
 
@@ -58,15 +51,14 @@ Expectations do
     method.argument('b', 'd', :optional => true, :default => 1)
     method.argument('c', 'd', :optional => true, :default => false)
     method.splat('d', 'd', :optional => true)
-    method.name = :method
     method.description 'd'
-    method.validate
+    method.define(:method)
     method.call o
   end
 
   expect Ame::Class.to.receive.help_for_method(Ame::Method) do |o|
     catch Ame::AbortAllProcessing do
-      Ame::Method.new(o).description('d').validate.process o, ['--help']
+      Ame::Method.new(o).description('d').define(:method).process o, ['--help']
     end
   end
 end

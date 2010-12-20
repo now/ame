@@ -10,12 +10,10 @@ Expectations do
   end
 
   expect Ame::Method.new(nil) do |o|
-    o.name = :name
-    (Ame::Methods.new << o)[:name]
+    (Ame::Methods.new << o.define(:name))[:name]
   end
 
   expect Ame::Method.new(nil) do |o|
-    o.name = :name
-    (Ame::Methods.new << o)['name']
+    (Ame::Methods.new << o.define(:name))['name']
   end
 end

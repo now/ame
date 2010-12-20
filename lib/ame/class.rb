@@ -70,15 +70,13 @@ class Ame::Class
 
     def method_added(name)
       if name == :initialize
-        method.validate
-        @description = method.description
+        @description = method.define(name).description
       elsif [:process, :call].include? name
-        (method.validate rescue false) and
-          raise ArgumentError, '%s is a method name reserved by Ame' % name
+        method.valid? and
+          raise NameError, 'method name reserved by Ame: %s' % name
       elsif public_instance_methods.map{ |m| m.to_sym }.include? name
-        method.name = name
-        methods << method if method.validate
-      elsif (method.validate rescue false)
+        methods << method.define(name)
+      elsif method.valid?
         raise ArgumentError, 'non-public method cannot be used by Ame: %s' % name
       end
       @method = Ame::Method.new(self)

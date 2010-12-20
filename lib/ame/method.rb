@@ -28,14 +28,17 @@ class Ame::Method
 
   def_delegators :arguments, :argument, :splat, :arity
 
-  def validate
-    raise ArgumentError,
-      'method lacks description: %s' % ruby_name unless description
+  def define(name)
+    self.name = name
     option 'help', 'Display help for this method' do
       @class.help_for_method self
       throw Ame::AbortAllProcessing
     end unless options.include? 'help'
     self
+  end
+
+  def valid?
+    not description.nil?
   end
 
   def process(instance, arguments)
@@ -51,11 +54,6 @@ class Ame::Method
     self
   end
 
-  def name=(name)
-    @ruby_name = name
-    @name = self.class.name(name)
-  end
-
   attr_reader :name, :ruby_name
 
   def qualified_name
@@ -68,5 +66,12 @@ class Ame::Method
 
   def arguments
     @arguments ||= Ame::Arguments.new
+  end
+
+private
+
+  def name=(name)
+    @ruby_name = name
+    @name = self.class.name(name)
   end
 end
