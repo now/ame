@@ -16,7 +16,8 @@ class Ame::Methods
   end
 
   def [](name)
-    @random[name.to_sym]
+    @random[name.to_sym] or
+      raise UnrecognizedMethod, 'unrecognized method: %s' % name
   end
 
   def_delegators :@random, :include?

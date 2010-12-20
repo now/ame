@@ -7,6 +7,7 @@ module Ame
   AbortProcessing = :AmeAbortProcessing
 
   Error = Class.new(StandardError)
+  UnrecognizedMethod = Class.new(Error)
   MalformedArgument = Class.new(Error)
   MissingArgument = Class.new(Error)
   SuperfluousArgument = Class.new(Error)
