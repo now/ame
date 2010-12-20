@@ -1,29 +1,28 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Methods
-  extend Forwardable
   include Enumerable
 
   def initialize
-    @ordered = []
-    @random = {}
+    @methods = {}
   end
 
   def <<(method)
-    @ordered << method
-    @random[method.name] = method
+    @methods[method.name] = method
     self
   end
 
   def [](name)
-    @random[name.to_sym] or
+    @methods[name.to_sym] or
       raise UnrecognizedMethod, 'unrecognized method: %s' % name
   end
 
-  def_delegators :@random, :include?
+  def include?(name)
+    @methods.include? name.to_sym
+  end
 
   def each
-    @ordered.each do |method|
+    @methods.each_value do |method|
       yield method
     end
     self

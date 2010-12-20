@@ -44,13 +44,13 @@ Expectations do
   end
 =end
 
-  expect [:a, :b] do
+  expect ['a', 'b'] do
     Class.new(Ame::Class){
       description 'd'
       def a() end
 
       description 'e'
       def b() end
-    }.methods.entries.map{ |m| m.name }
+    }.methods.entries.map{ |m| m.name.to_s }.sort
   end
 end
