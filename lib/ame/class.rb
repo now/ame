@@ -74,7 +74,7 @@ class Ame::Class
       elsif [:process, :call].include? name
         method.valid? and
           raise NameError, 'method name reserved by Ame: %s' % name
-      elsif public_instance_methods.map{ |m| m.to_sym }.include? name
+      elsif public_method_defined? name
         methods << method.define(name)
       elsif method.valid?
         raise ArgumentError, 'non-public method cannot be used by Ame: %s' % name
