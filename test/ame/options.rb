@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'lookout'
-
-require 'ame'
-
 Expectations do
   expect Enumerable do
     Ame::Options.new
