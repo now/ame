@@ -38,7 +38,7 @@ private
   def parse(argument)
     argument.nil? ? default : @type.parse(argument)
   rescue Ame::MalformedArgument => e
-    raise e.exception('%s: %s' % [self, e])
+    raise e, '%s: %s' % [self, e]
   end
 
   def set_default(value, type)
