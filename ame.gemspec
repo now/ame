@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-$:.unshift File.expand_path("../lib", __FILE__)
+$:.unshift File.expand_path('../lib', __FILE__)
 
 require 'ame/version'
 
@@ -12,13 +12,10 @@ Gem::Specification.new do |s|
   s.email = 'now@bitwi.se'
   s.homepage = 'http://github.com/now/ame'
 
-  s.summary = 'A simple command-line parser and build system'
-  s.description = <<EOD
-Ame is a simple command-line parser and build system.  Its aim is to replace
-the need for other command-line parsers and Rake.
-EOD
+  s.description = IO.read(File.expand_path('../README', __FILE__))
+  s.summary = s.description[/^[[:alpha:]]+.*?\./]
 
-  s.files = Dir['{lib,test}/**/*.rb,[A-Z]*$']
+  s.files = Dir['{lib,test}/**/*.rb'] + %w[README Rakefile]
 
   s.add_development_dependency 'lookout', '~> 2.0'
   s.add_development_dependency 'yard', '~> 0.6.0'
