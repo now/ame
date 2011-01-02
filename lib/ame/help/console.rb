@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Help::Console
-  def initialize(io = STDOUT)
+  def initialize(io = $stdout)
     @io = io
   end
 
