@@ -14,7 +14,7 @@ class Ame::Methods
 
   def [](name)
     @methods[name.to_sym] or
-      raise UnrecognizedMethod, 'unrecognized method: %s' % name
+      raise Ame::UnrecognizedMethod, 'unrecognized method: %s' % name
   end
 
   def include?(name)
