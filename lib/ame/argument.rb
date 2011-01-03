@@ -3,7 +3,7 @@
 class Ame::Argument
   def initialize(name, description, options = {}, &validate)
     @name, @description, @validate = name, description, validate || DefaultValidate
-    @optional = options[:optional] || false
+    @optional = options.fetch(:optional, false)
     @type = Ame::Types[[options[:type], options[:default], String].find{ |o| !o.nil? }]
     set_default options[:default], options[:type] if options.include? :default
   end
