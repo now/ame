@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 Expectations do
-  expect io(%{Usage: help-console-test-1 [OPTIONS]... ARG1 ARG2 ARGN...
+  expect output(%{Usage: help-console-test-1 [OPTIONS]... ARG1 ARG2 ARGN...
   Method description
 
 Arguments:
@@ -30,7 +30,7 @@ Options:
     }.process('help-console-test-1', %w[--help])
   end
 
-  expect io(%{Usage: dispatch [OPTIONS]... METHOD [ARGUMENTS]...
+  expect output(%{Usage: dispatch [OPTIONS]... METHOD [ARGUMENTS]...
   Dispatch description
 
 Arguments:
@@ -63,7 +63,7 @@ Methods:
     }.process('dispatch', %w[--help])
   end
 
-  expect io(%{Usage: dispatch-1 dispatch-2 [OPTIONS]... METHOD [ARGUMENTS]...
+  expect output(%{Usage: dispatch-1 dispatch-2 [OPTIONS]... METHOD [ARGUMENTS]...
   Dispatch 2 description
 
 Arguments:
@@ -102,7 +102,7 @@ Methods:
     }.process('dispatch-1', %w[dispatch-2 --help])
   end
 
-  expect io(%{Usage: dispatch [OPTIONS]... [METHOD] [ARGUMENTS]...
+  expect output(%{Usage: dispatch [OPTIONS]... [METHOD] [ARGUMENTS]...
   Dispatch description
 
 Arguments:
@@ -135,7 +135,7 @@ Methods:
     }.process('dispatch', %w[--help])
   end
 
-  expect io(%{method 0.1.0\n}) do |io|
+  expect output(%{method 0.1.0\n}) do |io|
     Class.new(Ame::Root) {
       Version = '0.1.0'
 
