@@ -33,7 +33,7 @@ Expectations do
     Ame::Method.new(nil).description('d').define(:name).name
   end
 
-  expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'help' => false, 'a' => true}).once do |o|
+  expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'a' => true}).once do |o|
     method = Ame::Method.new(o)
     method.option('a', 'd')
     method.argument('a', 'd')
@@ -45,7 +45,7 @@ Expectations do
     method.process o, ['b', '-a', '1', 'on', 'd', 'e', 'f']
   end
 
-  expect mock.to.receive.method(1, false, [], {'help' => false, 'a' => 5}).once do |o|
+  expect mock.to.receive.method(1, false, [], {'a' => 5}).once do |o|
     method = Ame::Method.new(o)
     method.option('a', 'd', :default => 5)
     method.argument('b', 'd', :optional => true, :default => 1)

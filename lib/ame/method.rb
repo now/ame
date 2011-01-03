@@ -30,7 +30,7 @@ class Ame::Method
 
   def define(name)
     self.name = name
-    option 'help', 'Display help for this method' do
+    option 'help', 'Display help for this method', :ignore => true do
       @class.help_for_method self
       throw Ame::AbortAllProcessing
     end unless options.include? 'help'
@@ -49,7 +49,7 @@ class Ame::Method
   def call(instance, arguments = nil, options = nil)
     options, remainder = self.options.process([]) unless options
     arguments ||= self.arguments.process(options, [])
-    instance.send ruby_name, *(arguments + [options])
+    instance.send ruby_name, *(arguments + (options.empty? ? [] : [options]))
     self
   end
 

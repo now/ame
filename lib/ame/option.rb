@@ -17,6 +17,7 @@ class Ame::Option < Ame::Argument
         is_boolean and options[:argument]
     @argument_name = is_boolean ? "" : (options[:argument] || name).to_s
     @aliases = Array(options[:alias]) + Array(options[:aliases])
+    @ignored = options[:ignore]
     super
   end
 
@@ -32,6 +33,10 @@ class Ame::Option < Ame::Argument
 
   def long
     [name, *aliases].find{ |a| a.to_s.length > 1 }
+  end
+
+  def ignored?
+    @ignored
   end
 
 private

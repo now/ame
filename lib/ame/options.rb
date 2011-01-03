@@ -71,7 +71,7 @@ private
         break if @options_must_precede_arguments
       end
     end
-    [results, remainder.concat(arguments)]
+    [results.reject{ |n, _| self[n].ignored? }, remainder.concat(arguments)]
   end
 
   def process_combined(results, arguments, combined)

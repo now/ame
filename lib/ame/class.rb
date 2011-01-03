@@ -42,7 +42,7 @@ class Ame::Class
       description klass.description
       options_must_precede_arguments
       dispatch = method
-      option 'help', 'Display help for this method' do
+      option 'help', 'Display help for this method', :ignore => true do
         help_for_dispatch dispatch, klass
         throw Ame::AbortAllProcessing
       end unless method.options.include? 'help'
@@ -53,7 +53,7 @@ class Ame::Class
         {:optional => true, :default => options[:default]} :
         {}
       splat 'arguments', 'Arguments to pass to METHOD', :optional => true
-      define_method Ame::Method.ruby_name(klass.basename) do |method, arguments, options|
+      define_method Ame::Method.ruby_name(klass.basename) do |method, arguments|
         klass.new.process method, arguments
       end
     end

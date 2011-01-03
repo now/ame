@@ -68,4 +68,8 @@ Expectations do
   expect 'abc' do
     Ame::Option.new('a', 'd', :aliases => ['abc', 'b']).long
   end
+
+  expect Ame::Option.new('a', 'd').not.to.be.ignored?
+
+  expect Ame::Option.new('a', 'd', :ignore => true).to.be.ignored?
 end

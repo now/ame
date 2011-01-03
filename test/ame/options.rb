@@ -118,4 +118,8 @@ Expectations do
   expect [{'abc' => 1}, []] do
     Ame::Options.new.option('abc', 'd', :type => Integer).process(['--abc', '1'])
   end
+
+  expect [{}, []] do
+    Ame::Options.new.option('abc', 'd', :ignore => true).process(['--abc'])
+  end
 end
