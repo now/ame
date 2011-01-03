@@ -7,7 +7,7 @@ class Ame::Class
     def basename(basename = nil)
       @basename = basename if basename
       return @basename if defined? @basename
-      name.split('::').last.scan(/[[:upper:]][[:lower:]]+/).join('-').downcase
+      name.split('::').last.scan(/[[:upper:]][[:lower:]]*/).join('-').downcase
     end
 
     def fullname
