@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Help::Console
-  def initialize(io = $stdout)
-    @io = io
+  def initialize(io = $stdout, exit_on_error = true)
+    @io, @exit_on_error = io, exit_on_error
   end
 
   def for_dispatch(method, subclass)
@@ -17,6 +17,15 @@ class Ame::Help::Console
 
   def version(klass, method)
     @io.puts '%s %s' % [method.name, klass.const_get(:Version)]
+  end
+
+  def for_error(method, error)
+    @io.puts '%s: %s' % [method, error]
+    if @exit_on_error
+      exit 1
+    else
+      raise error
+    end
   end
 
 private

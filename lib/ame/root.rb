@@ -8,6 +8,8 @@ class Ame::Root < Ame::Class
 
     def process(method = File.basename($0), arguments = ARGV)
       new.process(method, arguments)
+    rescue => e
+      help_for_error method, e
     end
 
     def help(help = nil)
@@ -24,6 +26,10 @@ class Ame::Root < Ame::Class
     end
 
   private
+
+    def help_for_error(method, error)
+      help.for_error method, error
+    end
 
     def method_added(name)
       m = method

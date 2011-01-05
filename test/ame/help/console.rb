@@ -17,7 +17,7 @@ Options:
   -x=LEVEL       X description
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io)
+      help Ame::Help::Console.new(io, false)
 
       description 'Method description'
       option 'abc', 'Abc description', :aliases => 'a', :type => String
@@ -46,7 +46,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io)
+      help Ame::Help::Console.new(io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
@@ -78,7 +78,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io)
+      help Ame::Help::Console.new(io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch-1'
@@ -118,7 +118,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io)
+      help Ame::Help::Console.new(io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
@@ -144,5 +144,20 @@ Methods:
       description 'd'
       def method() end
     }.process 'method', %w[--version]
+  end
+
+  expect output("method: error message\n") do |io|
+    begin
+      Class.new(Ame::Root) {
+        help Ame::Help::Console.new(io, false)
+
+        description 'd'
+        def method()
+          raise 'error message'
+        end
+      }.process 'method', []
+    rescue RuntimeError => e
+      raise unless e.message == 'error message'
+    end
   end
 end
