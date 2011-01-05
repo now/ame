@@ -53,7 +53,7 @@ private
   end
 
   def options_usage(options)
-    options.count > 0 ? '[OPTIONS]...' : ""
+    options.count > 0 ? '[OPTIONS]...' : ''
   end
 
   def arguments_usage(arguments)
