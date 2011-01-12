@@ -14,7 +14,7 @@ class Ame::Argument
 
   def process(options, processed, argument)
     raise Ame::MissingArgument, 'missing argument: %s' % self if required? and argument.nil?
-    @validate.call(options, processed, parse(argument))
+    validate(options, processed, argument)
   end
 
   attr_reader :name, :description, :default
@@ -35,12 +35,6 @@ private
 
   DefaultValidate = proc{ |options, processed, argument| argument }
 
-  def parse(argument)
-    argument.nil? ? default : @type.parse(argument)
-  rescue Ame::MalformedArgument => e
-    raise e, '%s: %s' % [self, e]
-  end
-
   def set_default(value, type)
     raise ArgumentError,
       'default value can only be set if optional' unless optional?
@@ -48,5 +42,15 @@ private
       'default value %s is not of type %s' %
         [value, type] unless value.nil? or type.nil? or value.is_a? type
     @default = value
+  end
+
+  def parse(argument)
+    argument.nil? ? default : @type.parse(argument)
+  end
+
+  def validate(options, processed, argument)
+    @validate.call(options, processed, parse(argument))
+  rescue Ame::MalformedArgument, ArgumentError, TypeError => e
+    raise Ame::MalformedArgument, '%s: %s' % [self, e]
   end
 end
