@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-class Ame
+module Ame
   Version = '0.1.0'
 end
