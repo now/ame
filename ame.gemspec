@@ -18,5 +18,6 @@ Gem::Specification.new do |s|
   s.files = Dir['{lib,test}/**/*.rb'] + %w[README Rakefile]
 
   s.add_development_dependency 'lookout', '~> 2.0'
+  s.add_development_dependency 'rbtags', '~> 0.1.0'
   s.add_development_dependency 'yard', '~> 0.6.0'
 end
