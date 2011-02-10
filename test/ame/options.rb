@@ -122,4 +122,8 @@ Expectations do
   expect [{}, []] do
     Ame::Options.new.option('abc', 'd', :ignore => true).process(['--abc'])
   end
+
+  expect [{'a' => [1, 2, 3]}, []] do
+    Ame::Options.new.option('a', 'd', :type => Ame::Types::Array[Integer]).process(%w[-a 1 -a 2 -a 3])
+  end
 end

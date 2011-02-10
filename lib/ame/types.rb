@@ -22,6 +22,7 @@ module Ame::Types
     end
   end
 
+  autoload :Array, 'ame/types/array'
   require 'ame/types/boolean'
   require 'ame/types/integer'
   require 'ame/types/string'
