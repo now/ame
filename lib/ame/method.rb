@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Method
-  extend Forwardable
-
   class << self
     def ruby_name(name)
       name.to_s.gsub('-', '_').to_sym
@@ -24,16 +22,36 @@ class Ame::Method
     self
   end
 
-  def_delegators :options, :option, :options_must_precede_arguments
+  def options_must_precede_arguments
+    self.options.options_must_precede_arguments
+    self
+  end
 
-  def_delegators :arguments, :argument, :splat, :arity
+  def option(name, description, options = {}, &validate)
+    self.options.option name, description, options, &validate
+    self
+  end
+
+  def argument(name, description, options = {}, &validate)
+    arguments.argument name, description, options, &validate
+    self
+  end
+
+  def splat(name, description, options = {}, &validate)
+    arguments.splat name, description, options, &validate
+    self
+  end
+
+  def arity
+    arguments.arity
+  end
 
   def define(name)
     self.name = name
-    option 'help', 'Display help for this method', :ignore => true do
+    option :help, 'Display help for this method', :ignore => true do
       @class.help_for_method self
       throw Ame::AbortAllProcessing
-    end unless options.include? 'help'
+    end unless options.include? :help
     self
   end
 

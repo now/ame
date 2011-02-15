@@ -2,8 +2,6 @@
 
 class Ame::Class
   class << self
-    extend Forwardable
-
     def basename(basename = nil)
       @basename = basename if basename
       return @basename if defined? @basename
@@ -64,6 +62,26 @@ class Ame::Class
 
   private
 
+    def options_must_precede_arguments
+      method.options_must_precede_arguments
+      self
+    end
+
+    def option(name, description, options = {}, &validate)
+      method.option name, description, options, &validate
+      self
+    end
+
+    def argument(name, description, options = {}, &validate)
+      method.argument name, description, options, &validate
+      self
+    end
+
+    def splat(name, description, options = {}, &validate)
+      method.splat name, description, options, &validate
+      self
+    end
+
     def method
       @method ||= Ame::Method.new(self)
     end
@@ -81,8 +99,6 @@ class Ame::Class
       end
       @method = Ame::Method.new(self)
     end
-
-    def_delegators :method, :options_must_precede_arguments, :option, :argument, :splat
   end
 
   def process(name, arguments = [])

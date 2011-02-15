@@ -22,27 +22,19 @@ Expectations do
     }.tap{ |c| stub(c).name{ 'Outer::Inner' } }.fullname
   end
 
-=begin
-  expect Ame::Class.to.delegate(:description).to(:method) do |o|
-    o.description 'd'
+  expect 'd' do
+    Class.new(Ame::Class){
+      description 'd'
+      def initialize() end
+    }.description
   end
 
-  expect Ame::Class.to.delegate(:options_must_precede_arguments).to(:method) do |o|
-    o.options_must_precede_arguments
+  expect 'd' do
+    Class.new(Ame::Class){
+      description 'd'
+      def a() end
+    }.methods[:a].description
   end
-
-  expect Ame::Class.to.delegate(:option).to(:method) do |o|
-    o.option 'a', 'd'
-  end
-
-  expect Ame::Class.to.delegate(:argument).to(:method) do |o|
-    o.argument 'a', 'd'
-  end
-
-  expect Ame::Class.to.delegate(:splat).to(:method) do |o|
-    o.splat 'a', 'd'
-  end
-=end
 
   expect ['a', 'b'] do
     Class.new(Ame::Class){
@@ -52,5 +44,28 @@ Expectations do
       description 'e'
       def b() end
     }.methods.entries.map{ |m| m.name.to_s }.sort
+  end
+
+  expect 'd' do
+    Class.new(Ame::Class){
+      dispatch Class.new(Ame::Class){
+        basename 'a'
+
+        description 'd'
+        def initialize() end
+      }
+    }.methods[:a].description
+  end
+
+  expect ArgumentError do
+    Class.new(Ame::Class){
+      argument :a, 'd'
+      dispatch Class.new(Ame::Class){
+        basename 'a'
+
+        description 'd'
+        def initialize() end
+      }
+    }
   end
 end

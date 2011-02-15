@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'forwardable'
-
 module Ame
   AbortAllProcessing = :AmeAbortAllProcessing
   AbortProcessing = :AmeAbortProcessing
