@@ -33,10 +33,10 @@ class Ame::Root < Ame::Class
 
     def method_added(name)
       m = method
-      option 'version', 'Display version information', :ignore => true do
+      option :version, 'Display version information', :ignore => true do
         help.version self, m
         throw Ame::AbortAllProcessing
-      end unless method.options.include? 'version'
+      end unless method.options.include? :version
       super
     end
   end

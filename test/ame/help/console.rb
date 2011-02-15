@@ -20,12 +20,12 @@ Options:
       help Ame::Help::Console.new(io, false)
 
       description 'Method description'
-      option 'abc', 'Abc description', :aliases => 'a', :type => String
-      option 'v', 'V description'
-      option 'x', 'X description', :type => String, :argument => 'level'
-      argument 'ARG1', 'Argument 1'
-      argument 'ARG2', 'Argument 2'
-      splat 'ARGN', 'Argument N'
+      option :abc, 'Abc description', :aliases => :a, :type => String
+      option :v, 'V description'
+      option :x, 'X description', :type => String, :argument => 'level'
+      argument :arg1, 'Argument 1'
+      argument :arg2, 'Argument 2'
+      splat :argN, 'Argument N'
       def help_console_test_1() end
     }.process('help-console-test-1', %w[--help])
   end

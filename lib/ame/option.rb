@@ -22,7 +22,7 @@ class Ame::Option < Ame::Argument
   end
 
   def to_s
-    (name.to_s.length > 1 ? '--%s' : '-%s') % name.to_s
+    (name.to_s.length > 1 ? '--%s' : '-%s') % name
   end
 
   attr_reader :argument_name, :aliases

@@ -38,7 +38,7 @@ private
       result << "\n"
       append result, '  ', method.description
       append_group result, 'Arguments', :argument, method.arguments
-      append_group result, 'Options', :option, method.options.sort_by{ |o| o.short or o.long }
+      append_group result, 'Options', :option, method.options.sort_by{ |o| (o.short or o.long).to_s }
     }.join('')
   end
 

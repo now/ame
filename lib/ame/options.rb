@@ -36,7 +36,7 @@ class Ame::Options
   end
 
   def include?(name)
-    @options.include? name
+    @options.include? name.to_s
   end
 
 private
@@ -44,11 +44,11 @@ private
   def []=(name, option)
     raise ArgumentError,
       'option already defined: %s' % name if include? name
-    @options[name] = option
+    @options[name.to_s] = option
   end
 
   def [](name)
-    @options[name.sub(/^-+/, "")] or
+    @options[name.to_s.sub(/^-+/, "")] or
       raise Ame::UnrecognizedOption, 'unrecognized option: %s' % name
   end
 
