@@ -20,7 +20,7 @@ class Ame::Help::Console
   end
 
   def for_error(method, error)
-    @io.puts '%s: %s' % [method, error]
+    (@io == $stdout ? $stderr : @io).puts '%s: %s' % [method, error]
     if @exit_on_error
       exit 1
     else
