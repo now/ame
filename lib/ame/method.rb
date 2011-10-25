@@ -65,7 +65,7 @@ class Ame::Method
   end
 
   def call(instance, arguments = nil, options = nil)
-    options, remainder = self.options.process([]) unless options
+    options, _ = self.options.process([]) unless options
     arguments ||= self.arguments.process(options, [])
     instance.send ruby_name, *(arguments + (options.empty? ? [] : [options]))
     self
