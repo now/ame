@@ -2,3 +2,5 @@ TAGS
 *.gem
 *.sw?
 .yardoc
+.emacs.desktop
+.emacs.desktop.lock
