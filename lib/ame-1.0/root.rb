@@ -9,7 +9,7 @@ class Ame::Root < Ame::Class
     def process(method = File.basename($0), arguments = ARGV)
       new.process(method, arguments)
     rescue => e
-      help_for_error method, e
+      help.for_error method, e
     end
 
     def help(help = nil)
@@ -17,24 +17,10 @@ class Ame::Root < Ame::Class
       @help ||= Ame::Help::Console.new
     end
 
-    def help_for_dispatch(method, subclass)
-      help.for_dispatch method, subclass
-    end
-
-    def help_for_method(method)
-      help.for_method method
-    end
-
     def version(version = nil)
       return @version = version if version
       raise 'version not set, call %s.version VERSION' % self unless @version
       @version
-    end
-
-  private
-
-    def help_for_error(method, error)
-      help.for_error method, error
     end
   end
 

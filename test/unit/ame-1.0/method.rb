@@ -30,10 +30,4 @@ Expectations do
       define(:method).
       call o
   end
-
-  expect Ame::Class.to.receive.help_for_method(Ame::Method) do |o|
-    catch Ame::AbortAllProcessing do
-      Ame::Method.new(o).description('d').define(:method).process o, %w[--help]
-    end
-  end
 end

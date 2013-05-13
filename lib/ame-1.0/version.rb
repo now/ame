@@ -20,6 +20,7 @@ module Ame
          class.rb
          help.rb
          help/console.rb
+         help/delegate.rb
          method.rb
          methods.rb
          option.rb

@@ -81,20 +81,9 @@ class Ame::Class
       defined?(@description) ? @description : ''
     end
 
-    # Asks {#parent} for help on dispatch METHOD to KLASS.  This’ll bubble
-    # up to a {Root}, which’ll forward it to {Root.help}.
-    # @return [self]
-    def help_for_dispatch(method, klass)
-      parent.help_for_dispatch(method, klass)
-      self
-    end
-
-    # Asks {#parent} for help on METHOD.  This’ll bubble up to a {Root},
-    # which’ll forward it to {Root.help}.
-    # @return [self]
-    def help_for_method(method)
-      parent.help_for_method(method)
-      self
+    def help(help = nil)
+      return @help = help if help
+      @help ||= Ame::Help::Delegate.new(parent.help)
     end
 
     # @return [Methods] The methods defined on the receiver
@@ -111,7 +100,7 @@ class Ame::Class
       options_must_precede_arguments
       dispatch = method
       option :help, 'Display help for this method', :ignore => true do
-        help_for_dispatch dispatch, klass
+        help.for_dispatch dispatch, klass
         throw Ame::AbortAllProcessing
       end unless method.options.include? :help
       method.arguments.arity.zero? or

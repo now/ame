@@ -17,7 +17,7 @@ Options:
   -x=LEVEL       X description
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io, false)
+      help Ame::Help::Console.new(io, io, false)
 
       description 'Method description'
       option :abc, 'Abc description', :aliases => :a, :type => String
@@ -46,7 +46,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io, false)
+      help Ame::Help::Console.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
@@ -78,7 +78,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io, false)
+      help Ame::Help::Console.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch-1'
@@ -118,7 +118,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
-      help Ame::Help::Console.new(io, false)
+      help Ame::Help::Console.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
@@ -149,7 +149,7 @@ Methods:
   expect output("method: error message\n") do |io|
     begin
       Class.new(Ame::Root) {
-        help Ame::Help::Console.new(nil, io, false)
+        help Ame::Help::Console.new(io, io, false)
 
         description 'd'
         def method()
