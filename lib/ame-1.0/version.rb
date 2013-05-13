@@ -22,6 +22,7 @@ module Ame
          help/console.rb
          help/delegate.rb
          method.rb
+         method/undefined.rb
          methods.rb
          option.rb
          options.rb

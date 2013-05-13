@@ -139,7 +139,7 @@ Methods:
     Class.new(Ame::Root) {
       version '0.1.0'
 
-      help Ame::Help::Console.new(io)
+      help Ame::Help::Console.new(io, io)
 
       description 'd'
       def method() end

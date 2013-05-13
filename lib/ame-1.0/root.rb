@@ -35,10 +35,9 @@ class Ame::Root < Ame::Class
 
     private
 
-    def method_added(name)
-      m = method
+    def method_added(ruby_name)
       option :version, 'Display version information', :ignore => true do
-        help.version m, self.version
+        help.version methods[Ame::Method.name(ruby_name)], self.version
         throw Ame::AbortAllProcessing
       end unless method.options.include? :version
       super

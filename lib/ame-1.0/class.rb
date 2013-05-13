@@ -132,11 +132,10 @@ class Ame::Class
       klass.parent = self
       description klass.description
       options_must_precede_arguments
-      dispatch = method
       option :help, 'Display help for this method', :ignore => true do
-        help.dispatch dispatch, klass
+        help.dispatch methods[klass.basename], klass
         throw Ame::AbortAllProcessing
-      end unless method.options.include? :help
+      end unless options.include? :help
       method.arguments.arity.zero? or
         raise ArgumentError,
           'arguments may not be defined for a dispatch: %s' % klass
@@ -151,30 +150,32 @@ class Ame::Class
     end
 
     # Defines the {#method} currently being defined.
-    # @raise [ArgumentError] If NAME is the name of a non-public method that’s
-    #   being defined
+    # @raise [ArgumentError] If RUBY_NAME is the name of a non-public method
+    #   that’s being defined
     # @return [self]
-    def method_added(name)
-      if name == :initialize
-        @description = method.define(name).description
-      elsif public_method_defined? name
-        methods << method.define(name)
+    def method_added(ruby_name)
+      if ruby_name == :initialize
+        @description = method.define(ruby_name).description
+      elsif public_method_defined? ruby_name
+        methods << method.define(ruby_name)
       elsif method.valid?
-        raise ArgumentError, 'non-public method cannot be used by Ame: %s' % name
+        raise ArgumentError, 'non-public method cannot be used by Ame: %s' % ruby_name
       end
-      @method = Ame::Method.new(self)
+      @method = nil
       self
     end
 
     # @return [Method] The method currently being defined
     def method
-      @method ||= Ame::Method.new(self)
+      @method ||= Ame::Method::Undefined.new(self)
     end
 
     protected
 
     # @return [Class] The parent of the receiver
     attr_accessor :parent
+
+    public
 
     # Sets or returns, depending on if HELP is nil or not, the help object to
     # use for displaying usage information.  The default is to delegate the
@@ -183,8 +184,6 @@ class Ame::Class
       return @help = help if help
       @help ||= Ame::Help::Delegate.new(parent.help)
     end
-
-    public
 
     # Sets or returns, depending on if BASENAME is nil or not, the basename
     # of the receiver.  The basename is the downcased last component of the
