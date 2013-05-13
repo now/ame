@@ -85,20 +85,6 @@ class Ame::Class
     def method
       @method ||= Ame::Method.new(self)
     end
-
-    def method_added(name)
-      if name == :initialize
-        @description = method.define(name).description
-      elsif [:process, :call].include? name
-        method.valid? and
-          raise NameError, 'method name reserved by Ame: %s' % name
-      elsif public_method_defined? name
-        methods << method.define(name)
-      elsif method.valid?
-        raise ArgumentError, 'non-public method cannot be used by Ame: %s' % name
-      end
-      @method = Ame::Method.new(self)
-    end
   end
 
   def process(name, arguments = [])
@@ -113,5 +99,23 @@ class Ame::Class
       self.class.methods[name].call self, arguments, options
     end
     self
+  end
+
+  class << self
+    private
+
+    def method_added(name)
+      if name == :initialize
+        @description = method.define(name).description
+      elsif [:process, :call].include? name
+        method.valid? and
+          raise NameError, 'method name reserved by Ame: %s' % name
+      elsif public_method_defined? name
+        methods << method.define(name)
+      elsif method.valid?
+        raise ArgumentError, 'non-public method cannot be used by Ame: %s' % name
+      end
+      @method = Ame::Method.new(self)
+    end
   end
 end

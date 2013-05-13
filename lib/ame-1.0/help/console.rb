@@ -15,8 +15,8 @@ class Ame::Help::Console
     @io.puts for_method_s(method)
   end
 
-  def version(klass, method)
-    @io.puts '%s %s' % [method.name, klass.const_get(:Version)]
+  def version(method, version)
+    @io.puts '%s %s' % [method.name, version]
   end
 
   def for_error(method, error)
@@ -57,7 +57,7 @@ private
   end
 
   def arguments_usage(arguments)
-    arguments.map{ |a| 
+    arguments.map{ |a|
       if a.optional? and a.arity < 0 then '[%s]...'
       elsif a.optional? then '[%s]'
       elsif a.arity < 0 then '%s...'

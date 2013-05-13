@@ -3,9 +3,8 @@
 Expectations do
   expect 'd' do Ame::Method.new(nil).description('d').description end
 
-  expect Ame::Method.new(nil).not.to.be.valid?
-
-  expect Ame::Method.new(nil).description('d').to.be.valid?
+  expect result.not.valid? do Ame::Method.new(nil) end
+  expect result.valid? do Ame::Method.new(nil).description('d') end
 
   expect :name do Ame::Method.new(nil).description('d').define(:name).name end
 

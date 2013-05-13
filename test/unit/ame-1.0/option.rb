@@ -9,9 +9,8 @@ Expectations do
     Ame::Option.new(:a, 'd', :type => String, :optional => true)
   end
 
-  expect Ame::Option.new(:a, 'd').to.be.optional?
-
-  expect Ame::Option.new(:a, 'd', :type => String).not.to.be.optional?
+  expect result.optional? do Ame::Option.new(:a, 'd') end
+  expect result.not.optional? do Ame::Option.new(:a, 'd', :type => String) end
 
   expect FalseClass do
     Ame::Option.new(:a, 'd').default
@@ -69,7 +68,7 @@ Expectations do
     Ame::Option.new(:a, 'd', :aliases => [:abc, :b]).long
   end
 
-  expect Ame::Option.new(:a, 'd').not.to.be.ignored?
+  expect result.not.ignored? do Ame::Option.new(:a, 'd') end
 
-  expect Ame::Option.new(:a, 'd', :ignore => true).to.be.ignored?
+  expect result.ignored? do Ame::Option.new(:a, 'd', :ignore => true) end
 end

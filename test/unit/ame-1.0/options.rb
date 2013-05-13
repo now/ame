@@ -17,8 +17,8 @@ Expectations do
     Ame::Options.new.option(:a, 'd').option(:a, 'd')
   end
 
-  expect Ame::Options.new.option(:a, 'd').to.include?('a')
-  expect Ame::Options.new.option(:a, 'd').to.include?(:a)
+  expect result.include? 'a' do Ame::Options.new.option(:a, 'd') end
+  expect result.include? :a do Ame::Options.new.option(:a, 'd') end
 
   expect [{:a => 1, :b => 2}, []] do
     Ame::Options.new.

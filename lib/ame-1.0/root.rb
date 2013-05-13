@@ -25,19 +25,16 @@ class Ame::Root < Ame::Class
       help.for_method method
     end
 
+    def version(version = nil)
+      return @version = version if version
+      raise 'version not set, call %s#version VERSION' % self unless @version
+      @version
+    end
+
   private
 
     def help_for_error(method, error)
       help.for_error method, error
-    end
-
-    def method_added(name)
-      m = method
-      option :version, 'Display version information', :ignore => true do
-        help.version self, m
-        throw Ame::AbortAllProcessing
-      end unless method.options.include? :version
-      super
     end
   end
 
@@ -53,5 +50,18 @@ class Ame::Root < Ame::Class
       super
     end
     self
+  end
+
+  class << self
+    private
+
+    def method_added(name)
+      m = method
+      option :version, 'Display version information', :ignore => true do
+        help.version m, self.version
+        throw Ame::AbortAllProcessing
+      end unless method.options.include? :version
+      super
+    end
   end
 end

@@ -137,7 +137,7 @@ Methods:
 
   expect output(%{method 0.1.0\n}) do |io|
     Class.new(Ame::Root) {
-      Version = '0.1.0'
+      version '0.1.0'
 
       help Ame::Help::Console.new(io)
 

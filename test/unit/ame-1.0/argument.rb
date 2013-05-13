@@ -7,11 +7,11 @@ Expectations do
 
   expect 1 do Ame::Argument.new(:a, 'd').arity end
 
-  expect Ame::Argument.new(:a, 'd').not.to.be.optional?
-  expect Ame::Argument.new(:a, 'd', :optional => true).to.be.optional?
+  expect result.not.optional? do Ame::Argument.new(:a, 'd') end
+  expect result.optional? do Ame::Argument.new(:a, 'd', :optional => true) end
 
-  expect Ame::Argument.new(:a, 'd').to.be.required?
-  expect Ame::Argument.new(:a, 'd', :optional => true).not.to.be.required?
+  expect result.required? do Ame::Argument.new(:a, 'd') end
+  expect result.not.required? do Ame::Argument.new(:a, 'd', :optional => true) end
 
   expect 'A' do Ame::Argument.new(:a, 'd').to_s end
 
