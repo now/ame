@@ -149,7 +149,7 @@ Methods:
   expect output("method: error message\n") do |io|
     begin
       Class.new(Ame::Root) {
-        help Ame::Help::Console.new(io, false)
+        help Ame::Help::Console.new(nil, io, false)
 
         description 'd'
         def method()

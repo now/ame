@@ -1,34 +1,39 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Help::Console
-  def initialize(io = $stdout, exit_on_error = true)
-    @io, @exit_on_error = io, exit_on_error
+  def initialize(output = $stdout, error = $stderr, exit_on_error = true)
+    @output, @error, @exit_on_error = output, error, exit_on_error
   end
 
   def for_dispatch(method, subclass)
-    @io.puts for_method_s(method).tap{ |result|
+    output for_method_s(method).tap{ |result|
       append_group result, 'Methods', :method, subclass.methods.sort_by{ |m| method(m) }
     }
   end
 
   def for_method(method)
-    @io.puts for_method_s(method)
+    output for_method_s(method)
   end
 
   def version(method, version)
-    @io.puts '%s %s' % [method.name, version]
+    output '%s %s' % [method.name, version]
   end
 
   def for_error(method, error)
-    (@io == $stdout ? $stderr : @io).puts '%s: %s' % [method, error]
-    if @exit_on_error
-      exit 1
-    else
-      raise error
-    end
+    error '%s: %s' % [method, error]
+    exit 1 if @exit_on_error
+    raise error
   end
 
 private
+
+  def output(string)
+    @output.puts string
+  end
+
+  def error(string)
+    @error.puts string
+  end
 
   def for_method_s(method)
     ['Usage:'].tap{ |result|
