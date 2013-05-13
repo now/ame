@@ -1,6 +1,5 @@
-TAGS
 *.gem
-*.sw?
-.yardoc
-.emacs.desktop
-.emacs.desktop.lock
+*.gemspec
+doc/
+.yardoc/
+.yardopts.html
