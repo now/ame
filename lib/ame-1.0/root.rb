@@ -27,7 +27,7 @@ class Ame::Root < Ame::Class
 
     def version(version = nil)
       return @version = version if version
-      raise 'version not set, call %s#version VERSION' % self unless @version
+      raise 'version not set, call %s.version VERSION' % self unless @version
       @version
     end
 
