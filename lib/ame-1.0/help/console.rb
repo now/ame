@@ -5,9 +5,9 @@ class Ame::Help::Console
     @output, @error, @exit_on_error = output, error, exit_on_error
   end
 
-  def for_dispatch(method, subclass)
+  def for_dispatch(method, klass)
     output for_method_s(method).tap{ |result|
-      append_group result, 'Methods', :method, subclass.methods.sort_by{ |m| method(m) }
+      append_group result, 'Methods', :method, klass.methods.sort_by{ |m| method(m) }
     }
   end
 
