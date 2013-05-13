@@ -49,7 +49,7 @@ class Ame::Method
   def define(name)
     self.name = name
     option :help, 'Display help for this method', :ignore => true do
-      @class.help.for_method self
+      @class.help.method self
       throw Ame::AbortAllProcessing
     end unless options.include? :help
     self

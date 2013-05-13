@@ -5,13 +5,13 @@ class Ame::Help::Delegate
     @help = help
   end
 
-  def for_dispatch(method, klass)
-    @help.for_dispatch method, klass
+  def dispatch(method, klass)
+    @help.dispatch method, klass
     self
   end
 
-  def for_method(method)
-    @help.for_method method
+  def method(method)
+    @help.method method
     self
   end
 end

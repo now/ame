@@ -5,22 +5,22 @@ class Ame::Help::Console
     @output, @error, @exit_on_error = output, error, exit_on_error
   end
 
-  def for_dispatch(method, klass)
-    output for_method_s(method).tap{ |result|
-      append_group result, 'Methods', :method, klass.methods.sort_by{ |m| method(m) }
+  def dispatch(method, klass)
+    output method_s(method).tap{ |result|
+      append_group result, 'Methods', :method_name, klass.methods.sort_by{ |m| method_name(m) }
     }
   end
 
-  def for_method(method)
-    output for_method_s(method)
+  def method(method)
+    output method_s(method)
   end
 
   def version(method, version)
     output '%s %s' % [method.name, version]
   end
 
-  def for_error(method, error)
-    error '%s: %s' % [method, error]
+  def error(method, error)
+    errput '%s: %s' % [method, error]
     exit 1 if @exit_on_error
     raise error
   end
@@ -31,11 +31,11 @@ private
     @output.puts string
   end
 
-  def error(string)
+  def errput(string)
     @error.puts string
   end
 
-  def for_method_s(method)
+  def method_s(method)
     ['Usage:'].tap{ |result|
       append result, ' ', method.qualified_name
       append result, ' ', options_usage(method.options)
@@ -95,7 +95,7 @@ private
     end
   end
 
-  def method(method)
+  def method_name(method)
     method.name.to_s
   end
 end

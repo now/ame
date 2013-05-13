@@ -100,7 +100,7 @@ class Ame::Class
       options_must_precede_arguments
       dispatch = method
       option :help, 'Display help for this method', :ignore => true do
-        help.for_dispatch dispatch, klass
+        help.dispatch dispatch, klass
         throw Ame::AbortAllProcessing
       end unless method.options.include? :help
       method.arguments.arity.zero? or
