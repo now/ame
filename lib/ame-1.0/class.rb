@@ -91,6 +91,34 @@ class Ame::Class
       @methods ||= Ame::Methods.new
     end
 
+    # Process ARGUMENTS as a list of options and arguments, then call METHOD
+    # with the results of this processing on a new instance of the receiver.
+    # This method catches {AbortProcessing}.
+    # @param [#to_sym] method
+    # @param [Array<String>] arguments
+    # @return [self]
+    # @see Methods#process
+    def process(method, arguments = [])
+      catch Ame::AbortProcessing do
+        methods[method].process new, arguments
+      end
+      self
+    end
+
+    # Call METHOD with ARGUMENTS and OPTIONS on a new instance of the receiver.
+    # This method catches {AbortProcessing}.
+    # @param [#to_sym] method
+    # @param [Array] arguments
+    # @param [Hash] options
+    # @return [self]
+    # @see Methods#call
+    def call(method, arguments = nil, options = nil)
+      catch Ame::AbortProcessing do
+        methods[method].call new, arguments, options
+      end
+      self
+    end
+
     # Sets up a dispatch method to KLASS.
     # @raise [ArgumentError] If any arguments have been defined on the method
     # @return [self]
@@ -111,7 +139,7 @@ class Ame::Class
         {}
       splat :arguments, 'Arguments to pass to METHOD', :optional => true
       define_method Ame::Method.ruby_name(klass.basename) do |method, arguments|
-        klass.new.process method, arguments
+        klass.process method, arguments
       end
       self
     end
@@ -171,50 +199,14 @@ class Ame::Class
     def method
       @method ||= Ame::Method.new(self)
     end
-  end
-
-  # Process ARGUMENTS as a list of options and arguments, then call METHOD with
-  # the results of this processing.  This method catches {AbortProcessing}.
-  # @param [#to_sym] method
-  # @param [Array<String>] arguments
-  # @return [self]
-  # @see Methods#process
-  def process(method, arguments = [])
-    catch Ame::AbortProcessing do
-      self.class.methods[method].process self, arguments
-    end
-    self
-  end
-
-  # Call METHOD with ARGUMENTS and OPTIONS.  This method catches
-  #   {AbortProcessing}.
-  # @param [#to_sym] method
-  # @param [Array] arguments
-  # @param [Hash] options
-  # @return [self]
-  # @see Methods#call
-  def call(method, arguments = nil, options = nil)
-    catch Ame::AbortProcessing do
-      self.class.methods[method].call self, arguments, options
-    end
-    self
-  end
-
-  class << self
-    private
 
     # Defines the {#method} currently being defined.
-    # @raise [NameError] If NAME is :process or :call, as those are reserved by
-    #   Ame
     # @raise [ArgumentError] If NAME is the name of a non-public method that’s
     #   being defined
     # @return [self]
     def method_added(name)
       if name == :initialize
         @description = method.define(name).description
-      elsif [:process, :call].include? name
-        method.valid? and
-          raise NameError, 'method name reserved by Ame: %s' % name
       elsif public_method_defined? name
         methods << method.define(name)
       elsif method.valid?

@@ -7,9 +7,19 @@ class Ame::Root < Ame::Class
     end
 
     def process(method = File.basename($0), arguments = ARGV)
-      new.process(method, arguments)
+      catch Ame::AbortAllProcessing do
+        super
+      end
+      self
     rescue => e
       help.error method, e
+    end
+
+    def call(method, arguments = nil, options = nil)
+      catch Ame::AbortAllProcessing do
+        super
+      end
+      self
     end
 
     def help(help = nil)
@@ -22,23 +32,7 @@ class Ame::Root < Ame::Class
       raise 'version not set, call %s.version VERSION' % self unless @version
       @version
     end
-  end
 
-  def process(name, arguments = [])
-    catch Ame::AbortAllProcessing do
-      super
-    end
-    self
-  end
-
-  def call(name, arguments = nil, options = nil)
-    catch Ame::AbortAllProcessing do
-      super
-    end
-    self
-  end
-
-  class << self
     private
 
     def method_added(name)
