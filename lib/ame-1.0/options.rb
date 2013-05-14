@@ -3,25 +3,9 @@
 class Ame::Options
   include Enumerable
 
-  def initialize
-    @options = {}
-    @ordered = []
-    @options_must_precede_arguments = ENV.include? 'POSIXLY_CORRECT'
-  end
-
-  def option(name, description, options = {}, &block)
-    option = Ame::Option.new(name, description, options, &block)
-    self[option.name] = option
-    option.aliases.each do |a|
-      self[a] = option
-    end
-    @ordered << option
-    self
-  end
-
-  def options_must_precede_arguments
-    @options_must_precede_arguments = true
-    self
+  def initialize(options, ordered, options_must_precede_arguments)
+    @options, @ordered, @options_must_precede_arguments =
+      options, ordered, options_must_precede_arguments
   end
 
   def process(arguments)
@@ -39,13 +23,7 @@ class Ame::Options
     @options.include? name.to_s
   end
 
-private
-
-  def []=(name, option)
-    raise ArgumentError,
-      'option already defined: %s' % name if include? name
-    @options[name.to_s] = option
-  end
+  private
 
   def [](name)
     @options[name.to_s.sub(/^-+/, "")] or

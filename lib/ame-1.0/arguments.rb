@@ -1,41 +1,22 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Arguments
+  class << self
+    def arity(arguments, splat)
+      required = arguments.select{ |a| a.required? }.size
+      all_required = required + (splat && splat.required? ? 1 : 0)
+      splat || required < arguments.size ? -all_required - 1 : all_required
+    end
+  end
+
   include Enumerable
 
-  def initialize
-    @arguments = []
-    @splat = nil
-  end
-
-  def argument(name, description, options = {}, &block)
-    argument = Ame::Argument.new(name, description, options, &block)
-    raise ArgumentError,
-      'argument %s must come before splat argument %s' %
-        [argument.name, splat.name] if @splat
-    raise ArgumentError,
-      'optional argument %s may not precede required argument %s' %
-        [first_optional.name, argument.name] if argument.required? and first_optional
-    @arguments << argument
-    self
-  end
-
-  def splat(name = nil, description = nil, options = {}, &validate)
-    return @splat unless name
-    splat = Ame::Splat.new(name, description, options, &validate)
-    raise ArgumentError,
-      'splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
-    raise ArgumentError,
-      'optional argument %s may not precede required splat argument %s' %
-        [first_optional.name, splat.name] if splat.required? and first_optional
-    @splat = splat
-    self
+  def initialize(arguments, splat)
+    @arguments, @splat = arguments, splat
   end
 
   def arity
-    required = @arguments.select{ |a| a.required? }.size +
-               (@splat && @splat.required? ? 1 : 0)
-    @splat || first_optional ? -required - 1 : required
+    self.class.arity(@arguments, @splat)
   end
 
   def process(options, arguments)
@@ -57,9 +38,5 @@ class Ame::Arguments
     self
   end
 
-private
-
-  def first_optional
-    @arguments.find{ |a| a.optional? }
-  end
+  attr_reader :splat
 end

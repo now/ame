@@ -17,6 +17,7 @@ module Ame
     def package_libs
       %w[argument.rb
          arguments.rb
+         arguments/undefined.rb
          class.rb
          help.rb
          help/console.rb
@@ -26,6 +27,7 @@ module Ame
          methods.rb
          option.rb
          options.rb
+         options/undefined.rb
          root.rb
          splat.rb
          types.rb

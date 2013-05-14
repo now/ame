@@ -4,8 +4,8 @@ class Ame::Method::Undefined
   def initialize(klass)
     @class = klass
     @description = nil
-    @options ||= Ame::Options.new
-    @arguments ||= Ame::Arguments.new
+    @options = Ame::Options::Undefined.new
+    @arguments = Ame::Arguments::Undefined.new
   end
 
   def description(description = nil)
@@ -43,7 +43,7 @@ class Ame::Method::Undefined
       @class.help.method @class.methods[Ame::Method.name(ruby_name)]
       throw Ame::AbortAllProcessing
     end unless @options.include? :help
-    Ame::Method.new(ruby_name, @class, @description, @options, @arguments)
+    Ame::Method.new(ruby_name, @class, @description, @options.define, @arguments.define)
   end
 
   def valid?
