@@ -7,7 +7,9 @@ class Ame::Help::Console
 
   def dispatch(method, klass)
     output method_s(method).tap{ |result|
-      append_group result, 'Methods', :method_name, klass.methods.sort_by{ |m| method_name(m) }
+      append_group result, 'Methods', klass.methods.sort_by{ |m| method_name(m) } do |e|
+        method_name(e)
+      end
     }
   end
 
@@ -38,12 +40,38 @@ private
   def method_s(method)
     ['Usage:'].tap{ |result|
       append result, ' ', method.qualified_name
-      append result, ' ', options_usage(method.options)
-      append result, ' ', arguments_usage(method.arguments)
+      append result, ' ', method.options.count > 0 ? '[OPTIONS]...' : ''
+      append result, ' ', method.arguments.map{ |a|
+        if a.optional? and a.arity < 0 then '[%s]...'
+        elsif a.optional? then '[%s]'
+        elsif a.arity < 0 then '%s...'
+        else '%s'
+        end % a
+      }.join(' ')
       result << "\n"
       append result, '  ', method.description
-      append_group result, 'Arguments', :argument, method.arguments
-      append_group result, 'Options', :option, method.options.sort_by{ |o| (o.short or o.long).to_s }
+      append_group result, 'Arguments', method.arguments do |argument|
+        r = argument.to_s
+        r << '=%s' % argument.default if argument.default
+        r = '[%s]' % r if argument.optional?
+        r << '...' if argument.arity < 0
+        r
+      end
+      append_group result, 'Options', method.options.sort_by{ |o| (o.short or o.long).to_s } do |option|
+        if not option.long and option.argument_name.empty?
+          '-%s' % option.short
+        elsif not option.long
+          '-%s=%s' % [option.short, option.argument_name.upcase]
+        elsif option.short and option.argument_name.empty?
+          '-%s, --%s' % [option.short, option.long]
+        elsif option.short
+          '-%s, --%s=%s' % [option.short, option.long, option.argument_name.upcase]
+        elsif option.argument_name.empty?
+          '    --%s' % option.long
+        else
+          '    --%s=%s' % [option.long, option.argument_name.upcase]
+        end
+      end
     }.join('')
   end
 
@@ -51,48 +79,11 @@ private
     result << prefix << string unless string.empty?
   end
 
-  def append_group(result, heading, display, objects)
-    longest = objects.map{ |o| send(display, o).length }.max
+  def append_group(result, heading, objects)
+    strings = objects.map{ |o| [o, yield(o)] }
+    longest = strings.map{ |_, s| s.length }.max
     append result, "\n\n%s:\n" % heading,
-      objects.map{ |o| '  %-*s  %s' % [longest, send(display, o), o.description] }.join("\n")
-  end
-
-  def options_usage(options)
-    options.count > 0 ? '[OPTIONS]...' : ''
-  end
-
-  def arguments_usage(arguments)
-    arguments.map{ |a|
-      if a.optional? and a.arity < 0 then '[%s]...'
-      elsif a.optional? then '[%s]'
-      elsif a.arity < 0 then '%s...'
-      else '%s'
-      end % a
-    }.join(' ')
-  end
-
-  def argument(argument)
-    result = argument.to_s
-    result << '=%s' % argument.default if argument.default
-    result = '[%s]' % result if argument.optional?
-    result << '...' if argument.arity < 0
-    result
-  end
-
-  def option(option)
-    if not option.long and option.argument_name.empty?
-      '-%s' % option.short
-    elsif not option.long
-      '-%s=%s' % [option.short, option.argument_name.upcase]
-    elsif option.short and option.argument_name.empty?
-      '-%s, --%s' % [option.short, option.long]
-    elsif option.short
-      '-%s, --%s=%s' % [option.short, option.long, option.argument_name.upcase]
-    elsif option.argument_name.empty?
-      '    --%s' % option.long
-    else
-      '    --%s=%s' % [option.long, option.argument_name.upcase]
-    end
+      strings.map{ |o, s| '  %-*s  %s' % [longest, s, o.description] }.join("\n")
   end
 
   def method_name(method)
