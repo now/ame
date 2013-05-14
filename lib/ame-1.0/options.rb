@@ -16,9 +16,9 @@ class Ame::Options
       case first = arguments.shift
       when '--'
         break
-      when /^-([^=-]{2,})$/
+      when /\A-([^=-]{2,})\z/
         process_combined results, arguments, $1
-      when /^(--[^=]+|-[^-])(?:=(.*))?$/
+      when /\A(--[^=]+|-[^-])(?:=(.*))?\z/
         process1 results, arguments, self[$1], $2
       else
         remainder << first
@@ -38,7 +38,7 @@ class Ame::Options
   private
 
   def [](name)
-    @options[name.to_s.sub(/^-+/, "")] or
+    @options[name.to_s.sub(/\A-+/, '')] or
       raise Ame::UnrecognizedOption, 'unrecognized option: %s' % name
   end
 
