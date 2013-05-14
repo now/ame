@@ -15,27 +15,27 @@ class Ame::Method::Undefined
   end
 
   def options_must_precede_arguments
-    options.options_must_precede_arguments
+    @options.options_must_precede_arguments
     self
   end
 
   def option(name, description, options = {}, &validate)
-    self.options.option name, description, options, &validate
+    @options.option name, description, options, &validate
     self
   end
 
   def argument(name, description, options = {}, &validate)
-    arguments.argument name, description, options, &validate
+    @arguments.argument name, description, options, &validate
     self
   end
 
   def splat(name, description, options = {}, &validate)
-    arguments.splat name, description, options, &validate
+    @arguments.splat name, description, options, &validate
     self
   end
 
   def arity
-    arguments.arity
+    @arguments.arity
   end
 
   def define(ruby_name)
@@ -43,12 +43,14 @@ class Ame::Method::Undefined
       @class.help.method @class.methods[Ame::Method.name(ruby_name)]
       throw Ame::AbortAllProcessing
     end unless @options.include? :help
-    Ame::Method.new(ruby_name, @class, @description, options, arguments)
+    Ame::Method.new(ruby_name, @class, @description, @options, @arguments)
   end
 
   def valid?
     not description.nil?
   end
 
-  attr_reader :options, :arguments
+  def option?(option)
+    @options.include? option
+  end
 end

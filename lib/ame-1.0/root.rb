@@ -39,7 +39,7 @@ class Ame::Root < Ame::Class
       option :version, 'Display version information', :ignore => true do
         help.version methods[Ame::Method.name(ruby_name)], self.version
         throw Ame::AbortAllProcessing
-      end unless method.options.include? :version
+      end unless method.option? :version
       super
     end
   end

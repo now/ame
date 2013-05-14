@@ -135,8 +135,8 @@ class Ame::Class
       option :help, 'Display help for this method', :ignore => true do
         help.dispatch methods[klass.basename], klass
         throw Ame::AbortAllProcessing
-      end unless options.include? :help
-      method.arguments.arity.zero? or
+      end unless method.option? :help
+      method.arity.zero? or
         raise ArgumentError,
           'arguments may not be defined for a dispatch: %s' % klass
       argument :method, 'Method to run', options.include?(:default) ?
