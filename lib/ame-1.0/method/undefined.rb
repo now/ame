@@ -4,6 +4,8 @@ class Ame::Method::Undefined
   def initialize(klass)
     @class = klass
     @description = nil
+    @options ||= Ame::Options.new
+    @arguments ||= Ame::Arguments.new
   end
 
   def description(description = nil)
@@ -13,7 +15,7 @@ class Ame::Method::Undefined
   end
 
   def options_must_precede_arguments
-    self.options.options_must_precede_arguments
+    options.options_must_precede_arguments
     self
   end
 
@@ -40,7 +42,7 @@ class Ame::Method::Undefined
     option :help, 'Display help for this method', :ignore => true do
       @class.help.method @class.methods[Ame::Method.name(ruby_name)]
       throw Ame::AbortAllProcessing
-    end unless options.include? :help
+    end unless @options.include? :help
     Ame::Method.new(ruby_name, @class, @description, options, arguments)
   end
 
@@ -48,11 +50,5 @@ class Ame::Method::Undefined
     not description.nil?
   end
 
-  def options
-    @options ||= Ame::Options.new
-  end
-
-  def arguments
-    @arguments ||= Ame::Arguments.new
-  end
+  attr_reader :options, :arguments
 end
