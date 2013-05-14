@@ -9,32 +9,8 @@ class Ame::Options
   end
 
   def process(arguments)
-    process!(defaults, arguments.dup)
-  end
-
-  def each
-    @ordered.each do |option|
-      yield option
-    end
-    self
-  end
-
-  def include?(name)
-    @options.include? name.to_s
-  end
-
-  private
-
-  def [](name)
-    @options[name.to_s.sub(/^-+/, "")] or
-      raise Ame::UnrecognizedOption, 'unrecognized option: %s' % name
-  end
-
-  def defaults
-    @ordered.reduce({}){ |d, o| d[o.name] = o.default; d }
-  end
-
-  def process!(results, arguments)
+    arguments = arguments.dup
+    results = @ordered.reduce({}){ |d, o| d[o.name] = o.default; d }
     remainder = []
     until arguments.empty?
       case first = arguments.shift
@@ -50,6 +26,20 @@ class Ame::Options
       end
     end
     [results.reject{ |n, _| self[n].ignored? }, remainder.concat(arguments)]
+  end
+
+  def each
+    @ordered.each do |option|
+      yield option
+    end
+    self
+  end
+
+  private
+
+  def [](name)
+    @options[name.to_s.sub(/^-+/, "")] or
+      raise Ame::UnrecognizedOption, 'unrecognized option: %s' % name
   end
 
   def process_combined(results, arguments, combined)
