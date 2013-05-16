@@ -5,6 +5,20 @@ class Ame::Arguments::Undefined
     @arguments, @splat = [], nil
   end
 
+  # Defines argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL, has
+  # DEFAULT as its value if not given.  An optional block will be used for any
+  # validation or further processing, where OPTIONS are the options processed
+  # so far and their values, PROCESSED are the values of the arguments
+  # processed so far, and ARGUMENT is the value of the argument itself.
+  # @param (see Argument#initialize)
+  # @option (see Argument#initialize)
+  # @yield (see Argument#initialize)
+  # @yieldparam (see Argument#initialize)
+  # @raise [ArgumentError] If a splat argument has been defined
+  # @raise [ArgumentError] If an OPTIONAL argument has been defined and this
+  #   one isn’t
+  # @raise (see Argument#initialize)
+  # @return [self]
   def argument(name, description, options = {}, &block)
     argument = Ame::Argument.new(name, description, options, &block)
     raise ArgumentError,
@@ -17,6 +31,18 @@ class Ame::Arguments::Undefined
     self
   end
 
+  # Defines splat argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL,
+  # has DEFAULT as its value if not given, or returns the splat argument, if
+  # NAME is nil.  An optional block will be used for any validation or further
+  # processing, where OPTIONS are the options processed so far and their
+  # values, PROCESSED are the values of the arguments processed so far, and
+  # ARGUMENT is the value of the argument itself.
+  # @param (see Argument#initialize)
+  # @option (see Argument#initialize)
+  # @yield (see Argument#initialize)
+  # @yieldparam (see Argument#initialize)
+  # @raise (see Argument#initialize)
+  # @return [Splat, self]
   def splat(name = nil, description = nil, options = {}, &validate)
     return @splat unless name
     splat = Ame::Splat.new(name, description, options, &validate)

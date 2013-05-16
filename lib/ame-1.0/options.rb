@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# The defined options.
 class Ame::Options
   include Enumerable
 

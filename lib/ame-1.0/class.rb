@@ -64,10 +64,9 @@ class Ame::Class
       self
     end
 
-    # Sets or returns, depending on if DESCRIPTION is nil or not, the
-    # description of the method currently being defined.  The description can
-    # be used in help output and similar circumstances.
-    #
+    # Sets the DESCRIPTION of the method about to be defined, or returns it if
+    # DESCRIPTION is nil.  The description is used in help output and similar
+    # circumstances.
     # @param [String, nil] description
     # @return [String]
     # @example Set The Description of the #Push Method
@@ -81,44 +80,59 @@ class Ame::Class
 
     private
 
-    # Forces options to the method being defined to precede any arguments to be
-    # processed correctly.
+    # Forces options to the method about to be defined to precede any arguments
+    # to be processed correctly.
     # @return [self]
     def options_must_precede_arguments
       method.options_must_precede_arguments
       self
     end
 
-    # Defines option NAME with DESCRIPTION, configured with OPTIONS, using an
-    # optional block for any validation or further processing.
-    # @param (see Method#option)
-    # @yield (see Method#option)
-    # @yieldparam (see Method#option)
-    # @option (see Method#option)
+    # Defines option NAME with DESCRIPTION of TYPE that might take an ARGUMENT,
+    # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
+    # block for any validation or further processing, where OPTIONS are the
+    # options processed so far and their values, PROCESSED are the values of
+    # the arguments processed so far, and ARGUMENT is the value of the argument
+    # itself.  If specified, IGNORE it when passing options to the method.
+    # @param (see Method::Undefined#option)
+    # @option (see Method::Undefined#option)
+    # @yield (see Method::Undefined#option)
+    # @yieldparam (see Method::Undefined#option)
+    # @raise (see Method::Undefined#option)
     # @return [self]
     def option(name, description, options = {}, &validate)
       method.option name, description, options, &validate
       self
     end
 
-    # Defines argument NAME with DESCRIPTION, configured with OPTIONS, using an
-    # optional block for any validation or further processing.
-    # @param (see Method#option)
-    # @yield (see Method#option)
-    # @yieldparam (see Method#option)
-    # @option (see Method#option)
+    # Defines argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL, has
+    # DEFAULT as its value if not given.  An optional block will be used for
+    # any validation or further processing, where OPTIONS are the options
+    # processed so far and their values, PROCESSED are the values of the
+    # arguments processed so far, and ARGUMENT is the value of the argument
+    # itself.
+    # @param (see Method::Undefined#argument)
+    # @option (see Method::Undefined#argument)
+    # @yield (see Method::Undefined#argument)
+    # @yieldparam (see Method::Undefined#argument)
+    # @raise (see Method::Undefined#argument)
     # @return [self]
     def argument(name, description, options = {}, &validate)
       method.argument name, description, options, &validate
       self
     end
 
-    # Defines splat NAME with DESCRIPTION, configured with OPTIONS, using an
-    # optional block for any validation or further processing.
-    # @param (see Method#option)
-    # @yield (see Method#option)
-    # @yieldparam (see Method#option)
-    # @option (see Method#option)
+    # Defines splat argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL,
+    # has DEFAULT as its value if not given.  An optional block will be used
+    # for any validation or further processing, where OPTIONS are the options
+    # processed so far and their values, PROCESSED are the values of the
+    # arguments processed so far, and ARGUMENT is the value of the argument
+    # itself.
+    # @param (see Method::Undefined#splat)
+    # @option (see Method::Undefined#splat)
+    # @yield (see Method::Undefined#splat)
+    # @yieldparam (see Method::Undefined#splat)
+    # @raise (see Method::Undefined#splat)
     # @return [self]
     def splat(name, description, options = {}, &validate)
       method.splat name, description, options, &validate
@@ -126,6 +140,10 @@ class Ame::Class
     end
 
     # Sets up a dispatch method to KLASS.
+    # @param [Class] klass
+    # @param [Hash] options
+    # @option options [#to_sym] :default The default method to run; if given,
+    #   method argument will be optional
     # @raise [ArgumentError] If any arguments have been defined on the method
     # @return [self]
     def dispatch(klass, options = {})
@@ -149,7 +167,8 @@ class Ame::Class
       self
     end
 
-    # Defines the {#method} currently being defined.
+    # Defines the previously undefined {#method} now that it’s been added to
+    # the class.
     # @raise [ArgumentError] If RUBY_NAME is the name of a non-public method
     #   that’s being defined
     # @return [self]
@@ -165,7 +184,7 @@ class Ame::Class
       self
     end
 
-    # @return [Method] The method currently being defined
+    # @return [Method::Undefined] The undefined method about to be defined
     def method
       @method ||= Ame::Method::Undefined.new(self)
     end
@@ -177,9 +196,11 @@ class Ame::Class
 
     public
 
-    # Sets or returns, depending on if HELP is nil or not, the help object to
-    # use for displaying usage information.  The default is to delegate the
-    # request to the {#parent}.
+    # Sets the HELP object to use for displaying usage information, or returns
+    # it if HELP is nil.  The default is to delegate the request to the
+    # {#parent}.
+    # @param [#method, #dispatch, #error, #version] help
+    # @return [#method, #dispatch, #error, #version]
     def help(help = nil)
       return @help = help if help
       @help ||= Ame::Help::Delegate.new(parent.help)

@@ -1,6 +1,30 @@
 # -*- coding: utf-8 -*-
 
+# An option to an Ame {Method}.
 class Ame::Option < Ame::Argument
+  # Defines option NAME with DESCRIPTION of TYPE that might take an ARGUMENT,
+  # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
+  # block for any validation or further processing, where OPTIONS are the
+  # options processed so far and their values, PROCESSED are the values of the
+  # arguments processed so far, and ARGUMENT is the value of the argument
+  # itself.  If specified, IGNORE it when passing options to the method.
+  # @param (see Argument#initialize)
+  # @param [Hash] options
+  # @option options [Module] :type (nil) The type of the option
+  # @option options [Object] :default (false) The default to use if the option
+  #   isn’t specified; the default will be true if TYPE is FalseClass
+  # @option options [#to_s] :argument (NAME) The name of the argument to the
+  #   option
+  # @option options [Symbol] :alias An alias for the option
+  # @option options [Array<Symbol>] :aliases An Array of aliases for the option
+  # @option options [Boolean] :ignore If true, the option won’t be passed on to
+  #   the method
+  # @raise [ArgumentError] If OPTIONAL and TYPE isn’t Boolean
+  # @raise [ArgumentError] If DEFAULT is a Boolean and the ARGUMENT option has
+  #   been given
+  # @raise [ArgumentError] If DEFAULT isn’t of TYPE
+  # @yield (see Argument#initialize)
+  # @yieldparam (see Argument#initialize)
   def initialize(name, description, options = {}, &validate)
     is_boolean_type = [TrueClass, FalseClass].include? options[:type]
     options[:default] = false unless options.include? :default or options.include? :type

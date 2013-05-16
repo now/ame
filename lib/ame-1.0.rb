@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# Namespace for Ame.
 module Ame
   AbortAllProcessing = :AmeAbortAllProcessing
   AbortProcessing = :AmeAbortProcessing

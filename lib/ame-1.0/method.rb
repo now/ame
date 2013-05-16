@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# Defined method.
 class Ame::Method
   class << self
     def ruby_name(name)
