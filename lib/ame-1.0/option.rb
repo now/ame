@@ -45,6 +45,14 @@ class Ame::Option < Ame::Argument
     super
   end
 
+  def process(options, arguments, explicit)
+    arg = argument(arguments, explicit)
+    raise Ame::MissingArgument, 'missing argument: %s' % self if required? and arg.nil?
+    @validate.call(options, [], arg.nil? ? default : @type.parse(arg))
+  rescue Ame::MalformedArgument, ArgumentError, TypeError => e
+    raise Ame::MalformedArgument, '%s: %s' % [self, e]
+  end
+
   def to_s
     (name.to_s.length > 1 ? '--%s' : '-%s') % name
   end
@@ -70,5 +78,13 @@ private
     super
   ensure
     @optional = saved_optional
+  end
+
+  def argument(arguments, explicit)
+    case
+    when explicit then explicit
+    when optional? then (!default).to_s
+    else arguments.shift
+    end
   end
 end

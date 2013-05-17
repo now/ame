@@ -57,15 +57,7 @@ class Ame::Options
     end
   end
 
-  def process1(results, arguments, option, arg)
-    results[option.name] = option.process(results, [], argument(arguments, option, arg))
-  end
-
-  def argument(arguments, option, argument)
-    case
-    when argument then argument
-    when option.optional? then (!option.default).to_s
-    else arguments.shift
-    end
+  def process1(results, arguments, option, explicit)
+    results[option.name] = option.process(results, arguments, explicit)
   end
 end
