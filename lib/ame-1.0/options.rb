@@ -44,16 +44,9 @@ class Ame::Options
   end
 
   def process_combined(results, arguments, combined)
-    combined.each_char.with_index do |c, i|
-      option = self['-' + c]
-      if option.optional?
-        process1 results, [], option, nil
-      elsif i == combined.length - 1
-        process1 results, arguments, option, nil
-      else
-        process1 results, [], option, combined[i+1..-1]
-        break
-      end
+    until combined.empty?
+      option = self['-' + combined[0]]
+      results[option.name], combined = option.process_combined(results, arguments, combined[1..-1])
     end
   end
 

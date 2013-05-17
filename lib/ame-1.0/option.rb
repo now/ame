@@ -53,6 +53,12 @@ class Ame::Option < Ame::Argument
     raise Ame::MalformedArgument, '%s: %s' % [self, e]
   end
 
+  def process_combined(options, arguments, remainder)
+    optional? || remainder.empty? ?
+      [process(options, arguments, nil), remainder] :
+      [process(options, arguments, remainder), ""]
+  end
+
   def to_s
     (name.to_s.length > 1 ? '--%s' : '-%s') % name
   end
