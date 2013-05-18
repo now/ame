@@ -20,7 +20,8 @@ class Ame::Options
       when /\A-([^=-]{2,})\z/
         process_combined results, arguments, $1
       when /\A(--[^=]+|-[^-])(?:=(.*))?\z/
-        process1 results, arguments, self[$1], $2
+        option = self[$1]
+        results[option.name] = option.process(results, arguments, $2)
       else
         remainder << first
         break if @options_must_precede_arguments
@@ -48,9 +49,5 @@ class Ame::Options
       option = self['-' + combined[0]]
       results[option.name], combined = option.process_combined(results, arguments, combined[1..-1])
     end
-  end
-
-  def process1(results, arguments, option, explicit)
-    results[option.name] = option.process(results, arguments, explicit)
   end
 end
