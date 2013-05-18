@@ -18,7 +18,11 @@ class Ame::Options
       when '--'
         break
       when /\A-([^=-]{2,})\z/
-        process_combined results, arguments, $1
+        combined = $1
+        until combined.empty?
+          option = self['-' + combined[0]]
+          results[option.name], combined = option.process_combined(results, arguments, combined[1..-1])
+        end
       when /\A(--[^=]+|-[^-])(?:=(.*))?\z/
         option = self[$1]
         results[option.name] = option.process(results, arguments, $2)
@@ -42,12 +46,5 @@ class Ame::Options
   def [](name)
     @options[name.to_s.sub(/\A-+/, '')] or
       raise Ame::UnrecognizedOption, 'unrecognized option: %s' % name
-  end
-
-  def process_combined(results, arguments, combined)
-    until combined.empty?
-      option = self['-' + combined[0]]
-      results[option.name], combined = option.process_combined(results, arguments, combined[1..-1])
-    end
   end
 end
