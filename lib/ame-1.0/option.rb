@@ -46,9 +46,21 @@ class Ame::Option < Ame::Argument
   end
 
   def process(options, arguments, explicit)
-    arg = argument(arguments, explicit)
-    raise Ame::MissingArgument, 'missing argument: %s' % self if required? and arg.nil?
-    @validate.call(options, [], arg.nil? ? default : @type.parse(arg))
+    @validate.call(options, [],
+                   case
+                   when explicit
+                     @type.parse(explicit)
+                   when optional? then
+                     !default
+                   else
+                     if not arguments.empty?
+                       @type.parse(arguments.shift)
+                     elsif required?
+                       raise Ame::MissingArgument, 'missing argument: %s' % self
+                     else
+                       default
+                     end
+                   end)
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
     raise Ame::MalformedArgument, '%s: %s' % [self, e]
   end
@@ -84,13 +96,5 @@ private
     super
   ensure
     @optional = saved_optional
-  end
-
-  def argument(arguments, explicit)
-    case
-    when explicit then explicit
-    when optional? then (!default).to_s
-    else arguments.shift
-    end
   end
 end
