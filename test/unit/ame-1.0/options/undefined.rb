@@ -2,9 +2,9 @@
 
 Expectations do
   expect ArgumentError.new('option already defined: a') do
-    Ame::Options::Undefined.new.option(:a, 'd').option(:a, 'd')
+    Ame::Options::Undefined.new.flag('a', '', false, 'd').flag('a', '', false, 'd')
   end
 
-  expect result.include? 'a' do Ame::Options::Undefined.new.option(:a, 'd') end
-  expect result.include? :a do Ame::Options::Undefined.new.option(:a, 'd') end
+  expect result.include? 'a' do Ame::Options::Undefined.new.flag('a', '', false, 'd') end
+  expect result.include? :a do Ame::Options::Undefined.new.flag('a', '', false, 'd') end
 end

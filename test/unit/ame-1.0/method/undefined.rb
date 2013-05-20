@@ -10,7 +10,7 @@ Expectations do
 
   expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {:a => true}).once do |o|
     Ame::Method::Undefined.new(o).
-      option(:a, 'd').
+      flag('a', '', false, 'd').
       argument(:a, 'd').
       argument(:b, 'd', :type => Integer).
       argument(:c, 'd', :type => FalseClass).
@@ -22,7 +22,7 @@ Expectations do
 
   expect mock.to.receive.method(1, false, [], {:a => 5}).once do |o|
     Ame::Method::Undefined.new(o).
-      option(:a, 'd', :default => 5).
+      flag('a', '', 5, 'd').
       argument(:b, 'd', :optional => true, :default => 1).
       argument(:c, 'd', :optional => true, :default => false).
       splat(:d, 'd', :optional => true).

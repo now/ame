@@ -88,6 +88,11 @@ class Ame::Class
       self
     end
 
+    def flag(short, long, default, description)
+      method.flag short, long, default, description
+      self
+    end
+
     # Defines option NAME with DESCRIPTION of TYPE that might take an ARGUMENT,
     # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
     # block for any validation or further processing, where OPTIONS are the

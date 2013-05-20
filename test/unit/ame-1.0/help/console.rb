@@ -21,7 +21,7 @@ Options:
 
       description 'Method description'
       option :abc, 'Abc description', :aliases => :a, :type => String
-      option :v, 'V description'
+      flag   'v', '', false, 'V description'
       option :x, 'X description', :type => String, :argument => 'level'
       argument :arg1, 'Argument 1'
       argument :arg2, 'Argument 2'
