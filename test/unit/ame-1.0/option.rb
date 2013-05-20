@@ -17,15 +17,15 @@ Expectations do
   end
 
   expect TrueClass do
-    Ame::Option.new(:a, 'd').process({}, [], 'true')
+    Ame::Option.new(:a, 'd').process({}, [], 'a', 'true')
   end
 
   expect FalseClass do
-    Ame::Option.new(:a, 'd').process({}, [], 'off')
+    Ame::Option.new(:a, 'd').process({}, [], 'a', 'off')
   end
 
   expect 'string' do
-    Ame::Option.new(:a, 'd', :type => String).process({}, [], 'string')
+    Ame::Option.new(:a, 'd', :type => String).process({}, [], 'a', 'string')
   end
 
   expect 'a' do

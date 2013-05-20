@@ -32,8 +32,13 @@ class Ame::Method::Undefined
     self
   end
 
-  def flag(short, long, default, description)
-    @options.flag short, long, default, description
+  def flag(short, long, default, description, &validate)
+    @options.flag short, long, default, description, &validate
+    self
+  end
+
+  def toggle(short, long, default, description, &validate)
+    @options.toggle short, long, default, description, &validate
     self
   end
 

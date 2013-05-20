@@ -88,8 +88,13 @@ class Ame::Class
       self
     end
 
-    def flag(short, long, default, description)
+    def flag(short, long, default, description, &validate)
       method.flag short, long, default, description
+      self
+    end
+
+    def toggle(short, long, default, description, &validate)
+      method.toggle short, long, default, description
       self
     end
 

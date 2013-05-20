@@ -21,11 +21,11 @@ class Ame::Options
         combined = $1
         until combined.empty?
           option = self['-' + combined[0]]
-          results[option.name], combined = option.process_combined(results, arguments, combined[1..-1])
+          results[option.name], combined = option.process_combined(results, arguments, $1, combined[1..-1])
         end
       when /\A(--[^=]+|-[^-])(?:=(.*))?\z/
         option = self[$1]
-        results[option.name] = option.process(results, arguments, $2)
+        results[option.name] = option.process(results, arguments, $1, $2)
       else
         remainder << first
         break if @options_must_precede_arguments

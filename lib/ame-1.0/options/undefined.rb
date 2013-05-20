@@ -13,12 +13,21 @@ class Ame::Options::Undefined
     self
   end
 
-  def flag(short, long, default, description)
+  def flag(short, long, default, description, &validate)
     short = short.strip
     long = long.strip
     options = { :default => default }
     options[:alias] = short unless long.empty? or short.empty?
-    option(long.empty? ? short : long, description, options)
+    option(long.empty? ? short : long, description, options, &validate)
+  end
+
+  def toggle(short, long, default, description, &validate)
+    toggle = Ame::Toggle.new(short, long, default, description, &validate)
+    toggle.names.each do |name|
+      self[name] = toggle
+    end
+    @ordered << toggle
+    self
   end
 
   # Defines option NAME with DESCRIPTION of TYPE, that might take an ARGUMENT,

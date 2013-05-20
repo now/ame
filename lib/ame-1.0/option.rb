@@ -45,7 +45,7 @@ class Ame::Option < Ame::Argument
     super
   end
 
-  def process(options, arguments, explicit)
+  def process(options, arguments, name, explicit)
     @validate.call(options, [],
                    case
                    when explicit
@@ -65,10 +65,10 @@ class Ame::Option < Ame::Argument
     raise Ame::MalformedArgument, '%s: %s' % [self, e]
   end
 
-  def process_combined(options, arguments, remainder)
+  def process_combined(options, arguments, name, remainder)
     optional? || remainder.empty? ?
-      [process(options, arguments, nil), remainder] :
-      [process(options, arguments, remainder), ""]
+      [process(options, arguments, name, nil), remainder] :
+      [process(options, arguments, name, remainder), ""]
   end
 
   def to_s
