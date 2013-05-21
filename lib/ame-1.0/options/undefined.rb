@@ -23,11 +23,18 @@ class Ame::Options::Undefined
   end
 
   def toggle(short, long, default, description, &validate)
-    toggle = Ame::Toggle.new(short, long, default, description, &validate)
-    toggle.names do |name|
-      self[name] = toggle
+    flag = Ame::Flag.new(short, long, default, description, &validate)
+    raise ArgumentError if flag.long.empty?
+    flag.names.each do |name|
+      self[name] = flag
     end
-    @ordered << toggle
+    @ordered << flag
+    noflag = Ame::Flag.new('', 'no-%s' % long, nil, description) do |options, _, argument|
+      options[flag.name] = validate ? validate.call(!argument) : !argument
+    end
+    noflag.names.each do |name|
+      self[name] = noflag
+    end
     self
   end
 

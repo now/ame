@@ -12,6 +12,7 @@ Arguments:
 Options:
   -a, --abc=ABC  Abc description
       --help     Display help for this method
+  -s, --signoff  Add Signed-off-by: line to the commit message
   -v             V description
       --version  Display version information
   -x=LEVEL       X description
@@ -22,6 +23,7 @@ Options:
       description 'Method description'
       option 'a', 'abc', 'abc', '', 'Abc description'
       flag   'v', '', false, 'V description'
+      toggle ?s, 'signoff', false, 'Add Signed-off-by: line to the commit message'
       option 'x', '', 'level', '', 'X description'
       argument :arg1, 'Argument 1'
       argument :arg2, 'Argument 2'

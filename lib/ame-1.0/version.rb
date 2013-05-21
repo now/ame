@@ -32,7 +32,6 @@ module Ame
          root.rb
          splat.rb
          switch.rb
-         toggle.rb
          types.rb
          types/array.rb
          types/boolean.rb
