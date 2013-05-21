@@ -18,6 +18,10 @@ class Ame::Toggle < Ame::Option
     raise Ame::MalformedArgument, '%s: %s' % [name, e]
   end
 
+  def process_combined(options, arguments, name, remainder)
+    [process(options, arguments, name, nil), remainder]
+  end
+
   def names
     [long, short, long ? 'no-%s' % long : nil].select{ |e| e }.each do |name|
       yield name
