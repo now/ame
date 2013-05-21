@@ -20,9 +20,9 @@ Expectations do
       process o, %w[b -a 1 on d e f]
   end
 
-  expect mock.to.receive.method(1, false, [], {:a => 5}).once do |o|
+  expect mock.to.receive.method(1, false, [], {:a => true}).once do |o|
     Ame::Method::Undefined.new(o).
-      flag('a', '', 5, 'd').
+      flag('a', '', true, 'd').
       argument(:b, 'd', :optional => true, :default => 1).
       argument(:c, 'd', :optional => true, :default => false).
       splat(:d, 'd', :optional => true).

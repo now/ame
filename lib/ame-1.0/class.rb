@@ -103,20 +103,8 @@ class Ame::Class
       self
     end
 
-    # Defines option NAME with DESCRIPTION of TYPE that might take an ARGUMENT,
-    # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
-    # block for any validation or further processing, where OPTIONS are the
-    # options processed so far and their values, PROCESSED are the values of
-    # the arguments processed so far, and ARGUMENT is the value of the argument
-    # itself.  If specified, IGNORE it when passing options to the method.
-    # @param (see Method::Undefined#option)
-    # @option (see Method::Undefined#option)
-    # @yield (see Method::Undefined#option)
-    # @yieldparam (see Method::Undefined#option)
-    # @raise (see Method::Undefined#option)
-    # @return [self]
-    def option(name, description, options = {}, &validate)
-      method.option name, description, options, &validate
+    def option(short, long, argument, default, description, &validate)
+      method.option short, long, argument, default, description, &validate
       self
     end
 
@@ -165,7 +153,7 @@ class Ame::Class
       klass.parent = self
       description klass.description
       options_must_precede_arguments
-      option :help, 'Display help for this method', :ignore => true do
+      flag '', 'help', nil, 'Display help for this method' do
         help.dispatch methods[klass.basename], klass
         throw Ame::AbortAllProcessing
       end unless method.option? :help

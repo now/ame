@@ -16,9 +16,16 @@ class Ame::Options::Undefined
   def flag(short, long, default, description, &validate)
     short = short.strip
     long = long.strip
-    options = { :default => default }
+    options = { :default => !!default }
+    options[:ignore] = true if default.nil?
     options[:alias] = short unless long.empty? or short.empty?
-    option(long.empty? ? short : long, description, options, &validate)
+    option = Ame::Option.new(long.empty? ? short : long, description, options, &validate)
+    self[option.name] = option
+    option.aliases.each do |a|
+      self[a] = option
+    end
+    @ordered << option
+    self
   end
 
   def toggle(short, long, default, description, &validate)
@@ -39,20 +46,12 @@ class Ame::Options::Undefined
     self
   end
 
-  # Defines option NAME with DESCRIPTION of TYPE, that might take an ARGUMENT,
-  # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
-  # block for any validation or further processing, where OPTIONS are the
-  # options processed so far and their values, PROCESSED are the values of the
-  # arguments processed so far, and ARGUMENT is the value of the argument
-  # itself.  If specified, IGNORE it when passing options to the method.
-  # @param (see Option#initialize)
-  # @option (see Option#initialize)
-  # @raise (see Option#initialize)
-  # @yield (see Option#initialize)
-  # @yieldparam (see Option#initialize)
-  # @return [self]
-  def option(name, description, options = {}, &validate)
-    option = Ame::Option.new(name, description, options, &validate)
+  def option(short, long, argument, default, description, &validate)
+    short = short.strip
+    long = long.strip
+    options = { :argument => argument, :default => default }
+    options[:alias] = short unless long.empty? or short.empty?
+    option = Ame::Option.new(long.empty? ? short : long, description, options, &validate)
     self[option.name] = option
     option.aliases.each do |a|
       self[a] = option

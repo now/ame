@@ -20,9 +20,9 @@ Options:
       help Ame::Help::Console.new(io, io, false)
 
       description 'Method description'
-      option :abc, 'Abc description', :aliases => :a, :type => String
+      option 'a', 'abc', 'abc', '', 'Abc description'
       flag   'v', '', false, 'V description'
-      option :x, 'X description', :type => String, :argument => 'level'
+      option 'x', '', 'level', '', 'X description'
       argument :arg1, 'Argument 1'
       argument :arg2, 'Argument 2'
       splat :argN, 'Argument N'

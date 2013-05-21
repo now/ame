@@ -47,20 +47,8 @@ class Ame::Method::Undefined
     self
   end
 
-  # Defines option NAME with DESCRIPTION of TYPE, that might take an ARGUMENT,
-  # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
-  # block for any validation or further processing, where OPTIONS are the
-  # options processed so far and their values, PROCESSED are the values of the
-  # arguments processed so far, and ARGUMENT is the value of the argument
-  # itself.  If specified, IGNORE it when passing options to the method.
-  # @param (see Options::Undefined#option)
-  # @option (see Options::Undefined#option)
-  # @yield (see Options::Undefined#option)
-  # @yieldparam (see Options::Undefined#option)
-  # @raise (see Options::Undefined#option)
-  # @return [self]
-  def option(name, description, options = {}, &validate)
-    @options.option name, description, options, &validate
+  def option(short, long, argument, default, description, &validate)
+    @options.option short, long, argument, default, description, &validate
     self
   end
 
@@ -98,7 +86,7 @@ class Ame::Method::Undefined
   end
 
   def define(ruby_name)
-    option :help, 'Display help for this method', :ignore => true do
+    flag '', 'help', nil, 'Display help for this method' do
       @class.help.method @class.methods[Ame::Method.name(ruby_name)]
       throw Ame::AbortAllProcessing
     end unless @options.include? :help
