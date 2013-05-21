@@ -26,6 +26,7 @@ module Ame
          method/undefined.rb
          methods.rb
          option.rb
+         flag.rb
          options.rb
          options/undefined.rb
          root.rb

@@ -14,23 +14,17 @@ class Ame::Options::Undefined
   end
 
   def flag(short, long, default, description, &validate)
-    short = short.strip
-    long = long.strip
-    options = { :default => !!default }
-    options[:ignore] = true if default.nil?
-    options[:alias] = short unless long.empty? or short.empty?
-    option = Ame::Option.new(long.empty? ? short : long, description, options, &validate)
-    self[option.name] = option
-    option.aliases.each do |a|
-      self[a] = option
+    flag = Ame::Flag.new(short, long, default, description, &validate)
+    flag.names do |name|
+      self[name] = flag
     end
-    @ordered << option
+    @ordered << flag
     self
   end
 
   def toggle(short, long, default, description, &validate)
     toggle = Ame::Toggle.new(short, long, default, description, &validate)
-    toggle.names.each do |name|
+    toggle.names do |name|
       self[name] = toggle
     end
     @ordered << toggle
@@ -39,7 +33,7 @@ class Ame::Options::Undefined
 
   def switch(short, long, argument, default, argument_default, description, &validate)
     switch = Ame::Switch.new(short, long, argument, default, argument_default, description, &validate)
-    switch.names.each do |name|
+    switch.names do |name|
       self[name] = switch
     end
     @ordered << switch

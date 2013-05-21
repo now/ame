@@ -119,9 +119,11 @@ Expectations do
       process(['arg', '-a', '-b'])
   end
 
+=begin
   expect [{:a => true}, []] do
     Ame::Options::Undefined.new.flag('b', 'a', false, 'd').define.process(['-b'])
   end
+=end
 
   expect [{:a => false}, []] do
     Ame::Options::Undefined.new.flag('a', '', true, 'd').define.process(['-a'])
