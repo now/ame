@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
-class Ame::Switch < Ame::Option
+class Ame::Switch < Ame::Flag
   def initialize(short, long, argument, default, argument_default, description, &validate)
-    @argument_default = argument_default
-    short = short.strip
-    long = long.strip
-    options = { :default => default }
-    options[:alias] = short unless long.empty? or short.empty?
-    super long.empty? ? short : long, description, options, &validate
+    @argument, @argument_default = argument, argument_default
+    @type = Ame::Types[[default, argument_default, String].reject(&:nil?).first]
+    super short, long, default, description
   end
 
   def process(options, arguments, name, explicit)
@@ -16,18 +13,7 @@ class Ame::Switch < Ame::Option
     raise Ame::MalformedArgument, '%s: %s' % [name, e]
   end
 
-  def process_combined(options, arguments, name, remainder)
-    [process(options, arguments, name, nil), remainder]
-  end
-
-  def names
-    [long, short].select{ |e| e }.each do |name|
-      yield name
-    end
-    self
-  end
-
-  def optional?
-    true
+  def argument_name
+    @argument
   end
 end
