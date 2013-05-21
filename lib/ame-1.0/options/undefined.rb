@@ -15,7 +15,7 @@ class Ame::Options::Undefined
 
   def flag(short, long, default, description, &validate)
     flag = Ame::Flag.new(short, long, default, description, &validate)
-    flag.names do |name|
+    flag.names.each do |name|
       self[name] = flag
     end
     @ordered << flag
