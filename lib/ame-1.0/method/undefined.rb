@@ -42,6 +42,11 @@ class Ame::Method::Undefined
     self
   end
 
+  def switch(short, long, argument, default, argument_default, description, &validate)
+    @options.switch short, long, argument, default, argument_default, description, &validate
+    self
+  end
+
   # Defines option NAME with DESCRIPTION of TYPE, that might take an ARGUMENT,
   # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
   # block for any validation or further processing, where OPTIONS are the

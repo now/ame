@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-class Ame::Toggle < Ame::Option
-  def initialize(short, long, default, description, &validate)
+class Ame::Switch < Ame::Option
+  def initialize(short, long, argument, default, argument_default, description, &validate)
+    @argument_default = argument_default
     short = short.strip
     long = long.strip
     options = { :default => default }
@@ -10,16 +11,13 @@ class Ame::Toggle < Ame::Option
   end
 
   def process(options, arguments, name, explicit)
-    @validate.call(options, [],
-                   explicit ?
-                     (name =~ /\A--no-/) ^ @type.parse(explicit) :
-                     (name =~ /\A--no-/ ? default : !default))
+    @validate.call(options, [], explicit ? @type.parse(explicit) : @argument_default)
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
     raise Ame::MalformedArgument, '%s: %s' % [name, e]
   end
 
   def names
-    [long, short, long ? 'no-%s' % long : nil].select{ |e| e }.each do |name|
+    [long, short].select{ |e| e }.each do |name|
       yield name
     end
     self

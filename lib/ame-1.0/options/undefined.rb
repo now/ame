@@ -30,6 +30,15 @@ class Ame::Options::Undefined
     self
   end
 
+  def switch(short, long, argument, default, argument_default, description, &validate)
+    switch = Ame::Switch.new(short, long, argument, default, argument_default, description, &validate)
+    switch.names.each do |name|
+      self[name] = switch
+    end
+    @ordered << switch
+    self
+  end
+
   # Defines option NAME with DESCRIPTION of TYPE, that might take an ARGUMENT,
   # with an optional DEFAULT, and its ALIAS and/or ALIASES, using an optional
   # block for any validation or further processing, where OPTIONS are the
