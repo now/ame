@@ -7,13 +7,13 @@ class Ame::Switch < Ame::Flag
     super short, long, default, description, &validate
   end
 
-  def process(options, arguments, name, explicit)
-    @validate.call(options, [], explicit ? @type.parse(explicit) : @argument_default)
-  rescue Ame::MalformedArgument, ArgumentError, TypeError => e
-    raise Ame::MalformedArgument, '%s: %s' % [name, e]
-  end
-
   def argument_name
     @argument
+  end
+
+  private
+
+  def argument(arguments, explicit)
+    explicit ? @type.parse(explicit) : @argument_default
   end
 end

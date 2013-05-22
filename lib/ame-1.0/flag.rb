@@ -9,9 +9,9 @@ class Ame::Flag
   end
 
   def process(options, arguments, name, explicit)
-    @validate.call(options, [], explicit ? Ame::Types[TrueClass].parse(explicit) : !default)
+    @validate.call(options, [], argument(arguments, explicit))
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
-    raise Ame::MalformedArgument, '%s: %s' % [self, e]
+    raise Ame::MalformedArgument, '%s: %s' % [name, e]
   end
 
   def process_combined(options, arguments, name, remainder)
@@ -49,4 +49,10 @@ class Ame::Flag
   attr_reader :default
 
   attr_reader :description
+
+  private
+
+  def argument(arguments, explicit)
+    explicit ? Ame::Types[TrueClass].parse(explicit) : !default
+  end
 end
