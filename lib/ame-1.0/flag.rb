@@ -21,11 +21,11 @@ class Ame::Flag
   end
 
   def name
-    names.first.to_sym
+    @name ||= names.first.to_sym
   end
 
   def names
-    [long, short].reject{ |e| e.nil? }
+    @names ||= [long, short].reject{ |e| e.nil? }
   end
 
   def ignored?
