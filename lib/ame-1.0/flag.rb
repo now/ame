@@ -18,10 +18,6 @@ class Ame::Flag
     [process(options, arguments, name, nil), remainder]
   end
 
-  def to_s
-    (name.to_s.length > 1 ? '--%s' : '-%s') % name
-  end
-
   def name
     names.first.to_sym
   end
