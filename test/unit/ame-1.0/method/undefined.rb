@@ -8,7 +8,7 @@ Expectations do
 
   expect :name do Ame::Method::Undefined.new(nil).description('d').define(:name).name end
 
-  expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {:a => true}).once do |o|
+  expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'a' => true}).once do |o|
     Ame::Method::Undefined.new(o).
       flag('a', '', false, 'd').
       argument(:a, 'd').
@@ -20,7 +20,7 @@ Expectations do
       process o, %w[b -a 1 on d e f]
   end
 
-  expect mock.to.receive.method(1, false, [], {:a => true}).once do |o|
+  expect mock.to.receive.method(1, false, [], {'a' => true}).once do |o|
     Ame::Method::Undefined.new(o).
       flag('a', '', true, 'd').
       argument(:b, 'd', :optional => true, :default => 1).

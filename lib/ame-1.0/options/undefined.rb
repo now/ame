@@ -21,9 +21,9 @@ class Ame::Options::Undefined
     flag = Ame::Flag.new(short, long, default, description, &validate)
     raise ArgumentError if flag.long.empty?
     self << flag
-    add Ame::Flag.new '', 'no-%s' % flag.long, nil, description do |options, argument|
+    add Ame::Flag.new('', 'no-%s' % flag.long, nil, description){ |options, argument|
       options[flag.name] = validate ? validate.call(options, !argument) : !argument
-    end
+    }
   end
 
   def switch(short, long, argument, default, argument_default, description, &validate)
@@ -35,7 +35,7 @@ class Ame::Options::Undefined
   end
 
   def include?(name)
-    @options.include? name.to_s
+    @options.include? name
   end
 
   def define
@@ -62,6 +62,6 @@ class Ame::Options::Undefined
   def []=(name, option)
     raise ArgumentError,
       'option already defined: %s' % name if include? name
-    @options[name.to_s] = option
+    @options[name] = option
   end
 end

@@ -21,7 +21,7 @@ class Ame::Flag
   end
 
   def name
-    @name ||= names.first.to_sym
+    @name ||= names.first
   end
 
   def names

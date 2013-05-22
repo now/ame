@@ -6,22 +6,20 @@ Expectations do
   end
 
   expect result.include? 'a' do Ame::Options::Undefined.new.flag('a', '', false, 'd') end
-  expect result.include? :a do Ame::Options::Undefined.new.flag('a', '', false, 'd') end
 
-  expect({ :signoff => true }) do
+  expect({ 'signoff' => TrueClass }) do
     Ame::Options::Undefined.new.toggle('s', 'signoff', false, 'd').define.process(['--signoff=true']).first
   end
 
-  expect({ :signoff => false }) do
+  expect({ 'signoff' => FalseClass }) do
     Ame::Options::Undefined.new.toggle('s', 'signoff', false, 'd').define.process(['--signoff=false']).first
   end
 
-  expect({ :signoff => true }) do
-    Ame::Options::Undefined.new.toggle('s', 'signoff', false, 'd').define.process(['--signoff=true']).first
+  expect({ 'signoff' => TrueClass }) do
     Ame::Options::Undefined.new.toggle('s', 'signoff', false, 'd').define.process(['--signoff']).first
   end
 
-  expect({ :signoff => false }) do
+  expect({ 'signoff' => FalseClass }) do
     Ame::Options::Undefined.new.toggle('s', 'signoff', false, 'd').define.process(['--no-signoff']).first
   end
 

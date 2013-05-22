@@ -89,7 +89,7 @@ class Ame::Method::Undefined
     flag '', 'help', nil, 'Display help for this method' do
       @class.help.method @class.methods[Ame::Method.name(ruby_name)]
       throw Ame::AbortAllProcessing
-    end unless @options.include? :help
+    end unless @options.include? 'help'
     Ame::Method.new(ruby_name, @class, @description, @options.define, @arguments.define)
   end
 
