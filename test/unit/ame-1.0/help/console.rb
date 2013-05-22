@@ -10,12 +10,13 @@ Arguments:
   ARGN...  Argument N
 
 Options:
-  -a, --abc=ABC  Abc description
-      --help     Display help for this method
-  -s, --signoff  Add Signed-off-by: line to the commit message
-  -v             V description
-      --version  Display version information
-  -x=LEVEL       X description
+  -a, --abc=ABC         Abc description
+      --help            Display help for this method
+  -s, --signoff         Add Signed-off-by: line to the commit message
+      --thread[=STYLE]  Controls addition of In-Reply-To and References headers
+  -v                    V description
+      --version         Display version information
+  -xLEVEL               X description
 }) do |io|
     Class.new(Ame::Root) {
       help Ame::Help::Console.new(io, io, false)
@@ -24,6 +25,7 @@ Options:
       option 'a', 'abc', 'abc', '', 'Abc description'
       flag   'v', '', false, 'V description'
       toggle ?s, 'signoff', false, 'Add Signed-off-by: line to the commit message'
+      switch '', 'thread', 'style', nil, 'shallow', 'Controls addition of In-Reply-To and References headers'
       option 'x', '', 'level', '', 'X description'
       argument :arg1, 'Argument 1'
       argument :arg2, 'Argument 2'

@@ -58,18 +58,31 @@ private
         r
       end
       append_group result, 'Options', method.options.sort_by{ |o| (o.short or o.long).to_s } do |option|
-        if not option.long and option.argument_name.empty?
-          '-%s' % option.short
-        elsif not option.long
-          '-%s=%s' % [option.short, option.argument_name.upcase]
-        elsif option.short and option.argument_name.empty?
-          '-%s, --%s' % [option.short, option.long]
-        elsif option.short
-          '-%s, --%s=%s' % [option.short, option.long, option.argument_name.upcase]
-        elsif option.argument_name.empty?
-          '    --%s' % option.long
+        case option
+        when Ame::Option
+          if option.short and option.long
+            '-%s, --%s=%s' % [option.short, option.long, option.argument_name.upcase]
+          elsif option.short
+            '-%s%s' % [option.short, option.argument_name.upcase]
+          else
+            '    --%s=%s' % [option.long, option.argument_name.upcase]
+          end
+        when Ame::Switch
+          if option.short and option.long
+            '-%s, --%s[=%s]' % [option.short, option.long, option.argument_name.upcase]
+          elsif option.short
+            '-%s[=%s]' % [option.short, option.argument_name.upcase]
+          else
+            '    --%s[=%s]' % [option.long, option.argument_name.upcase]
+          end
         else
-          '    --%s=%s' % [option.long, option.argument_name.upcase]
+          if option.short and option.long
+            '-%s, --%s' % [option.short, option.long]
+          elsif option.short
+            '-%s' % option.short
+          else
+            '    --%s' % option.long
+          end
         end
       end
     }.join('')
