@@ -61,19 +61,19 @@ private
         case option
         when Ame::Option
           if option.short and option.long
-            '-%s, --%s=%s' % [option.short, option.long, option.argument_name.upcase]
+            '-%s, --%s=%s' % [option.short, option.long, option.argument]
           elsif option.short
-            '-%s%s' % [option.short, option.argument_name.upcase]
+            '-%s%s' % [option.short, option.argument]
           else
-            '    --%s=%s' % [option.long, option.argument_name.upcase]
+            '    --%s=%s' % [option.long, option.argument]
           end
         when Ame::Switch
           if option.short and option.long
-            '-%s, --%s[=%s]' % [option.short, option.long, option.argument_name.upcase]
+            '-%s, --%s[=%s]' % [option.short, option.long, option.argument]
           elsif option.short
-            '-%s[=%s]' % [option.short, option.argument_name.upcase]
+            '-%s[=%s]' % [option.short, option.argument]
           else
-            '    --%s[=%s]' % [option.long, option.argument_name.upcase]
+            '    --%s[=%s]' % [option.long, option.argument]
           end
         else
           if option.short and option.long

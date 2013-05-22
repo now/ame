@@ -9,7 +9,7 @@ class Ame::Flag
   end
 
   def process(options, arguments, name, explicit)
-    @validate.call(options, argument(arguments, explicit))
+    @validate.call(options, parse(arguments, explicit))
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
     raise Ame::MalformedArgument, '%s: %s' % [name, e]
   end
@@ -44,7 +44,7 @@ class Ame::Flag
 
   private
 
-  def argument(arguments, explicit)
+  def parse(arguments, explicit)
     explicit ? Ame::Types[TrueClass].parse(explicit) : !default
   end
 end

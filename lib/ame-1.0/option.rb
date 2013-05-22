@@ -12,7 +12,7 @@ class Ame::Option < Ame::Switch
 
   private
 
-  def argument(arguments, explicit)
+  def parse(arguments, explicit)
     @type.parse(explicit || arguments.shift || raise(Ame::MissingArgument, 'missing argument: %s' % self))
   end
 end

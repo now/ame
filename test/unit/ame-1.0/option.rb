@@ -5,7 +5,7 @@ Expectations do
     Ame::Option.new('a', '', 'a', '', 'd').process({}, [], '--a', 'string')
   end
 
-  expect 'a' do
-    Ame::Option.new('a', '', 'a', '', 'd').argument_name
+  expect 'A' do
+    Ame::Option.new('a', '', 'a', '', 'd').argument
   end
 end
