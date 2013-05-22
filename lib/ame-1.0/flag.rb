@@ -3,13 +3,13 @@
 class Ame::Flag
   def initialize(short, long, default, description, &validate)
     @short, @long, @default, @description, @validate =
-      short.strip, long.strip, default, description, validate || proc{ |_, _, a| a }
+      short.strip, long.strip, default, description, validate || proc{ |_, a| a }
     raise ArgumentError if short.empty? and long.empty?
     raise ArgumentError if description.empty?
   end
 
   def process(options, arguments, name, explicit)
-    @validate.call(options, [], argument(arguments, explicit))
+    @validate.call(options, argument(arguments, explicit))
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
     raise Ame::MalformedArgument, '%s: %s' % [name, e]
   end

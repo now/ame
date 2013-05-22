@@ -29,8 +29,8 @@ class Ame::Options::Undefined
       self[name] = flag
     end
     @ordered << flag
-    noflag = Ame::Flag.new '', 'no-%s' % long, nil, description do |options, _, argument|
-      options[flag.name] = validate ? validate.call(options, _, !argument) : !argument
+    noflag = Ame::Flag.new '', 'no-%s' % long, nil, description do |options, argument|
+      options[flag.name] = validate ? validate.call(options, !argument) : !argument
     end
     noflag.names.each do |name|
       self[name] = noflag
