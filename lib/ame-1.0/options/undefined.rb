@@ -14,47 +14,24 @@ class Ame::Options::Undefined
   end
 
   def flag(short, long, default, description, &validate)
-    flag = Ame::Flag.new(short, long, default, description, &validate)
-    flag.names.each do |name|
-      self[name] = flag
-    end
-    @ordered << flag
-    self
+    self << Ame::Flag.new(short, long, default, description, &validate)
   end
 
   def toggle(short, long, default, description, &validate)
     flag = Ame::Flag.new(short, long, default, description, &validate)
     raise ArgumentError if flag.long.empty?
-    flag.names.each do |name|
-      self[name] = flag
-    end
-    @ordered << flag
-    noflag = Ame::Flag.new '', 'no-%s' % long, nil, description do |options, argument|
+    self << flag
+    add Ame::Flag.new '', 'no-%s' % flag.long, nil, description do |options, argument|
       options[flag.name] = validate ? validate.call(options, !argument) : !argument
     end
-    noflag.names.each do |name|
-      self[name] = noflag
-    end
-    self
   end
 
   def switch(short, long, argument, default, argument_default, description, &validate)
-    switch = Ame::Switch.new(short, long, argument, default, argument_default, description, &validate)
-    switch.names do |name|
-      self[name] = switch
-    end
-    @ordered << switch
-    self
+    self << Ame::Switch.new(short, long, argument, default, argument_default, description, &validate)
   end
 
   def option(short, long, argument, default, description, &validate)
-    option = Ame::Option.new(short, long, argument, default, description, &validate)
-    self[option.name] = option
-    option.names do |a|
-      self[a] = option
-    end
-    @ordered << option
-    self
+    self << Ame::Option.new(short, long, argument, default, description, &validate)
   end
 
   def include?(name)
@@ -65,7 +42,22 @@ class Ame::Options::Undefined
     Ame::Options.new(@options, @ordered, @options_must_precede_arguments)
   end
 
+  protected
+
+  def <<(option)
+    add option
+    @ordered << option
+    self
+  end
+
   private
+
+  def add(option)
+    option.names.each do |name|
+      self[name] = option
+    end
+    self
+  end
 
   def []=(name, option)
     raise ArgumentError,
