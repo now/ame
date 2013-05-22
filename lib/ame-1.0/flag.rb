@@ -2,9 +2,11 @@
 
 class Ame::Flag
   def initialize(short, long, default, description, &validate)
+    s, l = short.strip, long.strip
     @short, @long, @default, @description, @validate =
-      short.strip, long.strip, default, description, validate || proc{ |_, a| a }
-    raise ArgumentError if short.empty? and long.empty?
+      s.empty? ? nil : s, l.empty? ? nil : l, default, description, validate || proc{ |_, a| a }
+    raise ArgumentError if @short.nil? and @long.nil?
+    raise ArgumentError if @short and @short.length > 1
     raise ArgumentError if description.empty?
   end
 
@@ -30,13 +32,9 @@ class Ame::Flag
     default.nil?
   end
 
-  def short
-    @short.empty? ? nil : @short
-  end
+  attr_reader :short
 
-  def long
-    @long.empty? ? nil : @long
-  end
+  attr_reader :long
 
   attr_reader :default
 
