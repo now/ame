@@ -2,12 +2,13 @@
 
 class Ame::Flag
   def initialize(short, long, default, description, &validate)
-    s, l = short.strip, long.strip
     @short, @long, @default, @description, @validate =
-      s.empty? ? nil : s, l.empty? ? nil : l, default, description, validate || proc{ |_, a| a }
-    raise ArgumentError if @short.nil? and @long.nil?
-    raise ArgumentError if @short and @short.length > 1
-    raise ArgumentError if description.empty?
+      (s = short.strip).empty? ? nil : s, (l = long.strip).empty? ? nil : l,
+      default, description, validate || proc{ |_, a| a }
+    raise ArgumentError, 'both short and long can’t be empty' if
+      @short.nil? and @long.nil?
+    raise ArgumentError, 'short can’t be longer than 1: %s' % @short if
+      @short and @short.length > 1
   end
 
   def process(options, arguments, name, explicit)

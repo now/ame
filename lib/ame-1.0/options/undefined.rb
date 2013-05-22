@@ -19,7 +19,7 @@ class Ame::Options::Undefined
 
   def toggle(short, long, default, description, &validate)
     flag = Ame::Flag.new(short, long, default, description, &validate)
-    raise ArgumentError if flag.long.empty?
+    raise ArgumentError, 'long can’t be empty' if flag.long.empty?
     self << flag
     add Ame::Flag.new('', 'no-%s' % flag.long, nil, description){ |options, argument|
       options[flag.name] = validate ? validate.call(options, !argument) : !argument

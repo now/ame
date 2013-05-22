@@ -57,7 +57,7 @@ private
         r << '...' if argument.arity < 0
         r
       end
-      append_group result, 'Options', method.options.sort_by{ |o| (o.short or o.long).to_s } do |option|
+      append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |option|
         case option
         when Ame::Option
           if option.short and option.long
