@@ -19,19 +19,19 @@ module Ame
          arguments.rb
          arguments/undefined.rb
          class.rb
+         flag.rb
          help.rb
          help/console.rb
          help/delegate.rb
          method.rb
          method/undefined.rb
          methods.rb
+         switch.rb
          option.rb
-         flag.rb
          options.rb
          options/undefined.rb
          root.rb
          splat.rb
-         switch.rb
          types.rb
          types/array.rb
          types/boolean.rb

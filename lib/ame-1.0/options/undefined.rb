@@ -29,8 +29,8 @@ class Ame::Options::Undefined
       self[name] = flag
     end
     @ordered << flag
-    noflag = Ame::Flag.new('', 'no-%s' % long, nil, description) do |options, _, argument|
-      options[flag.name] = validate ? validate.call(!argument) : !argument
+    noflag = Ame::Flag.new '', 'no-%s' % long, nil, description do |options, _, argument|
+      options[flag.name] = validate ? validate.call(options, _, !argument) : !argument
     end
     noflag.names.each do |name|
       self[name] = noflag
@@ -48,13 +48,9 @@ class Ame::Options::Undefined
   end
 
   def option(short, long, argument, default, description, &validate)
-    short = short.strip
-    long = long.strip
-    options = { :argument => argument, :default => default }
-    options[:alias] = short unless long.empty? or short.empty?
-    option = Ame::Option.new(long.empty? ? short : long, description, options, &validate)
+    option = Ame::Option.new(short, long, argument, default, description, &validate)
     self[option.name] = option
-    option.aliases.each do |a|
+    option.names do |a|
       self[a] = option
     end
     @ordered << option
