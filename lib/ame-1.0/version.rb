@@ -36,7 +36,8 @@ module Ame
          types/array.rb
          types/boolean.rb
          types/integer.rb
-         types/string.rb]
+         types/string.rb
+         types/symbol.rb]
     end
   }
 end

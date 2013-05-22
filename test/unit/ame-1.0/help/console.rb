@@ -25,7 +25,7 @@ Options:
       option 'a', 'abc', 'abc', '', 'Abc description'
       flag   'v', '', false, 'V description'
       toggle ?s, 'signoff', false, 'Add Signed-off-by: line to the commit message'
-      switch '', 'thread', 'style', nil, 'shallow', 'Controls addition of In-Reply-To and References headers'
+      switch '', 'thread', 'style', nil, :shallow, 'Controls addition of In-Reply-To and References headers'
       option 'x', '', 'level', '', 'X description'
       argument :arg1, 'Argument 1'
       argument :arg2, 'Argument 2'
