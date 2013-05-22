@@ -30,10 +30,6 @@ class Ame::Flag
     default.nil?
   end
 
-  def argument_name
-    ''
-  end
-
   def short
     @short.empty? ? nil : @short
   end
