@@ -30,10 +30,6 @@ class Ame::Flag
     [long, short].reject{ |e| e.nil? }
   end
 
-  def optional?
-    true
-  end
-
   def ignored?
     default.nil?
   end

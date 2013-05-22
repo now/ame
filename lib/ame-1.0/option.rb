@@ -16,8 +16,4 @@ class Ame::Option < Ame::Switch
   def process_combined(options, arguments, name, remainder)
     [process(options, arguments, name, remainder.empty? ? nil : remainder), '']
   end
-
-  def optional?
-    false
-  end
 end
