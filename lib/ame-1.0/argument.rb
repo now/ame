@@ -27,7 +27,7 @@ class Ame::Argument
   # @raise [ArgumentError] If DEFAULT isn’t of TYPE
   def initialize(name, type, description, &validate)
     @name, @description, @validate = name.to_sym, description, validate || DefaultValidate
-    @type = Ame::Types[[type, String].find{ |o| !o.nil? }]
+    @type = Ame::Types[[type, String].reject(&:nil?).first]
   end
 
   # @return [Symbol] The name of the receiver
