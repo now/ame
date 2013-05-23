@@ -19,7 +19,7 @@ Expectations do
       splus(:b, String, 'd')
   end
 
-  expect ArgumentError.new('optional argument a may not precede required splat argument b') do
+  expect ArgumentError.new('splus “b” may not follow optional “a”') do
     Ame::Arguments::Undefined.new.
       optional(:a, nil, 'd').
       splus(:b, String, 'd')

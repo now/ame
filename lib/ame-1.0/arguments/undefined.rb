@@ -88,8 +88,8 @@ class Ame::Arguments::Undefined
     def splus(name, default, description, &validate)
       super
       raise ArgumentError,
-        'optional argument %s may not precede required splat argument %s' %
-          [@optional.name, @splat.name]
+        'splus “%s” may not follow optional “%s”' %
+          [@splat.name, @optional.name]
     end
   end
 end
