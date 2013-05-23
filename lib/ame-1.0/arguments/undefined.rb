@@ -65,9 +65,6 @@ class Ame::Arguments::Undefined
     raise ArgumentError,
       'argument %s must come before splat argument %s' %
         [argument.name, @splat.name] if @splat
-    raise ArgumentError,
-      'optional argument %s may not precede required argument %s' %
-        [first_optional.name, argument.name] if argument.required? and first_optional
     @arguments << argument
     self
   end
@@ -90,6 +87,12 @@ class Ame::Arguments::Undefined
       raise ArgumentError,
         'splus “%s” may not follow optional “%s”' %
           [@splat.name, @optional.name]
+    end
+
+    def argument(name, description, options = {}, &block)
+      raise ArgumentError,
+        'optional argument %s may not precede required argument %s' %
+          [@optional.name, name]
     end
   end
 end
