@@ -29,7 +29,7 @@ Options:
       option 'x', '', 'level', '', 'X description'
       argument :arg1, 'Argument 1'
       argument :arg2, 'Argument 2'
-      splat :argN, 'Argument N'
+      splus :argN, String, 'Argument N'
       def help_console_test_1() end
     }.process('help-console-test-1', %w[--help])
   end

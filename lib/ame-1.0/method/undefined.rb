@@ -90,6 +90,11 @@ class Ame::Method::Undefined
     self
   end
 
+  def splus(name, default, description, &validate)
+    @arguments.splus name, default, description, &validate
+    self
+  end
+
   def define(ruby_name)
     flag '', 'help', nil, 'Display help for this method' do
       @class.help.method @class.methods[Ame::Method.name(ruby_name)]

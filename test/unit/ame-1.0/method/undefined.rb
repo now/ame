@@ -14,7 +14,7 @@ Expectations do
       argument(:a, 'd').
       argument(:b, 'd', :type => Integer).
       argument(:c, 'd', :type => FalseClass).
-      splat(:d, 'd').
+      splus(:d, String, 'd').
       description('d').
       define(:method).
       process o, %w[b -a 1 on d e f]

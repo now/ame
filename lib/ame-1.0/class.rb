@@ -147,6 +147,11 @@ class Ame::Class
       self
     end
 
+    def splus(name, default, description, &validate)
+      method.splus name, default, description, &validate
+      self
+    end
+
     # Sets up a dispatch method to KLASS.
     # @param [Class] klass
     # @param [Hash] options

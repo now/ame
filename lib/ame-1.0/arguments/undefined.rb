@@ -41,9 +41,15 @@ class Ame::Arguments::Undefined
   # @return [Splat, self]
   def splat(name, description, options = {}, &validate)
     self.splat = Ame::Splat.new(name, description, options, &validate)
+    self
+  end
+
+  def splus(name, default, description, &validate)
+    splat = Ame::Splus.new(name, default, description, &validate)
     raise ArgumentError,
       'optional argument %s may not precede required splat argument %s' %
-        [first_optional.name, @splat.name] if @splat.required? and first_optional
+        [first_optional.name, splat.name] if first_optional
+    self.splat = splat
     self
   end
 

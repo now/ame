@@ -33,6 +33,7 @@ module Ame
          options/undefined.rb
          root.rb
          splat.rb
+         splus.rb
          types.rb
          types/array.rb
          types/boolean.rb

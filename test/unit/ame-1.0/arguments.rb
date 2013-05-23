@@ -34,7 +34,7 @@ Expectations do
   expect Ame::MissingArgument do
     Ame::Arguments::Undefined.new.
       argument(:a, 'd', :type => Integer).
-      splat(:b, 'd').
+      splus(:b, String, 'd').
       define.
       process({}, %w[1])
   end
@@ -50,14 +50,14 @@ Expectations do
   expect [1, [2, 3]] do
     Ame::Arguments::Undefined.new.
       argument(:a, 'd', :type => Integer).
-      splat(:b, 'd', :type => Integer).
+      splus(:b, Integer, 'd').
       define.
       process({}, %w[1 2 3])
   end
 
-  expect Ame::Splat do
+  expect Ame::Splus do
     Ame::Arguments::Undefined.new.
-      splat(:a, 'd').
+      splus(:a, String, 'd').
       define.
       splat
   end

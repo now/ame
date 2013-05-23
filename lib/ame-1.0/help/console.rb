@@ -44,7 +44,7 @@ private
       append result, ' ', method.arguments.map{ |a|
         if a.optional? and Ame::Splat === a then '[%s]...'
         elsif a.optional? then '[%s]'
-        elsif Ame::Splat === a then '%s...'
+        elsif Ame::Splus === a then '%s...'
         else '%s'
         end % a
       }.join(' ')
@@ -54,7 +54,7 @@ private
         r = argument.to_s
         r << '=%s' % argument.default if argument.default
         r = '[%s]' % r if argument.optional?
-        r << '...' if Ame::Splat === argument
+        r << '...' if Ame::Splat === argument or Ame::Splus === argument
         r
       end
       append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |option|
