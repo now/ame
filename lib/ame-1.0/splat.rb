@@ -17,7 +17,11 @@ class Ame::Splat < Ame::Argument
   #   validated
   # @return [Array<Object>]
   def process(options, processed, arguments)
-    super options, processed, nil if required? and arguments.empty?
-    arguments.map{ |argument| super(options, processed, argument) }.tap{ arguments.clear }
+    super options, processed, [] if required? and arguments.empty?
+    [].tap{ |r|
+      until arguments.empty?
+        r << super(options, processed, arguments)
+      end
+    }
   end
 end

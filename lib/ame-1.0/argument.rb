@@ -66,9 +66,9 @@ class Ame::Argument
   # @raise [Ame::MalformedArgument] If the receiver couldn’t be parsed or
   #   validated
   # @return [Object]
-  def process(options, processed, argument)
-    raise Ame::MissingArgument, 'missing argument: %s' % self if required? and argument.nil?
-    @validate.call(options, processed, argument.nil? ? default : @type.parse(argument))
+  def process(options, processed, arguments)
+    raise Ame::MissingArgument, 'missing argument: %s' % self if required? and arguments.empty?
+    @validate.call(options, processed, arguments.empty? ? default : @type.parse(arguments.shift))
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
     raise Ame::MalformedArgument, '%s: %s' % [self, e]
   end

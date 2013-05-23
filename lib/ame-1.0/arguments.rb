@@ -22,8 +22,7 @@ class Ame::Arguments
   def process(options, arguments)
     unprocessed = arguments.dup
     reduce([]){ |processed, argument|
-      processed << argument.process(options, processed,
-                                    argument.arity < 0 ? unprocessed : unprocessed.shift)
+      processed << argument.process(options, processed, unprocessed)
     }.tap{
       raise Ame::SuperfluousArgument,
         'superfluous arguments: %s' % unprocessed.join(' ') unless unprocessed.empty?
