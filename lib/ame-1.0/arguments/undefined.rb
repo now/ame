@@ -77,10 +77,6 @@ class Ame::Arguments::Undefined
 
   private
 
-  def first_optional
-    @arguments.find{ |a| a.optional? }
-  end
-
   module Optional
     def splus(name, default, description, &validate)
       super
