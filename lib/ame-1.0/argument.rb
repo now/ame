@@ -45,8 +45,7 @@ class Ame::Argument
   #   validated
   # @return [Object]
   def process(options, processed, arguments)
-    raise Ame::MissingArgument, 'missing argument: %s' % self if arguments.empty?
-    @validate.call(options, processed, @type.parse(arguments.shift))
+    @validate.call(options, processed, parse(arguments))
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
     raise Ame::MalformedArgument, '%s: %s' % [self, e]
   end
@@ -59,4 +58,8 @@ class Ame::Argument
   private
 
   DefaultValidate = proc{ |options, processed, argument| argument }
+
+  def parse(arguments)
+    @type.parse(arguments.shift || raise(Ame::MissingArgument, 'missing argument: %s' % self))
+  end
 end
