@@ -31,6 +31,10 @@ class Ame::Arguments::Undefined
     self
   end
 
+  def optional(name, default, description, &validate)
+    argument(name, description, :optional => true, :default => default, &validate)
+  end
+
   # Defines splat argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL,
   # has DEFAULT as its value if not given, or returns the splat argument, if
   # NAME is nil.  An optional block will be used for any validation or further

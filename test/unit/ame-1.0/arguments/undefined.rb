@@ -5,27 +5,22 @@ Expectations do
     Ame::Arguments::Undefined.new.arity
   end
   expect 1 do
-    Ame::Arguments::Undefined.new.
-      argument(:a, 'd').arity
+    Ame::Arguments::Undefined.new.argument(:a, 'd').arity
   end
   expect(-1) do
-    Ame::Arguments::Undefined.new.
-      argument(:a, 'd', :optional => true).arity
+    Ame::Arguments::Undefined.new.optional(:a, nil, 'd').arity
   end
   expect 2 do
-    Ame::Arguments::Undefined.new.
-      argument(:a, 'd').argument(:b, 'd').arity
+    Ame::Arguments::Undefined.new.argument(:a, 'd').argument(:b, 'd').arity
   end
   expect(-2) do
-    Ame::Arguments::Undefined.new.
-      argument(:a, 'd').
-      argument(:b, 'd', :optional => true).arity
+    Ame::Arguments::Undefined.new.argument(:a, 'd').optional(:b, nil, 'd').arity
   end
   expect(-3) do
     Ame::Arguments::Undefined.new.
       argument(:a, 'd').
       argument(:b, 'd').
-      argument(:c, 'd', :optional => true).arity
+      optional(:c, nil, 'd').arity
   end
   expect(-4) do
     Ame::Arguments::Undefined.new.
@@ -43,8 +38,8 @@ Expectations do
     Ame::Arguments::Undefined.new.
       argument(:a, 'd').
       argument(:b, 'd').
-      argument(:c, 'd', :optional => true).
-      argument(:d, 'd', :optional => true).arity
+      optional(:c, nil, 'd').
+      optional(:d, nil, 'd').arity
   end
   expect(-3) do
     Ame::Arguments::Undefined.new.
@@ -60,7 +55,7 @@ Expectations do
 
   expect ArgumentError.new('optional argument a may not precede required argument b') do
     Ame::Arguments::Undefined.new.
-      argument(:a, 'd', :optional => true).
+      optional(:a, nil, 'd').
       argument(:b, 'd')
   end
 
@@ -72,7 +67,7 @@ Expectations do
 
   expect ArgumentError.new('optional argument a may not precede required splat argument b') do
     Ame::Arguments::Undefined.new.
-      argument(:a, 'd', :optional => true).
+      optional(:a, nil, 'd').
       splat(:b, 'd')
   end
 

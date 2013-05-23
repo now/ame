@@ -125,6 +125,11 @@ class Ame::Class
       self
     end
 
+    def optional(name, default, description, &validate)
+      method.optional name, default, description, &validate
+      self
+    end
+
     # Defines splat argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL,
     # has DEFAULT as its value if not given.  An optional block will be used
     # for any validation or further processing, where OPTIONS are the options
