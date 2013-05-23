@@ -19,8 +19,8 @@ class Ame::Arguments::Undefined
   #   one isn’t
   # @raise (see Argument#initialize)
   # @return [self]
-  def argument(name, description, options = {}, &block)
-    self << Ame::Argument.new(name, description, options, &block)
+  def argument(name, description, options = {}, &validate)
+    self << Ame::Argument.new(name, description, options, &validate)
   end
 
   def optional(name, default, description, &validate)
@@ -62,16 +62,12 @@ class Ame::Arguments::Undefined
   protected
 
   def <<(argument)
-    raise ArgumentError,
-      'argument %s must come before splat argument %s' %
-        [argument.name, @splat.name] if @splat
     @arguments << argument
     self
   end
 
   def splat=(splat)
-    raise ArgumentError,
-      'splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
+    extend(Splat)
     @splat = splat
   end
 
@@ -85,10 +81,29 @@ class Ame::Arguments::Undefined
           [@splat.name, @optional.name]
     end
 
-    def argument(name, description, options = {}, &block)
+    def argument(name, description, options = {}, &validate)
       raise ArgumentError,
         "argument '%s', … must come before optional '%s', …" %
           [@optional.name, name]
+    end
+  end
+
+  module Splat
+    def argument(name, description, options = {}, &validate)
+      raise ArgumentError,
+        "argument '%s', … must come before %s '%s', …" %
+          [name, @splat.class.name.split('::').last.downcase, @splat.name]
+    end
+
+    def optional(name, default, description, &validate)
+      raise ArgumentError,
+        "optional '%s', … must come before %s '%s', …" %
+          [name, @splat.class.name.split('::').last.downcase, @splat.name]
+    end
+
+    def splat=(splat)
+      raise ArgumentError,
+        'splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
     end
   end
 end

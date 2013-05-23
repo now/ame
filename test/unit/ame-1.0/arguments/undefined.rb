@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 Expectations do
-  expect ArgumentError.new('argument b must come before splat argument a') do
+  expect ArgumentError.new("argument 'b', … must come before splus 'a', …") do
     Ame::Arguments::Undefined.new.
       splus(:a, String, 'd').
       argument(:b, 'd')
