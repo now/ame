@@ -24,7 +24,7 @@ class Ame::Arguments::Undefined
   end
 
   def optional(name, default, description, &validate)
-    argument(name, description, :optional => true, :default => default, &validate)
+    self << Ame::Optional.new(name, default, description, &validate)
   end
 
   # Defines splat argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL,

@@ -28,6 +28,7 @@ module Ame
          methods.rb
          switch.rb
          option.rb
+         optional.rb
          options.rb
          options/undefined.rb
          root.rb
