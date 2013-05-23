@@ -40,7 +40,6 @@ class Ame::Arguments::Undefined
   # @raise (see Argument#initialize)
   # @return [Splat, self]
   def splat(name = nil, description = nil, options = {}, &validate)
-    return @splat unless name
     splat = Ame::Splat.new(name, description, options, &validate)
     raise ArgumentError,
       'splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
@@ -64,7 +63,7 @@ class Ame::Arguments::Undefined
   def <<(argument)
     raise ArgumentError,
       'argument %s must come before splat argument %s' %
-        [argument.name, splat.name] if @splat
+        [argument.name, @splat.name] if @splat
     raise ArgumentError,
       'optional argument %s may not precede required argument %s' %
         [first_optional.name, argument.name] if argument.required? and first_optional

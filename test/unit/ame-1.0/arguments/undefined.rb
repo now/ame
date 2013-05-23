@@ -24,9 +24,4 @@ Expectations do
       optional(:a, nil, 'd').
       splat(:b, 'd')
   end
-
-  expect Ame::Splat do
-    Ame::Arguments::Undefined.new.
-      splat(:a, 'd').splat
-  end
 end
