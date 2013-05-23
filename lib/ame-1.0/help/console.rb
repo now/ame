@@ -52,11 +52,12 @@ private
       result << "\n"
       append result, '  ', method.description
       append_group result, 'Arguments', method.arguments do |argument|
-        r = argument.to_s
-        r << '=%s' % argument.default if Ame::Optional === argument
-        r = '[%s]' % r if Ame::Splat === argument or Ame::Optional === argument
-        r << '...' if Ame::Splat === argument or Ame::Splus === argument
-        r
+        case argument
+        when Ame::Splat then '[%s]...' % argument
+        when Ame::Splus then '%s...' % argument
+        when Ame::Optional then '[%s=%s]' % [argument, argument.default]
+        else argument.to_s
+        end
       end
       append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |option|
         case option
