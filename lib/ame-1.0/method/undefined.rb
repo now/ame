@@ -102,8 +102,8 @@ class Ame::Method::Undefined
     @options.include? option
   end
 
-  def arity
-    @arguments.arity
+  def arguments?
+    not @arguments.empty?
   end
 
   def valid?

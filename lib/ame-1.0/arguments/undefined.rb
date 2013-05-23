@@ -59,6 +59,10 @@ class Ame::Arguments::Undefined
     self
   end
 
+  def empty?
+    @arguments.empty? and not @splat
+  end
+
   def arity
     Ame::Arguments.arity(@arguments, @splat)
   end

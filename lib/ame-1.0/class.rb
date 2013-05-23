@@ -162,7 +162,7 @@ class Ame::Class
         help.dispatch methods[klass.basename], klass
         throw Ame::AbortAllProcessing
       end unless method.option? :help
-      method.arity.zero? or
+      method.arguments? and
         raise ArgumentError,
           'arguments may not be defined for a dispatch: %s' % klass
       if options[:default]

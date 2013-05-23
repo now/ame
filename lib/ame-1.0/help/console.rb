@@ -42,9 +42,9 @@ private
       append result, ' ', method.qualified_name
       append result, ' ', method.options.count > 0 ? '[OPTIONS]...' : ''
       append result, ' ', method.arguments.map{ |a|
-        if a.optional? and a.arity < 0 then '[%s]...'
+        if a.optional? and Ame::Splat === a then '[%s]...'
         elsif a.optional? then '[%s]'
-        elsif a.arity < 0 then '%s...'
+        elsif Ame::Splat === a then '%s...'
         else '%s'
         end % a
       }.join(' ')
@@ -54,7 +54,7 @@ private
         r = argument.to_s
         r << '=%s' % argument.default if argument.default
         r = '[%s]' % r if argument.optional?
-        r << '...' if argument.arity < 0
+        r << '...' if Ame::Splat === argument
         r
       end
       append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |option|
