@@ -165,9 +165,11 @@ class Ame::Class
       method.arity.zero? or
         raise ArgumentError,
           'arguments may not be defined for a dispatch: %s' % klass
-      argument :method, 'Method to run', options.include?(:default) ?
-        {:optional => true, :default => options[:default]} :
-        {}
+      if options[:default]
+        optional :method, options[:default], 'Method to run'
+      else
+        argument :method, 'Method to run'
+      end
       splat :arguments, 'Arguments to pass to METHOD', :optional => true
       define_method Ame::Method.ruby_name(klass.basename) do |method, arguments|
         klass.process method, arguments
