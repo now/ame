@@ -2,7 +2,7 @@
 
 class Ame::Arguments::Undefined
   def initialize
-    @arguments, @splat = [], nil
+    @arguments = []
   end
 
   # Defines argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL, has
@@ -49,11 +49,10 @@ class Ame::Arguments::Undefined
   end
 
   def empty?
-    @arguments.empty? and not @splat
+    @arguments.empty?
   end
 
   def define
-    @arguments << @splat if @splat
     Ame::Arguments.new(@arguments)
   end
 
@@ -66,9 +65,8 @@ class Ame::Arguments::Undefined
 
   def splatify(splat, command)
     extend(Splat)
-    @splat = splat
     @splat_command = command
-    self
+    self << @splat = splat
   end
 
   private
