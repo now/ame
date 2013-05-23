@@ -5,8 +5,6 @@ Expectations do
 
   expect 'd' do Ame::Argument.new(:a, 'd').description end
 
-  expect 1 do Ame::Argument.new(:a, 'd').arity end
-
   expect result.not.optional? do Ame::Argument.new(:a, 'd') end
   expect result.optional? do Ame::Argument.new(:a, 'd', :optional => true) end
 

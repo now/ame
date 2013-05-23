@@ -29,10 +29,6 @@ class Ame::Method
     self
   end
 
-  def arity
-    @arguments.arity
-  end
-
   attr_reader :description, :options, :arguments
 
   def name

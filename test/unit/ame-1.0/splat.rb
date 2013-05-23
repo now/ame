@@ -3,8 +3,6 @@
 Expectations do
   expect Ame::MissingArgument do Ame::Splat.new('a', 'd').process({}, [], []) end
 
-  expect(-1) do Ame::Splat.new('a', 'd').arity end
-
   expect [] do Ame::Splat.new('a', 'd', :optional => true).process({}, [], []) end
   expect ['arg'] do Ame::Splat.new('a', 'd').process({}, [], %w[arg]) end
   expect [1, 2] do Ame::Splat.new('a', 'd', :type => Integer).process({}, [], %w[1 2]) end

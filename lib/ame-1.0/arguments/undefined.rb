@@ -63,10 +63,6 @@ class Ame::Arguments::Undefined
     @arguments.empty? and not @splat
   end
 
-  def arity
-    Ame::Arguments.arity(@arguments, @splat)
-  end
-
   def define
     Ame::Arguments.new(@arguments, @splat)
   end

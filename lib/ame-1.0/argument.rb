@@ -2,8 +2,7 @@
 
 # Represents an argument to a {Method}.  It has a {#name}, a {#description}, it
 # may be {#optional?}, in which case it might have a {#default}, otherwise it’s
-# {#required?}, and it has an {#arity} of 1 ({Splat} has an {Splat#arity?
-# arity} of -1).  It may be called upon to {#process} an argument before the
+# {#required?}.  It may be called upon to {#process} an argument before the
 # method this argument is associated with gets called.
 class Ame::Argument
   # Defines argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL, has
@@ -51,11 +50,6 @@ class Ame::Argument
   # @return True if the receiver has to appear for the method to be called
   def required?
     not optional?
-  end
-
-  # @return [Integer] The number of arguments that the receiver processes (1)
-  def arity
-    1
   end
 
   # Parses ARGUMENT as a value of the type of the receiver, then passes this
