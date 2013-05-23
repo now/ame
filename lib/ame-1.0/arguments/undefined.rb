@@ -58,7 +58,8 @@ class Ame::Arguments::Undefined
   end
 
   def define
-    Ame::Arguments.new(@arguments, @splat)
+    @arguments << @splat if @splat
+    Ame::Arguments.new(@arguments)
   end
 
   protected

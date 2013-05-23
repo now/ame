@@ -3,8 +3,8 @@
 class Ame::Arguments
   include Enumerable
 
-  def initialize(arguments, splat)
-    @arguments, @splat = arguments, splat
+  def initialize(arguments)
+    @arguments = arguments
   end
 
   def process(options, arguments)
@@ -21,7 +21,6 @@ class Ame::Arguments
     @arguments.each do |argument|
       yield argument
     end
-    yield @splat if @splat
     self
   end
 end
