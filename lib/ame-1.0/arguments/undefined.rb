@@ -24,7 +24,8 @@ class Ame::Arguments::Undefined
   end
 
   def optional(name, default, description, &validate)
-    self << Ame::Optional.new(name, default, description, &validate)
+    self << @optional = Ame::Optional.new(name, default, description, &validate)
+    extend(Optional)
   end
 
   # Defines splat argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL,
@@ -45,11 +46,7 @@ class Ame::Arguments::Undefined
   end
 
   def splus(name, default, description, &validate)
-    splat = Ame::Splus.new(name, default, description, &validate)
-    raise ArgumentError,
-      'optional argument %s may not precede required splat argument %s' %
-        [first_optional.name, splat.name] if first_optional
-    self.splat = splat
+    self.splat = Ame::Splus.new(name, default, description, &validate)
     self
   end
 
@@ -85,5 +82,14 @@ class Ame::Arguments::Undefined
 
   def first_optional
     @arguments.find{ |a| a.optional? }
+  end
+
+  module Optional
+    def splus(name, default, description, &validate)
+      super
+      raise ArgumentError,
+        'optional argument %s may not precede required splat argument %s' %
+          [@optional.name, @splat.name]
+    end
   end
 end
