@@ -15,15 +15,6 @@ class Ame::Optional
   # @return [Object, nil] The default value of the receiver
   attr_reader :default
 
-  def optional?
-    true
-  end
-
-  # @return True if the receiver has to appear for the method to be called
-  def required?
-    not optional?
-  end
-
   def process(options, processed, arguments)
     @validate.call(options, processed, arguments.empty? ? default : @type.parse(arguments.shift))
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e

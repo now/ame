@@ -13,8 +13,4 @@ class Ame::Splat < Ame::Splus
   def process(options, processed, arguments)
     arguments.empty? ? [] : super
   end
-
-  def optional?
-    true
-  end
 end

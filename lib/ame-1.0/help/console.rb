@@ -42,9 +42,10 @@ private
       append result, ' ', method.qualified_name
       append result, ' ', method.options.count > 0 ? '[OPTIONS]...' : ''
       append result, ' ', method.arguments.map{ |a|
-        if a.optional? and Ame::Splat === a then '[%s]...'
-        elsif a.optional? then '[%s]'
-        elsif Ame::Splus === a then '%s...'
+        case a
+        when Ame::Splat then '[%s]...'
+        when Ame::Splus then '%s...'
+        when Ame::Optional then '[%s]'
         else '%s'
         end % a
       }.join(' ')
@@ -52,8 +53,8 @@ private
       append result, '  ', method.description
       append_group result, 'Arguments', method.arguments do |argument|
         r = argument.to_s
-        r << '=%s' % argument.default if argument.default
-        r = '[%s]' % r if argument.optional?
+        r << '=%s' % argument.default if Ame::Optional === argument
+        r = '[%s]' % r if Ame::Splat === argument or Ame::Optional === argument
         r << '...' if Ame::Splat === argument or Ame::Splus === argument
         r
       end

@@ -27,9 +27,7 @@ class Ame::Argument
   # @raise [ArgumentError] If DEFAULT isn’t of TYPE
   def initialize(name, description, options = {}, &validate)
     @name, @description, @validate = name.to_sym, description, validate || DefaultValidate
-    @optional = options.fetch(:optional, false)
-    @type = Ame::Types[[options[:type], options[:default], String].find{ |o| !o.nil? }]
-    set_default options[:default], options[:type] if options.include? :default
+    @type = Ame::Types[[options[:type], String].find{ |o| !o.nil? }]
   end
 
   # @return [Symbol] The name of the receiver
@@ -37,20 +35,6 @@ class Ame::Argument
 
   # @return [String] The description of the receiver
   attr_reader :description
-
-  # @return [Object, nil] The default value of the receiver
-  attr_reader :default
-
-  # @return True if the receiver doesn’t have to appear for the method to be
-  #   called
-  def optional?
-    @optional
-  end
-
-  # @return True if the receiver has to appear for the method to be called
-  def required?
-    not optional?
-  end
 
   # Parses ARGUMENT as a value of the type of the receiver, then passes this
   # value to the block passed to the receiver’s constructor and returns the
@@ -61,8 +45,8 @@ class Ame::Argument
   #   validated
   # @return [Object]
   def process(options, processed, arguments)
-    raise Ame::MissingArgument, 'missing argument: %s' % self if required? and arguments.empty?
-    @validate.call(options, processed, arguments.empty? ? default : @type.parse(arguments.shift))
+    raise Ame::MissingArgument, 'missing argument: %s' % self if arguments.empty?
+    @validate.call(options, processed, @type.parse(arguments.shift))
   rescue Ame::MalformedArgument, ArgumentError, TypeError => e
     raise Ame::MalformedArgument, '%s: %s' % [self, e]
   end
@@ -75,13 +59,4 @@ class Ame::Argument
   private
 
   DefaultValidate = proc{ |options, processed, argument| argument }
-
-  def set_default(value, type)
-    raise ArgumentError,
-      'default value can only be set if optional' unless optional?
-    raise ArgumentError,
-      'default value %s is not of type %s' %
-        [value, type] unless value.nil? or type.nil? or value.is_a? type
-    @default = value
-  end
 end
