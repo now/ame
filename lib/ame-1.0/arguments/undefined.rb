@@ -20,15 +20,7 @@ class Ame::Arguments::Undefined
   # @raise (see Argument#initialize)
   # @return [self]
   def argument(name, description, options = {}, &block)
-    argument = Ame::Argument.new(name, description, options, &block)
-    raise ArgumentError,
-      'argument %s must come before splat argument %s' %
-        [argument.name, splat.name] if @splat
-    raise ArgumentError,
-      'optional argument %s may not precede required argument %s' %
-        [first_optional.name, argument.name] if argument.required? and first_optional
-    @arguments << argument
-    self
+    self << Ame::Argument.new(name, description, options, &block)
   end
 
   def optional(name, default, description, &validate)
@@ -65,6 +57,19 @@ class Ame::Arguments::Undefined
 
   def define
     Ame::Arguments.new(@arguments, @splat)
+  end
+
+  protected
+
+  def <<(argument)
+    raise ArgumentError,
+      'argument %s must come before splat argument %s' %
+        [argument.name, splat.name] if @splat
+    raise ArgumentError,
+      'optional argument %s may not precede required argument %s' %
+        [first_optional.name, argument.name] if argument.required? and first_optional
+    @arguments << argument
+    self
   end
 
   private
