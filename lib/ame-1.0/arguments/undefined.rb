@@ -20,7 +20,7 @@ class Ame::Arguments::Undefined
   # @raise (see Argument#initialize)
   # @return [self]
   def argument(name, type, description, &validate)
-    add('argument', Ame::Argument.new(name, description, :type => type, &validate))
+    add('argument', Ame::Argument.new(name, type, description, &validate))
   end
 
   def optional(name, default, description, &validate)

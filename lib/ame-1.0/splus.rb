@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
 class Ame::Splus < Ame::Argument
-  def initialize(name, type, description, &validate)
-    super name, description, { :type => type }, &validate
-  end
-
   # Processes each argument in ARGUMENTS via {Argument#process}.
   # @param (see Argument#process)
   # @raise [Ame::MissingArgument] If the receiver is {#required?} and ARGUMENTS

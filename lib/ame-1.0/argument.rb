@@ -25,9 +25,9 @@ class Ame::Argument
   # @yieldparam [Object] argument
   # @raise [ArgumentError] If DEFAULT given but OPTIONAL is false
   # @raise [ArgumentError] If DEFAULT isn’t of TYPE
-  def initialize(name, description, options = {}, &validate)
+  def initialize(name, type, description, &validate)
     @name, @description, @validate = name.to_sym, description, validate || DefaultValidate
-    @type = Ame::Types[[options[:type], String].find{ |o| !o.nil? }]
+    @type = Ame::Types[[type, String].find{ |o| !o.nil? }]
   end
 
   # @return [Symbol] The name of the receiver
