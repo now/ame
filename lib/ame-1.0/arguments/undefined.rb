@@ -20,11 +20,11 @@ class Ame::Arguments::Undefined
   # @raise (see Argument#initialize)
   # @return [self]
   def argument(name, description, options = {}, &validate)
-    self << Ame::Argument.new(name, description, options, &validate)
+    add('argument', Ame::Argument.new(name, description, options, &validate))
   end
 
   def optional(name, default, description, &validate)
-    self << @optional = Ame::Optional.new(name, default, description, &validate)
+    add('optional', @optional ||= Ame::Optional.new(name, default, description, &validate))
     extend(Optional)
   end
 
@@ -41,11 +41,11 @@ class Ame::Arguments::Undefined
   # @raise (see Argument#initialize)
   # @return [Splat, self]
   def splat(name, description, options = {}, &validate)
-    splatify(Ame::Splat.new(name, description, options, &validate), 'splat')
+    splatify('splat', Ame::Splat.new(name, description, options, &validate))
   end
 
   def splus(name, default, description, &validate)
-    splatify(Ame::Splus.new(name, default, description, &validate), 'splus')
+    splatify('splus', Ame::Splus.new(name, default, description, &validate))
   end
 
   def empty?
@@ -58,15 +58,16 @@ class Ame::Arguments::Undefined
 
   protected
 
-  def <<(argument)
+  def add(command, argument)
     @arguments << argument
     self
   end
 
-  def splatify(splat, command)
+  def splatify(command, splat)
+    @splat_command ||= command
+    @splat ||= splat
+    add(command, splat)
     extend(Splat)
-    @splat_command = command
-    self << @splat = splat
   end
 
   private
@@ -87,22 +88,10 @@ class Ame::Arguments::Undefined
   end
 
   module Splat
-    def argument(name, description, options = {}, &validate)
-      raise ArgumentError,
-        "argument '%s', … must come before %s '%s', …" %
-          [name, @splat_command, @splat.name]
-    end
-
-    def optional(name, default, description, &validate)
-      raise ArgumentError,
-        "optional '%s', … must come before %s '%s', …" %
-          [name, @splat_command, @splat.name]
-    end
-
-    def splatify(splat, command)
+    def add(command, argument)
       raise ArgumentError,
         "%s '%s', … may not follow %s '%s', …" %
-          [command, splat.name, @splat_command, @splat.name]
+          [command, argument.name, @splat_command, @splat.name]
     end
   end
 end
