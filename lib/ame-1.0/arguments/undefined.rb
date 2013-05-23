@@ -19,12 +19,12 @@ class Ame::Arguments::Undefined
   #   one isn’t
   # @raise (see Argument#initialize)
   # @return [self]
-  def argument(name, description, options = {}, &validate)
-    add('argument', Ame::Argument.new(name, description, options, &validate))
+  def argument(name, type, description, &validate)
+    add('argument', Ame::Argument.new(name, description, :type => type, &validate))
   end
 
   def optional(name, default, description, &validate)
-    add('optional', @optional ||= Ame::Optional.new(name, default, description, &validate))
+    add('optional', Ame::Optional.new(name, default, description, &validate).tap{ |o| @optional ||= o })
     extend(Optional)
   end
 

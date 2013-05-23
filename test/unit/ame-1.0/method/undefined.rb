@@ -11,9 +11,9 @@ Expectations do
   expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'a' => true}).once do |o|
     Ame::Method::Undefined.new(o).
       flag('a', '', false, 'd').
-      argument(:a, 'd').
-      argument(:b, 'd', :type => Integer).
-      argument(:c, 'd', :type => FalseClass).
+      argument(:a, String, 'd').
+      argument(:b, Integer, 'd').
+      argument(:c, FalseClass, 'd').
       splus(:d, String, 'd').
       description('d').
       define(:method).
@@ -23,8 +23,8 @@ Expectations do
   expect mock.to.receive.method(1, false, [], {'a' => true}).once do |o|
     Ame::Method::Undefined.new(o).
       flag('a', '', true, 'd').
-      argument(:b, 'd', :optional => true, :default => 1).
-      argument(:c, 'd', :optional => true, :default => false).
+      optional(:b, 1, 'd').
+      optional(:c, false, 'd').
       splat(:d, 'd', :optional => true).
       description('d').
       define(:method).

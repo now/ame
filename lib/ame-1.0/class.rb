@@ -120,8 +120,8 @@ class Ame::Class
     # @yieldparam (see Method::Undefined#argument)
     # @raise (see Method::Undefined#argument)
     # @return [self]
-    def argument(name, description, options = {}, &validate)
-      method.argument name, description, options, &validate
+    def argument(name, type, description, &validate)
+      method.argument name, type, description, &validate
       self
     end
 
@@ -173,7 +173,7 @@ class Ame::Class
       if options[:default]
         optional :method, options[:default], 'Method to run'
       else
-        argument :method, 'Method to run'
+        argument :method, String, 'Method to run'
       end
       splat :arguments, 'Arguments to pass to METHOD', :optional => true
       define_method Ame::Method.ruby_name(klass.basename) do |method, arguments|

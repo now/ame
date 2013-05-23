@@ -27,8 +27,8 @@ Options:
       toggle ?s, 'signoff', false, 'Add Signed-off-by: line to the commit message'
       switch '', 'thread', 'style', nil, :shallow, 'Controls addition of In-Reply-To and References headers'
       option 'x', '', 'level', '', 'X description'
-      argument :arg1, 'Argument 1'
-      argument :arg2, 'Argument 2'
+      argument :arg1, String, 'Argument 1'
+      argument :arg2, String, 'Argument 2'
       splus :argN, String, 'Argument N'
       def help_console_test_1() end
     }.process('help-console-test-1', %w[--help])

@@ -63,8 +63,8 @@ class Ame::Method::Undefined
   # @yieldparam (see Arguments::Undefined#argument)
   # @raise (see Arguments::Undefined#argument)
   # @return [self]
-  def argument(name, description, options = {}, &validate)
-    @arguments.argument name, description, options, &validate
+  def argument(name, type, description, &validate)
+    @arguments.argument name, type, description, &validate
     self
   end
 
