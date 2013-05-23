@@ -32,8 +32,8 @@ module Ame
          options.rb
          options/undefined.rb
          root.rb
-         splat.rb
          splus.rb
+         splat.rb
          types.rb
          types/array.rb
          types/boolean.rb

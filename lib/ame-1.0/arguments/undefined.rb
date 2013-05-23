@@ -40,12 +40,12 @@ class Ame::Arguments::Undefined
   # @yieldparam (see Argument#initialize)
   # @raise (see Argument#initialize)
   # @return [Splat, self]
-  def splat(name, description, options = {}, &validate)
-    splatify('splat', Ame::Splat.new(name, description, options, &validate))
+  def splat(name, type, description, &validate)
+    splatify('splat', Ame::Splat.new(name, type, description, &validate))
   end
 
-  def splus(name, default, description, &validate)
-    splatify('splus', Ame::Splus.new(name, default, description, &validate))
+  def splus(name, type, description, &validate)
+    splatify('splus', Ame::Splus.new(name, type, description, &validate))
   end
 
   def empty?

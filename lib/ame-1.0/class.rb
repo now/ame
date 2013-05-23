@@ -175,7 +175,7 @@ class Ame::Class
       else
         argument :method, String, 'Method to run'
       end
-      splat :arguments, 'Arguments to pass to METHOD', :optional => true
+      splat :arguments, String, 'Arguments to pass to METHOD'
       define_method Ame::Method.ruby_name(klass.basename) do |method, arguments|
         klass.process method, arguments
       end
