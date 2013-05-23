@@ -13,7 +13,7 @@ Expectations do
       argument(:b, 'd')
   end
 
-  expect ArgumentError.new('splat argument a already defined: b') do
+  expect ArgumentError.new("splus 'b', … may not follow splus 'a', …") do
     Ame::Arguments::Undefined.new.
       splus(:a, String, 'd').
       splus(:b, String, 'd')

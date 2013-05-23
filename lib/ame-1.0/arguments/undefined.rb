@@ -41,13 +41,11 @@ class Ame::Arguments::Undefined
   # @raise (see Argument#initialize)
   # @return [Splat, self]
   def splat(name, description, options = {}, &validate)
-    self.splat = Ame::Splat.new(name, description, options, &validate)
-    self
+    splatify(Ame::Splat.new(name, description, options, &validate), 'splat')
   end
 
   def splus(name, default, description, &validate)
-    self.splat = Ame::Splus.new(name, default, description, &validate)
-    self
+    splatify(Ame::Splus.new(name, default, description, &validate), 'splus')
   end
 
   def empty?
@@ -66,9 +64,11 @@ class Ame::Arguments::Undefined
     self
   end
 
-  def splat=(splat)
+  def splatify(splat, command)
     extend(Splat)
     @splat = splat
+    @splat_command = command
+    self
   end
 
   private
@@ -92,18 +92,19 @@ class Ame::Arguments::Undefined
     def argument(name, description, options = {}, &validate)
       raise ArgumentError,
         "argument '%s', … must come before %s '%s', …" %
-          [name, @splat.class.name.split('::').last.downcase, @splat.name]
+          [name, @splat_command, @splat.name]
     end
 
     def optional(name, default, description, &validate)
       raise ArgumentError,
         "optional '%s', … must come before %s '%s', …" %
-          [name, @splat.class.name.split('::').last.downcase, @splat.name]
+          [name, @splat_command, @splat.name]
     end
 
-    def splat=(splat)
+    def splatify(splat, command)
       raise ArgumentError,
-        'splat argument %s already defined: %s' % [@splat.name, splat.name] if @splat
+        "%s '%s', … may not follow %s '%s', …" %
+          [command, splat.name, @splat_command, @splat.name]
     end
   end
 end
