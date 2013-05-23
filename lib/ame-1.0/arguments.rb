@@ -24,6 +24,4 @@ class Ame::Arguments
     yield @splat if @splat
     self
   end
-
-  attr_reader :splat
 end

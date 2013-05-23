@@ -55,13 +55,6 @@ Expectations do
       process({}, %w[1 2 3])
   end
 
-  expect Ame::Splus do
-    Ame::Arguments::Undefined.new.
-      splus(:a, String, 'd').
-      define.
-      splat
-  end
-
   expect Ame::SuperfluousArgument do
     Ame::Arguments::Undefined.new.
       define.
