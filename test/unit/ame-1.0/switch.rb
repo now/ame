@@ -8,4 +8,8 @@ Expectations do
   expect 'deep' do
     Ame::Switch.new('', 'thread', 'style', nil, 'shallow', 'd').process({}, [], '--thread', 'deep')
   end
+
+  expect :deep do
+    Ame::Switch.new('', 'thread', 'style', nil, :shallow, 'd'){ |o, e| Ame::Types::Enumeration[:shallow, :deep].parse(e) }.process({}, [], '--thread', 'deep')
+  end
 end
