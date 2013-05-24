@@ -147,8 +147,8 @@ class Ame::Class
     # @yieldparam (see Method::Undefined#splat)
     # @raise (see Method::Undefined#splat)
     # @return [self]
-    def splat(name, description, options = {}, &validate)
-      method.splat name, description, options, &validate
+    def splat(name, type, description, &validate)
+      method.splat name, type, description, &validate
       self
     end
 
