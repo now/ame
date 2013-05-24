@@ -26,7 +26,7 @@ class Ame::Argument
   # @raise [ArgumentError] If DEFAULT given but OPTIONAL is false
   # @raise [ArgumentError] If DEFAULT isn’t of TYPE
   def initialize(name, type, description, &validate)
-    @name, @description, @validate = name.to_sym, description, validate || DefaultValidate
+    @name, @description, @validate = name, description, validate || DefaultValidate
     @type = Ame::Types[[type, String].reject(&:nil?).first]
   end
 
@@ -52,7 +52,7 @@ class Ame::Argument
 
   # @return [String] The upcasing of the {#name} of the receiver
   def to_s
-    name.to_s.upcase
+    name.upcase
   end
 
   private

@@ -7,8 +7,8 @@ class Ame::Help::Console
 
   def dispatch(method, klass)
     output method_s(method).tap{ |result|
-      append_group result, 'Methods', klass.methods.sort_by{ |m| method_name(m) } do |e|
-        method_name(e)
+      append_group result, 'Methods', klass.methods.sort_by{ |m| m.name } do |m|
+        m.name
       end
     }
   end
@@ -99,9 +99,5 @@ private
     longest = strings.map{ |_, s| s.length }.max
     append result, "\n\n%s:\n" % heading,
       strings.map{ |o, s| '  %-*s  %s' % [longest, s, o.description] }.join("\n")
-  end
-
-  def method_name(method)
-    method.name.to_s
   end
 end

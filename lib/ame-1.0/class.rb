@@ -171,11 +171,11 @@ class Ame::Class
         raise ArgumentError,
           'arguments may not be defined for a dispatch: %s' % klass
       if options[:default]
-        optional :method, options[:default], 'Method to run'
+        optional 'method', options[:default], 'Method to run'
       else
-        argument :method, String, 'Method to run'
+        argument 'method', String, 'Method to run'
       end
-      splat :arguments, String, 'Arguments to pass to METHOD'
+      splat 'arguments', String, 'Arguments to pass to METHOD'
       define_method Ame::Method.ruby_name(klass.basename) do |method, arguments|
         klass.process method, arguments
       end
