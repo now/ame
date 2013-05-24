@@ -8,7 +8,7 @@ class Ame::Method
     end
 
     def name(ruby_name)
-      ruby_name.to_s.gsub('_', '-').to_sym
+      ruby_name.to_s.gsub('_', '-')
     end
   end
 
@@ -36,6 +36,6 @@ class Ame::Method
   end
 
   def qualified_name
-    [@class.fullname, name.to_s].reject{ |n| n.empty? }.join(' ')
+    [@class.fullname, name].reject{ |n| n.empty? }.join(' ')
   end
 end

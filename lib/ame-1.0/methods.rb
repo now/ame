@@ -13,12 +13,8 @@ class Ame::Methods
   end
 
   def [](name)
-    @methods[name.to_sym] or
+    @methods[name] or
       raise Ame::UnrecognizedMethod, 'unrecognized method: %s' % name
-  end
-
-  def include?(name)
-    @methods.include? name.to_sym
   end
 
   def each

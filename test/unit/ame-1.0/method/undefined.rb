@@ -6,7 +6,7 @@ Expectations do
   expect result.not.valid? do Ame::Method::Undefined.new(nil) end
   expect result.valid? do Ame::Method::Undefined.new(nil).description('d') end
 
-  expect :name do Ame::Method::Undefined.new(nil).description('d').define(:name).name end
+  expect 'name' do Ame::Method::Undefined.new(nil).description('d').define(:name).name end
 
   expect mock.to.receive.method('b', 1, true, ['d', 'e', 'f'], {'a' => true}).once do |o|
     Ame::Method::Undefined.new(o).
