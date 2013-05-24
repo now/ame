@@ -28,6 +28,7 @@ module Ame
          methods.rb
          switch.rb
          option.rb
+         multioption.rb
          optional.rb
          options.rb
          options/undefined.rb
@@ -35,7 +36,6 @@ module Ame
          splus.rb
          splat.rb
          types.rb
-         types/array.rb
          types/boolean.rb
          types/enumeration.rb
          types/integer.rb

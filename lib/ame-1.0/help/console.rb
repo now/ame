@@ -61,6 +61,14 @@ private
       end
       append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |option|
         case option
+        when Ame::Multioption
+          if option.short and option.long
+            '-%s, --%s=%s*' % [option.short, option.long, option.argument]
+          elsif option.short
+            '-%s%s*' % [option.short, option.argument]
+          else
+            '    --%s=%s*' % [option.long, option.argument]
+          end
         when Ame::Option
           if option.short and option.long
             '-%s, --%s=%s' % [option.short, option.long, option.argument]

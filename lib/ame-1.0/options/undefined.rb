@@ -34,6 +34,11 @@ class Ame::Options::Undefined
     self << Ame::Option.new(short, long, argument, default, description, &validate)
   end
 
+  def multioption(short, long, argument, type, description, &validate)
+    self << Ame::Multioption.new(short, long, argument, type, description, &validate)
+    self
+  end
+
   def include?(name)
     @options.include? name
   end

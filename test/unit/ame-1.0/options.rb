@@ -144,6 +144,6 @@ Expectations do
   end
 
   expect [{'a' => [1, 2, 3]}, []] do
-    Ame::Options::Undefined.new.option('a', '', 'N', [], 'd'){ |o, a| o['a'] << Ame::Types::Integer.parse(a) }.define.process(%w[-a 1 -a 2 -a 3])
+    Ame::Options::Undefined.new.multioption('a', '', 'N', Integer, 'd').define.process(%w[-a 1 -a 2 -a 3])
   end
 end
