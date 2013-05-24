@@ -73,17 +73,17 @@ class Ame::Arguments::Undefined
   private
 
   module Optional
+    def argument(name, description, options = {}, &validate)
+      raise ArgumentError,
+        "argument '%s', … may not follow optional '%s', …" %
+          [@optional.name, name]
+    end
+
     def splus(name, default, description, &validate)
       super
       raise ArgumentError,
         "splus '%s', … may not follow optional '%s', …" %
           [@splat.name, @optional.name]
-    end
-
-    def argument(name, description, options = {}, &validate)
-      raise ArgumentError,
-        "argument '%s', … may not follow optional '%s', …" %
-          [@optional.name, name]
     end
   end
 
