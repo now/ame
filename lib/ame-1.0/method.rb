@@ -36,6 +36,6 @@ class Ame::Method
   end
 
   def qualified_name
-    [@class.fullname, name].reject{ |n| n.empty? }.join(' ')
+    [@class.fullname, name].reject(&:empty?).join(' ')
   end
 end
