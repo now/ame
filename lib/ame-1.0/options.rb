@@ -44,7 +44,7 @@ class Ame::Options
   private
 
   def [](name)
-    @options[name.to_s.sub(/\A-+/, '')] or
+    @options[name.sub(/\A-+/, '')] or
       raise Ame::UnrecognizedOption, 'unrecognized option: %s' % name
   end
 end
