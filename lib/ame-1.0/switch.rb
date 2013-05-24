@@ -2,8 +2,9 @@
 
 class Ame::Switch < Ame::Flag
   def initialize(short, long, argument, default, argument_default, description, &validate)
-    @argument, @argument_default = argument.upcase, argument_default
-    @type = Ame::Types[[default, argument_default, String].reject(&:nil?).first]
+    @argument = argument.upcase
+    @type = Ame::Types[[argument_default, default, String].reject(&:nil?).first]
+    @argument_default = @type.respond_to?(:default) ? @type.default : argument_default
     super short, long, default, description, &validate
   end
 

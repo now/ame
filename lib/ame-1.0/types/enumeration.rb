@@ -5,11 +5,14 @@ class Ame::Types::Enumeration
     alias [] new
   end
 
-  def initialize(*names)
-    @names = names
+  def initialize(first, second, *rest)
+    @default = first
+    @names = [first, second] + rest
   end
 
   def parse(value)
     @names.include?(s = value.to_sym) ? s : raise(Ame::MalformedArgument, 'not a valid enumeration value: %s' % value)
   end
+
+  attr_reader :default
 end
