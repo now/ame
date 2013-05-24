@@ -59,40 +59,12 @@ private
         else argument.to_s
         end
       end
-      append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |option|
-        case option
-        when Ame::Multioption
-          if option.short and option.long
-            '-%s, --%s=%s*' % [option.short, option.long, option.argument]
-          elsif option.short
-            '-%s%s*' % [option.short, option.argument]
-          else
-            '    --%s=%s*' % [option.long, option.argument]
-          end
-        when Ame::Option
-          if option.short and option.long
-            '-%s, --%s=%s' % [option.short, option.long, option.argument]
-          elsif option.short
-            '-%s%s' % [option.short, option.argument]
-          else
-            '    --%s=%s' % [option.long, option.argument]
-          end
-        when Ame::Switch
-          if option.short and option.long
-            '-%s, --%s[=%s]' % [option.short, option.long, option.argument]
-          elsif option.short
-            '-%s[=%s]' % [option.short, option.argument]
-          else
-            '    --%s[=%s]' % [option.long, option.argument]
-          end
-        else
-          if option.short and option.long
-            '-%s, --%s' % [option.short, option.long]
-          elsif option.short
-            '-%s' % option.short
-          else
-            '    --%s' % option.long
-          end
+      append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |o|
+        case o
+        when Ame::Multioption then '%s*' % option(o)
+        when Ame::Option then option(o)
+        when Ame::Switch then '%s[=%s]' % [flag(o), o.argument]
+        else flag(o)
         end
       end
     }.join('')
@@ -107,5 +79,19 @@ private
     longest = strings.map{ |_, s| s.length }.max
     append result, "\n\n%s:\n" % heading,
       strings.map{ |o, s| '  %-*s  %s' % [longest, s, o.description] }.join("\n")
+  end
+
+  def flag(option)
+    if option.short and option.long
+      '-%s, --%s' % [option.short, option.long]
+    elsif option.short
+      '-%s' % option.short
+    else
+      '    --%s' % option.long
+    end
+  end
+
+  def option(option)
+    '%s%s%s' % [flag(option), option.long ? '=' : '', option.argument]
   end
 end
