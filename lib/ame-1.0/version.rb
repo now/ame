@@ -38,6 +38,7 @@ module Ame
          types.rb
          types/boolean.rb
          types/enumeration.rb
+         types/float.rb
          types/integer.rb
          types/string.rb
          types/symbol.rb]
