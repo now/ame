@@ -76,13 +76,13 @@ class Ame::Arguments::Undefined
     def splus(name, default, description, &validate)
       super
       raise ArgumentError,
-        "splus '%s', … must come before optional '%s', …" %
+        "splus '%s', … may not follow optional '%s', …" %
           [@splat.name, @optional.name]
     end
 
     def argument(name, description, options = {}, &validate)
       raise ArgumentError,
-        "argument '%s', … must come before optional '%s', …" %
+        "argument '%s', … may not follow optional '%s', …" %
           [@optional.name, name]
     end
   end

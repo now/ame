@@ -7,7 +7,7 @@ Expectations do
       argument(:b, String, 'd')
   end
 
-  expect ArgumentError.new("argument 'a', … must come before optional 'b', …") do
+  expect ArgumentError.new("argument 'a', … may not follow optional 'b', …") do
     Ame::Arguments::Undefined.new.
       optional(:a, nil, 'd').
       argument(:b, String, 'd')
@@ -19,7 +19,7 @@ Expectations do
       splus(:b, String, 'd')
   end
 
-  expect ArgumentError.new("splus 'b', … must come before optional 'a', …") do
+  expect ArgumentError.new("splus 'b', … may not follow optional 'a', …") do
     Ame::Arguments::Undefined.new.
       optional(:a, nil, 'd').
       splus(:b, String, 'd')
