@@ -91,26 +91,31 @@ class Ame::Class
     def flag(short, long, default, description, &validate)
       method.flag short, long, default, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     def toggle(short, long, default, description, &validate)
       method.toggle short, long, default, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     def switch(short, long, argument, default, argument_default, description, &validate)
       method.switch short, long, argument, default, argument_default, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     def option(short, long, argument, default, description, &validate)
       method.option short, long, argument, default, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     def multioption(short, long, argument, type, description, &validate)
       method.multioption short, long, argument, type, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     # Defines argument NAME of TYPE with DESCRIPTION.  An optional block will
@@ -125,11 +130,13 @@ class Ame::Class
     def argument(name, type, description, &validate)
       method.argument name, type, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     def optional(name, default, description, &validate)
       method.optional name, default, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     # Defines splat argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL,
@@ -147,11 +154,13 @@ class Ame::Class
     def splat(name, type, description, &validate)
       method.splat name, type, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     def splus(name, default, description, &validate)
       method.splus name, default, description, &validate
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     # Sets up a dispatch method to KLASS.
@@ -182,6 +191,7 @@ class Ame::Class
         klass.process method, arguments
       end
       self
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
 
     # Defines the previously undefined {#method} now that it’s been added to
@@ -195,7 +205,7 @@ class Ame::Class
       elsif public_method_defined? ruby_name
         methods << method.define(ruby_name)
       elsif method.valid?
-        raise ArgumentError, 'non-public method cannot be used by Ame: %s' % ruby_name
+        raise ArgumentError, 'non-public method cannot be used by Ame: %s' % ruby_name, caller
       end
       @method = nil
       self

@@ -29,18 +29,21 @@ class Ame::Root < Ame::Class
 
     def version(version = nil)
       return @version = version if version
-      raise 'version not set, call %s.version VERSION' % self unless @version
       @version
     end
 
     private
 
     def method_added(ruby_name)
-      flag '', 'version', nil, 'Display version information' do
-        help.version methods[Ame::Method.name(ruby_name)], self.version
-        throw Ame::AbortAllProcessing
-      end unless method.option? 'version'
+      unless method.option? 'version'
+        raise ArgumentError, 'version not set, set it with version VERSION', caller unless defined? @version
+        flag '', 'version', nil, 'Display version information' do
+          help.version methods[Ame::Method.name(ruby_name)], self.version
+          throw Ame::AbortAllProcessing
+        end
+      end
       super
+    rescue; $!.set_backtrace(caller[1..-1]); raise
     end
   end
 end
