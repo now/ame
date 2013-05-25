@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 Expectations do
-  expect ArgumentError.new("argument 'a', … may not follow optional 'b', …") do
+  expect ArgumentError.new("argument 'b', … may not follow optional 'a', …") do
     Ame::Arguments::Undefined.new.
       optional('a', nil, 'd').
       argument('b', String, 'd')

@@ -113,17 +113,14 @@ class Ame::Class
       self
     end
 
-    # Defines argument NAME with DESCRIPTION of TYPE, which, if OPTIONAL, has
-    # DEFAULT as its value if not given.  An optional block will be used for
-    # any validation or further processing, where OPTIONS are the options
-    # processed so far and their values, PROCESSED are the values of the
-    # arguments processed so far, and ARGUMENT is the value of the argument
-    # itself.
+    # Defines argument NAME of TYPE with DESCRIPTION.  An optional block will
+    # be used for any validation or further processing of the parsed value of
+    # the argument, where OPTIONS are the options processed so far and their
+    # values, PROCESSED are the values of the arguments processed so far, and
+    # ARGUMENT is the value itself.
     # @param (see Method::Undefined#argument)
-    # @option (see Method::Undefined#argument)
     # @yield (see Method::Undefined#argument)
     # @yieldparam (see Method::Undefined#argument)
-    # @raise (see Method::Undefined#argument)
     # @return [self]
     def argument(name, type, description, &validate)
       method.argument name, type, description, &validate

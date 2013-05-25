@@ -18,6 +18,8 @@ module Ame
       %w[argument.rb
          arguments.rb
          arguments/undefined.rb
+         arguments/optional.rb
+         arguments/complete.rb
          class.rb
          flag.rb
          help.rb

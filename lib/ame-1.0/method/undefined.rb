@@ -69,12 +69,12 @@ class Ame::Method::Undefined
   # @raise (see Arguments::Undefined#argument)
   # @return [self]
   def argument(name, type, description, &validate)
-    @arguments.argument name, type, description, &validate
+    @arguments.argument(name, type, description, &validate)
     self
   end
 
   def optional(name, default, description, &validate)
-    @arguments.optional name, default, description, &validate
+    @arguments = @arguments.optional(name, default, description, &validate)
     self
   end
 
@@ -91,12 +91,12 @@ class Ame::Method::Undefined
   # @raise (see Arguments::Undefined#splat)
   # @return [self]
   def splat(name, type, description, &validate)
-    @arguments.splat name, type, description, &validate
+    @arguments = @arguments.splat(name, type, description, &validate)
     self
   end
 
   def splus(name, default, description, &validate)
-    @arguments.splus name, default, description, &validate
+    @arguments = @arguments.splus(name, default, description, &validate)
     self
   end
 
