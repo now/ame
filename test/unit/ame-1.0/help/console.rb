@@ -20,6 +20,7 @@ Options:
   -xLEVEL               X description
 }) do |io|
     Class.new(Ame::Root) {
+      version '1.0.0'
       help Ame::Help::Console.new(io, io, false)
 
       description 'Method description'
@@ -52,6 +53,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
+      version '1.0.0'
       help Ame::Help::Console.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
@@ -84,6 +86,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
+      version '1.0.0'
       help Ame::Help::Console.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
@@ -124,6 +127,7 @@ Methods:
   method-2  Method 2 does b
 }) do |io|
     Class.new(Ame::Root) {
+      version '1.0.0'
       help Ame::Help::Console.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
@@ -155,6 +159,7 @@ Methods:
   expect output("method: error message\n") do |io|
     begin
       Class.new(Ame::Root) {
+        version '1.0.0'
         help Ame::Help::Console.new(io, io, false)
 
         description 'd'
