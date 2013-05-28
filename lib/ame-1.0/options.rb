@@ -52,6 +52,7 @@ class Ame::Options
   # @overload
   #   @return [Enumerator<Option>] An Enumerator over the options
   def each
+    return enum_for(__method__) unless block_given?
     @ordered.each do |option|
       yield option
     end

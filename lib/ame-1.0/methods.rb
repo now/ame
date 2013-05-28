@@ -31,6 +31,7 @@ class Ame::Methods
   # @overload
   #   @return [Enumerator<Method>] An Enumerator over the methods
   def each
+    return enum_for(__method__) unless block_given?
     @methods.each_value do |method|
       yield method
     end
