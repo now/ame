@@ -3,7 +3,7 @@
 module Ame::Types::String
   Ame::Types.register self, String
 
-  def self.parse(value)
-    value
+  def self.parse(argument)
+    argument
   end
 end

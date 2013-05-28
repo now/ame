@@ -3,9 +3,9 @@
 module Ame::Types::Float
   Ame::Types.register self, Float
 
-  def self.parse(value)
-    Float(value)
+  def self.parse(argument)
+    Float(argument)
   rescue ArgumentError
-    raise Ame::MalformedArgument, 'not a float: %s' % value
+    raise Ame::MalformedArgument, 'not a float: %s' % argument
   end
 end

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# Delegates help output requests to another help output.
+# @api internal
 class Ame::Help::Delegate
   def initialize(help)
     @help = help

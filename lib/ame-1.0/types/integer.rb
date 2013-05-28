@@ -3,9 +3,9 @@
 module Ame::Types::Integer
   Ame::Types.register self, Integer
 
-  def self.parse(value)
-    Integer(value)
+  def self.parse(argument)
+    Integer(argument)
   rescue ArgumentError
-    raise Ame::MalformedArgument, 'not an integer: %s' % value
+    raise Ame::MalformedArgument, 'not an integer: %s' % argument
   end
 end

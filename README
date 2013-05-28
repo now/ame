@@ -2,3 +2,5 @@
 
 Ame is a simple command-line parser and build system.  Its aim is to replace
 the need for other command-line parsers and Rake.
+
+Mention that --help and --version are automatically added.

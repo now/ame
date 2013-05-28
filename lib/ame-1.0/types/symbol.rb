@@ -3,7 +3,7 @@
 module Ame::Types::Symbol
   Ame::Types.register self, Symbol
 
-  def self.parse(value)
-    value.to_sym
+  def self.parse(argument)
+    argument.to_sym
   end
 end
