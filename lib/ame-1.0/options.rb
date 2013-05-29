@@ -31,7 +31,7 @@ class Ame::Options
       when /\A-([^=-]{2,})\z/
         combined = $1
         until combined.empty?
-          option = self['-' + combined[0]]
+          option = self['-' + combined[0].chr]
           results[option.name], combined = option.process_combined(results, arguments, $1, combined[1..-1])
         end
       when /\A(--[^=]+|-[^-])(?:=(.*))?\z/
