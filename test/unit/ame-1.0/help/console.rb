@@ -45,8 +45,8 @@ Arguments:
   [ARGUMENTS]...  Arguments to pass to METHOD
 
 Options:
-      --help     Display help for this method
-      --version  Display version information
+  --help     Display help for this method
+  --version  Display version information
 
 Methods:
   method-1  Method 1 does a
@@ -79,7 +79,7 @@ Arguments:
   [ARGUMENTS]...  Arguments to pass to METHOD
 
 Options:
-      --help  Display help for this method
+  --help  Display help for this method
 
 Methods:
   method-1  Method 1 does a
@@ -119,8 +119,8 @@ Arguments:
   [ARGUMENTS]...     Arguments to pass to METHOD
 
 Options:
-      --help     Display help for this method
-      --version  Display version information
+  --help     Display help for this method
+  --version  Display version information
 
 Methods:
   method-1  Method 1 does a

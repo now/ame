@@ -92,12 +92,14 @@ class Ame::Help::Console
         else argument.to_s
         end
       end
-      append_group result, 'Options', method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s } do |o|
+      os = method.options.select{ |o| o.description }.sort_by{ |o| (o.short or o.long).to_s }
+      short = os.any?{ |o| o.short }
+      append_group result, 'Options', os do |o|
         case o
-        when Ame::Multioption then '%s*' % option(o)
-        when Ame::Option then option(o)
-        when Ame::Switch then '%s[=%s]' % [flag(o), o.argument]
-        else flag(o)
+        when Ame::Multioption then '%s*' % option(o, short)
+        when Ame::Option then option(o, short)
+        when Ame::Switch then '%s[=%s]' % [flag(o, short), o.argument]
+        else flag(o, short)
         end
       end
     }.join('')
@@ -114,17 +116,17 @@ class Ame::Help::Console
       strings.map{ |o, s| '  %-*s  %s' % [longest, s, o.description] }.join("\n")
   end
 
-  def flag(option)
+  def flag(option, short)
     if option.short and option.long
       '-%s, --%s' % [option.short, option.long]
     elsif option.short
       '-%s' % option.short
     else
-      '    --%s' % option.long
+      '%s--%s' % [short ? '    ' : '', option.long]
     end
   end
 
-  def option(option)
-    '%s%s%s' % [flag(option), option.long ? '=' : '', option.argument]
+  def option(option, short)
+    '%s%s%s' % [flag(option, short), option.long ? '=' : '', option.argument]
   end
 end
