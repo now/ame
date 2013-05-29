@@ -24,34 +24,75 @@
 #   end
 #   Rm.process
 # @example A Git-like Command-line Interface With Ame
+#   module Git end
 #   class Git::CLI < Ame::Root
 #     version '1.0.0'
+#     class Git < Ame::Class
+#       description 'The stupid content tracker'
+#       def initialize; end
+#
+#       description 'Prepare patches for e-mail submission'
+#       flag   ?n, 'numbered', false, 'Name output in [PATCH n/m] format'
+#       flag   ?N, 'no-numbered', nil,
+#         'Name output in [PATCH] format' do |options|
+#         options['numbered'] = false
+#       end
+#       toggle ?s, 'signoff', false,
+#         'Add Signed-off-by: line to the commit message'
+#       switch '', 'thread', 'STYLE', nil,
+#         Ame::Types::Enumeration[:shallow, :deep],
+#         'Controls addition of In-Reply-To and References headers'
+#       flag   '', 'no-thread', nil,
+#         'Disables addition of In-Reply-To and Reference headers' do |options, _|
+#          options.delete 'thread'
+#       end
+#       option '', 'start-number', 'N', 1,
+#         'Start numbering the patches at N instead of 1'
+#       multioption '', 'to', 'ADDRESS', String,
+#         'Add a To: header to the email headers'
+#       optional 'SINCE', 'N/A', 'Generate patches for commits after SINCE'
+#       def format_patch(since = '', options = {})
+#         p since, options
+#       end
+#
+#       description 'Annotate file lines with commit information'
+#       argument 'FILE', String, 'File to annotate'
+#       def annotate(file)
+#         p file
+#       end
+#
+#       description 'Add file contents to the index'
+#       splat 'PATHSPEC', String, 'Files to add content from'
+#       def add(paths)
+#         p paths
+#       end
+#
+#       description 'Display gitattributes information'
+#       splus 'PATHNAME', String, 'Files to list attributes of'
+#       def check_attr(paths)
+#         p paths
+#       end
+#
+#       class Remote < Ame::Class
+#         description 'Manage set of remote repositories'
+#         def initialize; end
+#
+#         description 'Shows a list of existing remotes'
+#         flag 'v', 'verbose', false, 'Show remote URL after name'
+#         def list(options = {})
+#           p options
+#         end
+#
+#         description 'Adds a remote named NAME for the repository at URL'
+#         argument 'name', String, 'Name of the remote to add'
+#         argument 'url', String, 'URL to the repository of the remote to add'
+#         def add(name, url)
+#           p name, url
+#         end
+#       end
+#       dispatch Remote, :default => 'list'
+#     end
 #     dispatch Git
-#   end
-#   class Git::CLI::Git < Ame::Class
-#     description 'The stupid content tracker'
-#     def initialize; end
-#
-#     description 'Show various types of objects'
-#     option :'abbrev-commit', 'Show only partial prefix'
-#     splat :objects, 'The names of objects to show'
-#     def show(objects)
-#       options = objects.pop
-#       …
-#     end
-#
-#     dispatch Remote
-#   end
-#   class Git::CLI::Git::Remote < Ame::Class
-#     description 'Manage set of remote repositories'
-#     def initialize; end
-#
-#     description 'Adds a remote named NAME for the repository at URL'
-#     argument :name, 'Name of the remote to add'
-#     argument :url, 'URL to the repository of the remote to add'
-#     def add(name, url)
-#       …
-#     end
 #   end
 #   Git::CLI.process
 class Ame::Root < Ame::Class

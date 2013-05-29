@@ -368,7 +368,6 @@
     and then we’re done.  Here’s all the previous code in its entirety:
 
       module Git end
-
       class Git::CLI < Ame::Root
         version '1.0.0'
         class Git < Ame::Class
