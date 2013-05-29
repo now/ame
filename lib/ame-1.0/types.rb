@@ -30,7 +30,7 @@ module Ame::Types
     #   class Rm < Ame::Root
     #     …
     #     splus 'FILE', My::Pathname, 'File to remove'
-    #     def rm(*pathnames)
+    #     def rm(pathnames)
     #       pathnames.each do |e| e.rmtree end
     #     end
     #   end

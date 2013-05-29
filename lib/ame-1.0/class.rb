@@ -52,10 +52,10 @@ class Ame::Class
     # only public methods can be used as Ame methods.
     # @param [String, nil] description
     # @return [String]
-    # @example Set The Description of the #Push Method
-    #   class Button
-    #     description 'Push the button'
-    #     def push
+    # @example Set The Description of the Format-patch Method
+    #   class Git::CLI::Git::FormatPatch < Ame::Class
+    #     description 'Prepare patches for e-mail submission'
+    #     def format_patch
     def description(description = nil)
       return method.description(description) if description
       defined?(@description) ? @description : ''
@@ -91,7 +91,7 @@ class Ame::Class
     #     flag   ?n, 'numbered', false, 'Name output in [PATCH n/m] format'
     #     flag   ?N, 'no-numbered', nil, 'Name output in [PATCH] format' do |opt|
     #       opt['numbered'] = false
-    #      end
+    #     end
     #   end
     def flag(short, long, default, description, &validate)
       method.flag short, long, default, description, &validate
@@ -288,7 +288,7 @@ class Ame::Class
     # @return [self]
     # @example A Splus Argument
     #   class Git::CLI::Git::CheckAttr < Ame::Class
-    #     splat 'PATHNAME', String, 'Files to list attributes of'
+    #     splus 'PATHNAME', String, 'Files to list attributes of'
     #   end
     def splus(name, type, description, &validate)
       method.splus name, type, description, &validate

@@ -1,6 +1,533 @@
-# Ame #
+                                      Ame
 
-Ame is a simple command-line parser and build system.  Its aim is to replace
-the need for other command-line parsers and Rake.
+  Ame provides a simple command-line interface API for Ruby¹.  It can be used
+  to provide both simple interfaces like that of ‹rm›² and complex ones like
+  that of ‹git›³.  It uses Ruby’s own classes, methods, and argument lists to
+  provide an interface that is both simple to use from the command-line side
+  and from the Ruby side.  The provided command-line interface is flexible and
+  follows commond standards for command-line processing.
 
-Mention that --help and --version are automatically added.
+¹ See http://ruby-lang.org/
+² See http://pubs.opengroup.org/onlinepubs/9699919799/utilities/rm.html
+³ See http://git-scm.com/docs/
+
+§ Usage
+
+    Let’s begin by looking at two examples, one where we mimic the POSIX¹
+    command-line interface to the ‹rm› command.  Looking at the entry² in the
+    standard, ‹rm› takes the following options:
+
+  = -f. = Do not prompt for confirmation.
+  = -i. = Prompt for confirmation.
+  = -R. = Remove file hierarchies.
+  = -r. = Equivalent to /-r/.
+
+    It also takes the following arguments:
+
+  = FILE. = A pathname or directory entry to be removed.
+
+    And actually allows one or more of these /FILE/ arguments to be given.
+
+    We also note that the ‹rm› command is described as a command to “remove
+    directory entries”.
+
+  ¹ See http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html
+  ² See http://pubs.opengroup.org/onlinepubs/9699919799/utilities/rm.html
+
+    Let’s turn this specification into one using Ame’s API.  We begin by adding
+    a flag for each of the options listed above:
+
+      class Rm < Ame::Root
+        flag 'f', '', false, 'Do not prompt for confirmation'
+        flag 'i', '', nil, 'Prompt for confirmation' do |options|
+          options['f'] = false
+        end
+        flag 'R', '', false, 'Remove file hierarchies'
+        flag 'r', '', nil, 'Equivalent to -R' do |options|
+          options['r'] = true
+        end
+
+    A flag¹ is a boolean option that doesn’t take an argument.  Each flag gets
+    a short and long name, where an empty name means that there’s no
+    corresponding short or long name for the flag, a default value (true,
+    false, or nil), and a description of what the flag does.  Each flag can
+    also optionally take a block that can do further processing.  In this case
+    we use this block to modify the Hash that maps option names to their values
+    passed to the block to set other flags’ values than the ones that the block
+    is associated with.  As these flags (‘i’ and ‘r’) aren’t themselves of
+    interest, their default values have been set to nil, which means that they
+    won’t be included in the Hash that maps option names to their values when
+    passed to the method.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#flag-class-method
+
+    There are quite a few other kinds of options besides flags that can be
+    defined using Ame, but flags are all that are required for this example.
+    We’ll get to the other kinds in later examples.
+
+    Next we add a “splus” argument.
+
+        splus 'FILE', String, 'File to remove'
+
+    A splus¹ argument is like a Ruby “splat”, that is, an Array argument at the
+    end of the argument list to a method preceded by a star, except that a
+    splus requires at least one argument.  A splus argument gets a name for the
+    argument (‹FILE›), the type of argument it represents (String), and a
+    description.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#splus-class-method
+
+    Then we add a description of the command (method) itself:
+
+        description 'Remove directory entries'
+
+    Descriptions¹ will be used in help output to assist the user in using the
+    command.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#description-class-method
+
+    Finally, we add the Ruby method that’ll implement the command (all
+    preceding code included here for completeness):
+
+      class Rm < Ame::Root
+        version '1.0.0'
+
+        flag 'f', '', false, 'Do not prompt for confirmation'
+        flag 'i', '', nil, 'Prompt for confirmation' do |options|
+          options['f'] = false
+        end
+        flag 'R', '', false, 'Remove file hierarchies'
+        flag 'r', '', nil, 'Equivalent to -R' do |options|
+          options['r'] = true
+        end
+        splus 'FILE', String, 'File to remove'
+        description 'Remove directory entries'
+        def rm(files, options = {})
+          require 'fileutils'
+          FileUtils.send options['R'] ? :rm_r : :rm,
+            [first] + rest, :force => options['f']
+        end
+      end
+
+    Actually, another bit of code was also added, namely
+
+        version '1.0.0'
+
+    This sets the version¹ String of the command.  This information is used
+    when the command is invoked with the “‹--version›” flag.  This flag is
+    automatically added, so you don’t need to add it yourself.  Another flag,
+    “‹--help›”, is also added automatically.  When given, this flag’ll make Ame
+    output usage information of the command.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#version-class-method
+
+    To actually run the command, all you need to do is invoke
+
+      Rm.process
+
+    This’ll invoke the command using the command-line arguments stored in
+    ‹ARGV›, but you can also specify other ones if you want to:
+
+      Rm.process 'rm', %w[-r /tmp/*]
+
+    The first argument to #process¹ is the name of the method to invoke, which
+    defaults to ‹File.basename($0)›, and the second argument is an Array of
+    Strings that should be processed as command-line arguments passed to the
+    command.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#process-class-method
+
+    If you’d store the complete ‹Rm› class defined above in a file called ‹rm›
+    and add ‹#! /usr/bin/ruby -w› at the beginning and ‹Rm.process› at the end,
+    you’d have a fully functional ‹rm› command (after making it executable).
+    Let’s see it in action:
+
+      % rm --help
+      Usage: rm [OPTIONS]... FILE...
+        Remove directory entries
+
+      Arguments:
+        FILE...  File to remove
+
+      Options:
+        -R             Remove file hierarchies
+        -f             Do not prompt for confirmation
+            --help     Display help for this method
+        -i             Prompt for confirmation
+        -r             Equivalent to -R
+            --version  Display version information
+      % rm --version
+      rm 1.0.0
+
+    Some commands are more complex than ‹rm›.  For example, ‹git›¹ has a rather
+    complex command-line interface.  We won’t mimic it all here, but let’s
+    introduce the rest of the Ame API using a fake ‹git› clone as an example.
+
+  ¹ See http://git-scm.com/docs/
+
+    ‹Git› uses sub-commands to achieve most things.  Implementing sub-commands
+    with Ame is done using a “dispatch”.  We’ll discuss dispatches in more
+    detail later, but suffice it to say that a dispatch delegates processing to
+    a child class that’ll handle the sub-command in question.  We begin by
+    defining our main ‹git› command using a class called ‹Git› under the
+    ‹Git::CLI› namespace:
+
+      module Git end
+      class Git::CLI < Ame::Root
+        version '1.0.0'
+        class Git < Ame::Class
+          description 'The stupid content tracker'
+          def initialize; end
+
+    We’re setting things up to use the ‹Git› class as a dispatch in the
+    ‹Git::CLI› class.  The description on the ‹initialize› method will be used
+    as a description of the ‹git› dispatch command itself.
+
+    Next, let’s add the ‹format-patch›¹ sub-command:
+
+      description 'Prepare patches for e-mail submission'
+      flag   ?n, 'numbered', false, 'Name output in [PATCH n/m] format'
+      flag   ?N, 'no-numbered', nil,
+        'Name output in [PATCH] format' do |options|
+        options['numbered'] = false
+      end
+      toggle ?s, 'signoff', false,
+        'Add Signed-off-by: line to the commit message'
+      switch '', 'thread', 'STYLE', nil,
+        Ame::Types::Enumeration[:shallow, :deep],
+      'Controls addition of In-Reply-To and References headers'
+      flag   '', 'no-thread', nil,
+        'Disables addition of In-Reply-To and Reference headers' do |options, _|
+         options.delete 'thread'
+      end
+      option '', 'start-number', 'N', 1,
+        'Start numbering the patches at N instead of 1'
+      multioption '', 'to', 'ADDRESS', String,
+        'Add a To: header to the email headers'
+      optional 'SINCE', 'N/A', 'Generate patches for commits after SINCE'
+      def format_patch(since = '', options = {})
+        p since, options
+      end
+
+  ¹ See http://git-scm.com/docs/git-format-patch/
+
+    We’re using quite a few new Ame commands here.  Let’s look at each in turn:
+
+      toggle ?s, 'signoff', false,
+        'Add Signed-off-by: line to the commit message'
+
+    A “toggle”¹ is a flag that also has an inverse.  Beyond the flags ‘s’ and
+    “signoff”, the toggle also defines “no-signoff”, which will set “signoff”
+    to false.  This is useful if you want to support configuration files that
+    set “signoff”’s default to true, but still allow it to be overridden on the
+    command line.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#toggle-class-method
+
+    When using the short form of a toggle (and flag and switch), multiple ones
+    may be juxtaposed after the initial one.  For example, “‹-sn›” is
+    equivalent to “‹-s -n›” to “git format-patch›”.
+
+      switch '', 'thread', 'STYLE', nil,
+        Ame::Types::Enumeration[:shallow, :deep],
+        'Controls addition of In-Reply-To and References headers'
+
+    A “switch”¹ is an option that takes an optional argument.  This allows you
+    to have separate defaults for when the switch isn’t present on the command
+    line and for when it’s given without an argument.  The third argument to a
+    switch is the name of the argument.  We’re also introducing a new concept
+    here in ‹Ame::Types::Enumeration›.  An enumeration² allows you to limit the
+    allowed input to a set of Symbols.  An enumeration also has a default value
+    in the first item to its constructor (which is aliased as ‹.[]›).  In this
+    case, the “thread” switch defaults to nil, but, when given, will default to
+    ‹:shallow› if no argument is given.  If an argument is given it must be
+    either “shallow” or “deep”.  A switch isn’t required to take an enumeration
+    as its argument default and can take any kind of default value for its
+    argument that Ame knows how to handle.  We’ll look at this in more detail
+    later, but know that the type of the default value will be used to inform
+    Ame how to parse a command-line argument into a Ruby value.
+
+    An argument to a switch must be given, in this case, as “‹--thread=deep›”
+    on the command line.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#switch-class-method
+  ² See http://disu.se/software/ame-1.0/api/user/Ame/Types/Enumeration/
+
+      option '', 'start-number', 'N', 1,
+        'Start numbering the patches at N instead of 1'
+
+    An “option”¹ is an option that takes an argument.  The argument must always
+    be present and may be given, in this case, as “‹--start-number=2›” or
+    “‹--start-number 2›” on the command line.  For a short-form option,
+    anything that follows the option is seen as an argument, so assuming that
+    “start-number” also had a short name of ‘S’, “‹-S2›” would be equivalent to
+    “‹-S 2›”, which would be equivalent to “‹--start-number 2›”.  Note that
+    “‹-snS2›” would still work as expected.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#option-class-method
+
+      multioption '', 'to', 'ADDRESS', String,
+        'Add a To: header to the email headers'
+
+    A “multioption”¹ is an option that takes an argument and may be repeated
+    any number of times. Each argument will be added to an Array stored in the
+    Hash that maps option names to their values.  Instead of taking a default
+    argument, it takes a type for the argument (String, in this case).  Again,
+    types are used to inform Ame how to parse command-line arguments into Ruby
+    values.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#multioption-class-method
+
+      optional 'SINCE', 'N/A', 'Generate patches for commits after SINCE'
+
+    An “optional”¹ argument is an argument that isn’t required.  If it’s not
+    present on the command line it’ll get its default value (the String
+    ‹'N/A'›, in this case).
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#optional-class-method
+
+    We’ve now covered all kinds of options and one new kind of argument.  There
+    are three more types of argument (one that we’ve already seen and two new)
+    that we’ll look into now: “argument”, “splat”, and “splus”.
+
+      description 'Annotate file lines with commit information'
+      argument 'FILE', String, 'File to annotate'
+      def annotate(file)
+        p file
+      end
+
+    An “argument”¹ is an argument that’s required.  If it’s not present on the
+    command line, an error will be raised (and by default reported to the
+    console).  As it’s required, it doesn’t take a default, but rather a type.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#argument-class-method
+
+      description 'Add file contents to the index'
+      splat 'PATHSPEC', String, 'Files to add content from'
+      def add(paths)
+        p paths
+      end
+
+    A “splat”¹ is an argument that’s not required, but may be given any number
+    of times.  The type of a splat is the type of one argument and the type of
+    a splat as a whole is an Array of values of that type.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#splat-class-method
+
+      description 'Display gitattributes information'
+      splus 'PATHNAME', String, 'Files to list attributes of'
+      def check_attr(paths)
+        p paths
+      end
+
+    A “splus”¹ is an argument that’s required, but may also be given any number
+    of times.  The type of a splus is the type of one argument and the type of
+    a splus as a whole is an Array of values of that type.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#splus-class-method
+
+    Now that we’ve seen all kinds of options and arguments, let’s look on an
+    additional tool at our disposal, the dispatch¹.
+
+      class Remote < Ame::Class
+        description 'Manage set of remote repositories'
+        def initialize; end
+
+        description 'Shows a list of existing remotes'
+        flag 'v', 'verbose', false, 'Show remote URL after name'
+        def list(options = {})
+          p options
+        end
+
+        description 'Adds a remote named NAME for the repository at URL'
+        argument 'name', String, 'Name of the remote to add'
+        argument 'url', String, 'URL to the repository of the remote to add'
+        def add(name, url)
+          p name, url
+        end
+      end
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#dispatch-class-method
+
+    Here we’re defining a child class to Git::CLI::Git called “Remote” that
+    doesn’t introduce anything new.  Then we set up the dispatch:
+
+      dispatch Remote, :default => 'list'
+
+    This adds a method called “remote” to Git::CLI::Git that will dispatch
+    processing of the command line to an instance of the Remote class when
+    “‹git remote›” is seen on the command line.  The “remote” method expects an
+    argument that’ll be used to decide what sub-command to execute.  Here we’ve
+    specified that in the absence of such an argument, the “list” method should
+    be invoked.
+
+    We add the same kind of dispatch to Git under Git::CLI:
+
+      dispatch Git
+
+    and then we’re done.  Here’s all the previous code in its entirety:
+
+      module Git end
+
+      class Git::CLI < Ame::Root
+        version '1.0.0'
+        class Git < Ame::Class
+          description 'The stupid content tracker'
+          def initialize; end
+
+          description 'Prepare patches for e-mail submission'
+          flag   ?n, 'numbered', false, 'Name output in [PATCH n/m] format'
+          flag   ?N, 'no-numbered', nil,
+            'Name output in [PATCH] format' do |options|
+            options['numbered'] = false
+          end
+          toggle ?s, 'signoff', false,
+            'Add Signed-off-by: line to the commit message'
+          switch '', 'thread', 'STYLE', nil,
+            Ame::Types::Enumeration[:shallow, :deep],
+            'Controls addition of In-Reply-To and References headers'
+          flag   '', 'no-thread', nil,
+            'Disables addition of In-Reply-To and Reference headers' do |options, _|
+             options.delete 'thread'
+          end
+          option '', 'start-number', 'N', 1,
+            'Start numbering the patches at N instead of 1'
+          multioption '', 'to', 'ADDRESS', String,
+            'Add a To: header to the email headers'
+          optional 'SINCE', 'N/A', 'Generate patches for commits after SINCE'
+          def format_patch(since = '', options = {})
+            p since, options
+          end
+
+          description 'Annotate file lines with commit information'
+          argument 'FILE', String, 'File to annotate'
+          def annotate(file)
+            p file
+          end
+
+          description 'Add file contents to the index'
+          splat 'PATHSPEC', String, 'Files to add content from'
+          def add(paths)
+            p paths
+          end
+
+          description 'Display gitattributes information'
+          splus 'PATHNAME', String, 'Files to list attributes of'
+          def check_attr(paths)
+            p paths
+          end
+
+          class Remote < Ame::Class
+            description 'Manage set of remote repositories'
+            def initialize; end
+
+            description 'Shows a list of existing remotes'
+            flag 'v', 'verbose', false, 'Show remote URL after name'
+            def list(options = {})
+              p options
+            end
+
+            description 'Adds a remote named NAME for the repository at URL'
+            argument 'name', String, 'Name of the remote to add'
+            argument 'url', String, 'URL to the repository of the remote to add'
+            def add(name, url)
+              p name, url
+            end
+          end
+          dispatch Remote, :default => 'list'
+        end
+        dispatch Git
+      end
+
+    If we put this code in a file called “git” and add ‹#! /usr/bin/ruby -w› at
+    the beginning and ‹Git::CLI.process› at the end, you’ll have a very
+    incomplete git command-line interface on your hands.  Let’s look at what
+    some of its ‹--help› output looks like:
+
+      % git --help
+      Usage: git [OPTIONS]... METHOD [ARGUMENTS]...
+      The stupid content tracker
+
+      Arguments:
+        METHOD          Method to run
+        [ARGUMENTS]...  Arguments to pass to METHOD
+
+      Options:
+        --help     Display help for this method
+        --version  Display version information
+
+      Methods:
+        add           Add file contents to the index
+        annotate      Annotate file lines with commit information
+        check-attr    Display gitattributes information
+        format-patch  Prepare patches for e-mail submission
+        remote        Manage set of remote repositories
+      % git format-patch --help
+      Usage: git format-patch [OPTIONS]... [SINCE]
+      Prepare patches for e-mail submission
+
+      Arguments:
+        [SINCE=N/A]  Generate patches for commits after SINCE
+
+      Options:
+        -N, --no-numbered     Name output in [PATCH] format
+            --help            Display help for this method
+        -n, --numbered        Name output in [PATCH n/m] format
+            --no-thread       Disables addition of In-Reply-To and Reference headers
+        -s, --signoff         Add Signed-off-by: line to the commit message
+            --start-number=N  Start numbering the patches at N instead of 1
+            --thread[=STYLE]  Controls addition of In-Reply-To and References headers
+            --to=ADDRESS*     Add a To: header to the email headers
+      % git remote --help
+      Usage: git remote [OPTIONS]... [METHOD] [ARGUMENTS]...
+      Manage set of remote repositories
+
+      Arguments:
+        [METHOD=list]   Method to run
+        [ARGUMENTS]...  Arguments to pass to METHOD
+
+      Options:
+        --help  Display help for this method
+
+      Methods:
+        add   Adds a remote named NAME for the repository at URL
+        list  Shows a list of existing remotes
+
+§ API
+
+    The previous section gave an introduction to the whole user API in an
+    informal and introductory way.  For an indepth reference to the user API,
+    see the {user API documentation}¹.
+
+  ¹ See http://disu.se/software/ame-1.0/api/user/Ame/
+
+    If you want to extend the API or use it in some way other than as a
+    command-line-interface writer, see the {developer API documentation}¹.
+
+  ¹ See http://disu.se/software/ame-1.0/api/developer/Ame/
+
+§ Financing
+
+    Currently, most of my time is spent at my day job and in my rather busy
+    private life.  Please motivate me to spend time on this piece of software
+    by donating some of your money to this project.  Yeah, I realize that
+    requesting money to develop software is a bit, well, capitalistic of me.
+    But please realize that I live in a capitalistic society and I need money
+    to have other people give me the things that I need to continue living
+    under the rules of said society.  So, if you feel that this piece of
+    software has helped you out enough to warrant a reward, please PayPal a
+    donation to now@disu.se¹.  Thanks!  Your support won’t go unnoticed!
+
+¹ Send a donation:
+  https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=now%40disu%2ese&item_name=Ame
+
+§ Reporting Bugs
+
+    Please report any bugs that you encounter to the {issue tracker}¹.
+
+  ¹ See https://github.com/now/ame/issues
+
+§ Authors
+
+    Nikolai Weibull wrote the code, the tests, the documentation, and this
+    README.

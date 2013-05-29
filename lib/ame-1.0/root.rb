@@ -16,8 +16,7 @@
 #     end
 #     splus 'FILE', String, 'File to remove'
 #     description 'Remove directory entries'
-#     def rm(first, *rest)
-#       options = rest.pop
+#     def rm(files, options = {})
 #       require 'fileutils'
 #       FileUtils.send options['R'] ? :rm_r : :rm,
 #         [first] + rest, :force => options['f']
@@ -36,7 +35,7 @@
 #     description 'Show various types of objects'
 #     option :'abbrev-commit', 'Show only partial prefix'
 #     splat :objects, 'The names of objects to show'
-#     def show(*objects)
+#     def show(objects)
 #       options = objects.pop
 #       …
 #     end
