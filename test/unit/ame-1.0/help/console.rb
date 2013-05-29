@@ -26,7 +26,7 @@ Options:
       description 'Method description'
       option 'a', 'abc', 'abc', '', 'Abc description'
       flag   'v', '', false, 'V description'
-      toggle ?s, 'signoff', false, 'Add Signed-off-by: line to the commit message'
+      toggle 's', 'signoff', false, 'Add Signed-off-by: line to the commit message'
       switch '', 'thread', 'style', nil, :shallow, 'Controls addition of In-Reply-To and References headers'
       option 'x', '', 'level', '', 'X description'
       multioption '', 'bcc', 'address', String, 'Specify a Bcc: value for each email'
