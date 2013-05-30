@@ -21,7 +21,7 @@ Options:
 }) do |io|
     Class.new(Ame::Root) {
       version '1.0.0'
-      help Ame::Help::Console.new(io, io, false)
+      help Ame::Help::Terminal.new(io, io, false)
 
       description 'Method description'
       option 'a', 'abc', 'abc', '', 'Abc description'
@@ -54,7 +54,7 @@ Methods:
 }) do |io|
     Class.new(Ame::Root) {
       version '1.0.0'
-      help Ame::Help::Console.new(io, io, false)
+      help Ame::Help::Terminal.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
@@ -87,7 +87,7 @@ Methods:
 }) do |io|
     Class.new(Ame::Root) {
       version '1.0.0'
-      help Ame::Help::Console.new(io, io, false)
+      help Ame::Help::Terminal.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch-1'
@@ -128,7 +128,7 @@ Methods:
 }) do |io|
     Class.new(Ame::Root) {
       version '1.0.0'
-      help Ame::Help::Console.new(io, io, false)
+      help Ame::Help::Terminal.new(io, io, false)
 
       dispatch Class.new(Ame::Class) {
         basename 'dispatch'
@@ -149,7 +149,7 @@ Methods:
     Class.new(Ame::Root) {
       version '0.1.0'
 
-      help Ame::Help::Console.new(io, io)
+      help Ame::Help::Terminal.new(io, io)
 
       description 'd'
       def method() end
@@ -160,7 +160,7 @@ Methods:
     begin
       Class.new(Ame::Root) {
         version '1.0.0'
-        help Ame::Help::Console.new(io, io, false)
+        help Ame::Help::Terminal.new(io, io, false)
 
         description 'd'
         def method()

@@ -298,7 +298,7 @@
 
     An “argument”¹ is an argument that’s required.  If it’s not present on the
     command line, an error will be raised (and by default reported to the
-    console).  As it’s required, it doesn’t take a default, but rather a type.
+    terminal).  As it’s required, it doesn’t take a default, but rather a type.
 
   ¹ See http://disu.se/software/ame-1.0/api/user/Ame/Class#argument-class-method
 

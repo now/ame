@@ -98,12 +98,12 @@
 class Ame::Root < Ame::Class
   class << self
     # Sets the HELP object to use for displaying usage information, or returns
-    # it if HELP is nil.  The default is to use a {Help::Console} object.
+    # it if HELP is nil.  The default is to use a {Help::Terminal} object.
     # @param (see Class.help)
     # @return [#method, #dispatch, #error, #version]
     def help(help = nil)
       super if help
-      @help ||= Ame::Help::Console.new
+      @help ||= Ame::Help::Terminal.new
     end
 
     # Sets or returns, depending on if VERSION is nil or not, the version of

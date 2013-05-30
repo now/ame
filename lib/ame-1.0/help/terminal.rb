@@ -6,7 +6,7 @@
 # another object (such as an instance of this class that’s been constructed
 # with different parameters).
 # @api developer/user
-class Ame::Help::Console
+class Ame::Help::Terminal
   # Sets up help requests to be made to OUTPUT ({#dispatch}, {#method}, and
   # {#version}) and ERROR ({#error}), as well as specifying whether to
   # EXIT_ON_ERROR or not, see {#error}.

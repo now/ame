@@ -24,7 +24,7 @@ module Ame
          class.rb
          flag.rb
          help.rb
-         help/console.rb
+         help/terminal.rb
          help/delegate.rb
          method.rb
          method/undefined.rb
