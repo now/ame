@@ -8,7 +8,7 @@ module Ame
       author 'Nikolai Weibull', 'now@disu.se'
     }
 
-    homepage 'http://disu.se/software/ame/'
+    homepage 'http://disu.se/software/ame-1.0/'
 
     licenses{
       license 'LGPLv3+',
